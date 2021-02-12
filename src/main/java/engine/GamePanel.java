@@ -65,15 +65,15 @@ public class GamePanel extends JPanel {
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
 
-        final GridLayout gridLayout = new GridLayout(6, 6);
+        final GridLayout gridLayout = new GridLayout(5, 5);
         panel.setLayout(gridLayout);
 
-        JButton[][] buttons = new JButton[6][6];
+        JButton[][] buttons = new JButton[5][5];
 
         Tile[][] codeSource = gameLogic.status.getCodeMatrix();
 
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 6; col++) {
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
                 buttons[row][col] = new JButton(codeSource[row][col].getCode());
                 //style
                 buttons[row][col].setBackground(Color.BLACK);

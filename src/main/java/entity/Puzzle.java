@@ -15,7 +15,7 @@ import static entity.Tile.*;
 public class Puzzle {
 
     //do not modify the definitions here
-    private Tile[][] codeMatrix = new Tile[6][6];
+    private Tile[][] codeMatrix = new Tile[5][5];
     private ArrayList<Sequence> sequences = new ArrayList<>();
     private int bufferSize;
 
@@ -23,12 +23,12 @@ public class Puzzle {
 
         ///////////////////FIXME/////////////////////////
         Tile t = new Tile("E9",UNAVAILABLE);
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 6; col++) {
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
                 codeMatrix[row][col] = t;
             }
         }
-        for (int col = 0; col < 6; col++) {
+        for (int col = 0; col < 5; col++) {
             codeMatrix[0][col]= new Tile("E9",AVAILABLE);
         }
 
