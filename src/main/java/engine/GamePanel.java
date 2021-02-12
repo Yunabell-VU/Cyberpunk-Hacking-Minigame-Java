@@ -15,15 +15,20 @@ import static entity.Sequence.SUCCESS;
 import static entity.Tile.*;
 
 
-//Puzzle UI implement. DO NOT change this file!
+//Game UI.
+//Things need to FIX : to separate Timer to another panel to avoid repaint with puzzles.
+
+// DO NOT modify this file!
 
 public class GamePanel extends JPanel {
 
     private final GameLogic gameLogic;
     private static final int TIMER_PERIOD = 1000;
     private int count;
+
     JLabel countDownLabel = new JLabel("", SwingConstants.CENTER);
 
+    //init GamePanel
     public GamePanel(GameLogic logic) {
         gameLogic = logic;
 
@@ -40,7 +45,8 @@ public class GamePanel extends JPanel {
         add(seqPanel);
     }
 
-    public void repaintPuzzle() {
+    //refresh the Panel
+    private void repaintPuzzle() {
         removeAll();
         repaint();
         JPanel timePanel = drawTimerPanel();
@@ -54,7 +60,7 @@ public class GamePanel extends JPanel {
         revalidate();
     }
 
-    public JPanel drawCodeMatrix(){
+    private JPanel drawCodeMatrix(){
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
@@ -64,11 +70,11 @@ public class GamePanel extends JPanel {
 
         JButton[][] buttons = new JButton[6][6];
 
-        Tile[][] codeSource = gameLogic.state.codeMatrix;
+        Tile[][] codeSource = gameLogic.status.getCodeMatrix();
 
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                buttons[row][col] = new JButton(codeSource[row][col].code);
+                buttons[row][col] = new JButton(codeSource[row][col].getCode());
                 //style
                 buttons[row][col].setBackground(Color.BLACK);
                 buttons[row][col].setFont(new  java.awt.Font("Arial", Font.BOLD,  15));
@@ -79,7 +85,7 @@ public class GamePanel extends JPanel {
                 int finalRow = row;
                 int finalCol = col;
 
-                if(codeSource[row][col].state==AVAILABLE){
+                if(codeSource[row][col].getState()==AVAILABLE){
                     buttons[row][col].setBackground(Color.GRAY);
                     int[] tileSelected = new int [2];
                     buttons[row][col].addMouseListener(new MouseListener() {
@@ -115,7 +121,7 @@ public class GamePanel extends JPanel {
         return panel;
     }
 
-    public JPanel drawBuffer() {
+    private JPanel drawBuffer() {
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
@@ -125,17 +131,17 @@ public class GamePanel extends JPanel {
         gridLayout.setHgap(5);
         gridLayout.setVgap(5);
 
-        for (int i = 0; i < gameLogic.state.bufferSize; i++) {
+        for (int i = 0; i < gameLogic.status.getBufferSize(); i++) {
             JLabel label = new JLabel();
             label.setForeground(Color.YELLOW);
             label.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-            label.setText(gameLogic.state.buffer.get(i));
+            label.setText(gameLogic.status.getBuffer().get(i));
             panel.add(label);
         }
         return panel;
     }
 
-    public JPanel drawSequence() {
+    private JPanel drawSequence() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
 
@@ -144,7 +150,7 @@ public class GamePanel extends JPanel {
         gridLayout.setHgap(5);
         gridLayout.setVgap(5);
 
-        ArrayList<Sequence> sequences = gameLogic.state.sequences;
+        ArrayList<Sequence> sequences = gameLogic.status.getSequences();
 
         for (Sequence sequence : sequences) {
             JPanel p = new JPanel();
@@ -154,7 +160,7 @@ public class GamePanel extends JPanel {
             gridLayout2.setHgap(5);
             gridLayout2.setVgap(5);
 
-            if(sequence.state==SUCCESS){
+            if(sequence.getState()==SUCCESS){
                 JLabel label = new JLabel();
                 label.setForeground(Color.BLACK);
                 label.setOpaque(true);
@@ -163,7 +169,7 @@ public class GamePanel extends JPanel {
                 label.setFont(new Font(Font.DIALOG,Font.BOLD,9));
                 panel.add(label);
             }
-            else if(sequence.state==FAIL){
+            else if(sequence.getState()==FAIL){
                 JLabel label = new JLabel();
                 label.setForeground(Color.BLACK);
                 label.setText("FAIL");
@@ -173,14 +179,14 @@ public class GamePanel extends JPanel {
                 panel.add(label);
             }
             else{
-                for (int j = 0; j < sequence.sequence.size(); j++) {
+                for (int j = 0; j < sequence.getSeq().size(); j++) {
                     JLabel label = new JLabel();
                     label.setForeground(Color.WHITE);
-                    if (sequence.sequence.get(j).state == ADDED) {
+                    if (sequence.getSeq().get(j).getState()==ADDED) {
                         label.setForeground(Color.YELLOW);
                         label.setBorder(BorderFactory.createLineBorder(Color.CYAN));
                     }
-                    label.setText(sequence.sequence.get(j).code);
+                    label.setText(sequence.getSeq().get(j).getCode());
                     p.add(label);
                 }
             }
@@ -188,12 +194,12 @@ public class GamePanel extends JPanel {
 
         return panel;
     }
-    public JPanel drawTimerPanel(){
+    private JPanel drawTimerPanel(){
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
 
         panel.add(countDownLabel);
-        String text = (gameLogic.state.currentCount -count)+"";
+        String text = (gameLogic.status.getCurrentCount() -count)+"";
         setCountDownLabelText(text);
 
         countDownLabel.setForeground(Color.YELLOW);
@@ -202,15 +208,17 @@ public class GamePanel extends JPanel {
         return panel;
     }
 
-    public void setCountDownLabelText(String text) {
+    //set Timer Label text
+    private void setCountDownLabelText(String text) {
         countDownLabel.setText(text);
     }
 
-    public void start() {
+    //Timer event
+    private void start() {
         new Timer(TIMER_PERIOD, e -> {
-            if (count < gameLogic.state.currentCount) {
+            if (count < gameLogic.status.getCurrentCount()) {
                 count++;
-                String text = (gameLogic.state.currentCount -count)+"";
+                String text = (gameLogic.status.getCurrentCount() -count)+"";
                 setCountDownLabelText(text);
             } else {
                 ((Timer) e.getSource()).stop();

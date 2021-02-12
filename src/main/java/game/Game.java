@@ -6,8 +6,12 @@ import entity.Puzzle;
 import javax.swing.*;
 import java.awt.*;
 
+import static game.Setting.TIMELIMIT;
 
-//Game process control: initiate game frame, handle events, set Timer
+
+//Game process control: initiate game frame, init status, init game logic
+//DO NOT modify this file!
+
 public class Game {
 
     public static void runGame()
@@ -22,7 +26,7 @@ public class Game {
         //Set bufferSize here.
         int bufferOffset = 0;//FIXME
 
-        Status gameState = new Status(new Puzzle(),bufferOffset,15,0);
+        Status gameState = new Status(new Puzzle(),bufferOffset,TIMELIMIT,0);
 
         GameLogic logic = new GameLogic(gameState);
 

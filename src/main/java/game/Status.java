@@ -6,19 +6,23 @@ import entity.Tile;
 
 import java.util.ArrayList;
 
+//status of each movement.
+//UI draws the panel based on the latest Status
+//Do Not modify this file!
+
 public class Status {
-    public int currentCount;
-    public int score;
-    public Tile[][] codeMatrix;
-    public ArrayList<Sequence> sequences;
-    public int bufferSize;
-    public ArrayList<String> buffer = new ArrayList<>();
+    private int currentCount;
+    private int score;
+    private Tile[][] codeMatrix;
+    private ArrayList<Sequence> sequences;
+    private int bufferSize;
+    private ArrayList<String> buffer = new ArrayList<>();
 
     public Status(Puzzle puzzle, int bufferSizeOffset, int count, int score){
 
-        this.codeMatrix = puzzle.codeMatrix;
-        this.sequences = puzzle.sequences;
-        this.bufferSize = puzzle.bufferSize + bufferSizeOffset;
+        this.codeMatrix = puzzle.getCodeMatrix();
+        this.sequences = puzzle.getSequences();
+        this.bufferSize = puzzle.getBufferSize() + bufferSizeOffset;
         this.currentCount = count;
         this.score = 0;
 
@@ -27,5 +31,53 @@ public class Status {
             buffer.add("    ");
         }
         ///////////////////////////////////////////
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
+
+    public ArrayList<Sequence> getSequences() {
+        return sequences;
+    }
+
+    public Tile[][] getCodeMatrix() {
+        return codeMatrix;
+    }
+
+    public ArrayList<String> getBuffer() {
+        return buffer;
+    }
+
+    public void setSequences(ArrayList<Sequence> sequences) {
+        this.sequences = sequences;
+    }
+
+    public void setCodeMatrix(Tile[][] codeMatrix) {
+        this.codeMatrix = codeMatrix;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
+    public void setBuffer(ArrayList<String> buffer) {
+        this.buffer = buffer;
+    }
+
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

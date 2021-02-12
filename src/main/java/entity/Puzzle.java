@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import static entity.Sequence.UNCHECK;
 import static entity.Tile.*;
 
-//Parse the puzzle
+//store the pure puzzle here.
+//you can decide how to add state to each element you parsed
+
+//State need to implement:
+//CodeMatrix : every tile in first row ->state: AVAILABLE, remaining tiles->state: UNAVAILABLE
+//Sequence: every tile in sequence->state: WAITING
+
 public class Puzzle {
-    public Tile[][] codeMatrix = new Tile[6][6];
-    public ArrayList<Sequence> sequences = new ArrayList<>();
-    public int bufferSize;
+
+    //do not modify the definitions here
+    private Tile[][] codeMatrix = new Tile[6][6];
+    private ArrayList<Sequence> sequences = new ArrayList<>();
+    private int bufferSize;
 
     public Puzzle(){
 
@@ -49,6 +57,29 @@ public class Puzzle {
 
         bufferSize = 8;
         ///////////////////////////////////////////////
+    }
 
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public Tile[][] getCodeMatrix() {
+        return codeMatrix;
+    }
+
+    public ArrayList<Sequence> getSequences() {
+        return sequences;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
+    public void setCodeMatrix(Tile[][] codeMatrix) {
+        this.codeMatrix = codeMatrix;
+    }
+
+    public void setSequences(ArrayList<Sequence> sequences) {
+        this.sequences = sequences;
     }
 }
