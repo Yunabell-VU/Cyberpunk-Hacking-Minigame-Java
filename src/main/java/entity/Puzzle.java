@@ -24,32 +24,31 @@ public class Puzzle {
     public Puzzle(){
         Parse map = new Parse();
         map.readFile();
-
-        String[][] rawMatrix = map.matrix;
-        Tile t;
+        String[][] rawMatrix = map.getMatrix();
+        Tile temp;
 
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
                 if (row == 0) {
-                    t = new Tile(rawMatrix[row][col],AVAILABLE);
+                    temp = new Tile(rawMatrix[row][col],AVAILABLE);
                 } else {
-                    t = new Tile(rawMatrix[row][col],UNAVAILABLE);
+                    temp = new Tile(rawMatrix[row][col],UNAVAILABLE);
                 }
-                codeMatrix[row][col] = t;
+                codeMatrix[row][col] = temp;
             }
         }
 
-        for (int i = 0; i < map.seq.size(); i++) {
-            String[] rawSeq = map.seq.get(i);
-            ArrayList<Tile> currentSeq = new ArrayList<>(rawSeq.length);
-            for (String s : rawSeq) {
-                t = new Tile(s, WAITING);
-                currentSeq.add(t);
+        ArrayList<String[]> seq = map.getSeq();
+        for (String[] strings : seq) {
+            ArrayList<Tile> currentSeq = new ArrayList<>(strings.length);
+            for (String s : strings) {
+                temp = new Tile(s, WAITING);
+                currentSeq.add(temp);
             }
             Sequence cookedSeq = new Sequence(currentSeq, UNCHECK);
             sequences.add(cookedSeq);
         }
-        bufferSize = map.bufferSize;
+        bufferSize = map.getBufferSize();
     }
 
     public int getBufferSize() {
@@ -62,17 +61,5 @@ public class Puzzle {
 
     public ArrayList<Sequence> getSequences() {
         return sequences;
-    }
-
-    public void setBufferSize(int bufferSize) {
-        this.bufferSize = bufferSize;
-    }
-
-    public void setCodeMatrix(Tile[][] codeMatrix) {
-        this.codeMatrix = codeMatrix;
-    }
-
-    public void setSequences(ArrayList<Sequence> sequences) {
-        this.sequences = sequences;
     }
 }

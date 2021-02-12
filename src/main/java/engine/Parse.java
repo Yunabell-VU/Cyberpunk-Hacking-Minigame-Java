@@ -8,14 +8,44 @@ import java.util.Random;
 //puzzle set should be stored in entity.Puzzle class
 public class Parse {
 
-    public int bufferSize;
-    public String[][] matrix;
-    public ArrayList<String[]> seq;
+    private int bufferSize;
+    private String[][] matrix;
+    private ArrayList<String[]> seq;
+    private int matrixSpan;
+    private int mapSeed;
+    private final Random rand;
 
-    public Parse(){
+
+    public Parse() {
         bufferSize = 0;
-        matrix = new String[5][5];
+        matrix = new String[6][6];
         seq = new ArrayList<>();
+        matrixSpan = 0;
+        mapSeed = 0;
+        rand = new Random();
+    }
+
+    public void print() {
+        System.out.println("Current map seed: " + mapSeed);
+        System.out.println("Current buffer size: " + bufferSize);
+        System.out.println();
+        System.out.println("Current matrix: ");
+        System.out.println();
+        for (int i = 0; i < matrixSpan; i++) {
+            for (int j = 0; j < matrixSpan; j++) {
+                System.out.print(matrix[i][j] + " ");
+                if (j == matrixSpan - 1) System.out.println();
+            }
+        }
+        System.out.println();
+        System.out.println("Current sequences: ");
+        System.out.println();
+        for (String[] strings : seq) {
+            for (int j = 0; j < strings.length; j++) {
+                System.out.print(strings[j] + " ");
+                if (j == strings.length - 1) System.out.println();
+            }
+        }
     }
 
     public void readFile() {
@@ -24,35 +54,42 @@ public class Parse {
             File[] files = dir.listFiles();
             assert files != null;
 
-            Random rand = new Random();
-            int mapSeed = rand.nextInt(files.length);
+            mapSeed = rand.nextInt(files.length);
             File file = files[mapSeed];
             mapSeed++;
-            System.out.println("Current map seed: " + mapSeed);
 
             Scanner reader = new Scanner(file);
             bufferSize = reader.nextInt();
-            System.out.println(bufferSize);
-            System.out.println();
 
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    matrix[i][j] = reader.next();
-                    System.out.print(matrix[i][j] + " ");
-                    if (j == 4) System.out.println();
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                if (line.length() != 0) {
+                    String[] firstLine = line.split(" ");
+                    matrixSpan = firstLine.length;
+                    System.arraycopy(firstLine, 0, matrix[0], 0, matrixSpan);
+                    break;
                 }
             }
 
+            for (int i = 1; i < matrixSpan; i++)
+                for (int j = 0; j < matrixSpan; j++)
+                    matrix[i][j] = reader.next();
+
             while (reader.hasNextLine()) {
-                String a = reader.nextLine();
-                System.out.println(a);
-                String[] b = a.split(" ");
-                if (b.length > 1) seq.add(b);
+                String seqStr = reader.nextLine();
+                String[] seqArr = seqStr.split(" ");
+                if (seqStr.length() > 0) seq.add(seqArr);
             }
+            print();
             reader.close();
         } catch (FileNotFoundException e){
             System.out.println("Error occurs when loading puzzles");
             e.printStackTrace();
         }
     }
+    public int getBufferSize() {return bufferSize;}
+
+    public String[][] getMatrix() {return matrix;}
+
+    public ArrayList<String[]> getSeq() {return seq;}
 }
