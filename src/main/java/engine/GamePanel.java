@@ -1,7 +1,8 @@
 package engine;
 
+import entity.Sequence;
 import entity.Tile;
-import gamelogic.GameLogic;
+import game.GameLogic;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,18 +10,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import static game.Game.AVAILABLE;
-import static game.Game.INBUFFER;
+import static entity.Sequence.FAIL;
+import static entity.Sequence.SUCCESS;
+import static entity.Tile.*;
 
 
 //Puzzle UI implement. DO NOT change this file!
 
-public class PuzzlePanel extends JPanel {
+public class GamePanel extends JPanel {
 
     private final GameLogic gameLogic;
+    private static final int TIMER_PERIOD = 1000;
+    private int count;
+    JLabel countDownLabel = new JLabel("", SwingConstants.CENTER);
 
-    public PuzzlePanel(GameLogic logic) {
+    public GamePanel(GameLogic logic) {
         gameLogic = logic;
+
+        JPanel timePanel = drawTimerPanel();
+        add(timePanel);
+
         JPanel gridPanel = drawCodeMatrix();
         add(gridPanel);
 
@@ -31,9 +40,11 @@ public class PuzzlePanel extends JPanel {
         add(seqPanel);
     }
 
-    public void repaintCodeMatrix() {
+    public void repaintPuzzle() {
         removeAll();
         repaint();
+        JPanel timePanel = drawTimerPanel();
+        add(timePanel);
         JPanel gridPanel = drawCodeMatrix();
         add(gridPanel);
         JPanel bufferPanel = drawBuffer();
@@ -53,7 +64,7 @@ public class PuzzlePanel extends JPanel {
 
         JButton[][] buttons = new JButton[6][6];
 
-        Tile[][] codeSource = gameLogic.currentPuzzle.codeMatrix;
+        Tile[][] codeSource = gameLogic.state.codeMatrix;
 
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
@@ -70,20 +81,21 @@ public class PuzzlePanel extends JPanel {
 
                 if(codeSource[row][col].state==AVAILABLE){
                     buttons[row][col].setBackground(Color.GRAY);
-                    int[] selectedTile = new int [2];
+                    int[] tileSelected = new int [2];
                     buttons[row][col].addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             if(gameLogic.timeFlag==0){
                                 gameLogic.timeFlag = 1;
-                                gameLogic.timer.start();
+                                start();
                             }
 
-                            selectedTile[0] = finalRow;
-                            selectedTile[1] = finalCol;
-                            System.out.println("("+selectedTile[0]+","+selectedTile[1]+")");
-                            gameLogic.updateState(selectedTile);
-                            repaintCodeMatrix();
+                            tileSelected[0] = finalRow;
+                            tileSelected[1] = finalCol;
+                            System.out.println("("+tileSelected[0]+","+tileSelected[1]+")");
+                            gameLogic.setTileSelected(tileSelected);
+                            gameLogic.updateState();
+                            repaintPuzzle();
                         }
                         @Override
                         public void mousePressed(MouseEvent e) {}
@@ -107,17 +119,17 @@ public class PuzzlePanel extends JPanel {
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
-        add(panel);
+
         final GridLayout gridLayout = new GridLayout(1, 0);
         panel.setLayout(gridLayout);
         gridLayout.setHgap(5);
         gridLayout.setVgap(5);
 
-        for (int i = 0; i < gameLogic.currentPuzzle.bufferSize; i++) {
+        for (int i = 0; i < gameLogic.state.bufferSize; i++) {
             JLabel label = new JLabel();
             label.setForeground(Color.YELLOW);
             label.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-            label.setText(gameLogic.currentPuzzle.buffer.get(i));
+            label.setText(gameLogic.state.buffer.get(i));
             panel.add(label);
         }
         return panel;
@@ -126,15 +138,15 @@ public class PuzzlePanel extends JPanel {
     public JPanel drawSequence() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
-        add(panel);
+
         final GridLayout gridLayout = new GridLayout(4, 0);
         panel.setLayout(gridLayout);
         gridLayout.setHgap(5);
         gridLayout.setVgap(5);
 
-        ArrayList<ArrayList<Tile>> sequences = gameLogic.currentPuzzle.sequences;
+        ArrayList<Sequence> sequences = gameLogic.state.sequences;
 
-        for (ArrayList<Tile> tiles : sequences) {
+        for (Sequence sequence : sequences) {
             JPanel p = new JPanel();
             p.setBackground(Color.BLACK);
             panel.add(p);
@@ -142,19 +154,70 @@ public class PuzzlePanel extends JPanel {
             gridLayout2.setHgap(5);
             gridLayout2.setVgap(5);
 
-            for (Tile tile : tiles) {
+            if(sequence.state==SUCCESS){
                 JLabel label = new JLabel();
-                label.setForeground(Color.WHITE);
-                //label.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-                if (tile.state == INBUFFER) {
-                    label.setForeground(Color.YELLOW);
-                    label.setBorder(BorderFactory.createLineBorder(Color.CYAN));
+                label.setForeground(Color.BLACK);
+                label.setOpaque(true);
+                label.setBackground(Color.GREEN);
+                label.setText("SUCCESS");
+                label.setFont(new Font(Font.DIALOG,Font.BOLD,9));
+                panel.add(label);
+            }
+            else if(sequence.state==FAIL){
+                JLabel label = new JLabel();
+                label.setForeground(Color.BLACK);
+                label.setText("FAIL");
+                label.setOpaque(true);
+                label.setBackground(Color.RED);
+                label.setFont(new Font(Font.DIALOG,Font.BOLD,9));
+                panel.add(label);
+            }
+            else{
+                for (int j = 0; j < sequence.sequence.size(); j++) {
+                    JLabel label = new JLabel();
+                    label.setForeground(Color.WHITE);
+                    if (sequence.sequence.get(j).state == ADDED) {
+                        label.setForeground(Color.YELLOW);
+                        label.setBorder(BorderFactory.createLineBorder(Color.CYAN));
+                    }
+                    label.setText(sequence.sequence.get(j).code);
+                    p.add(label);
                 }
-                label.setText(tile.code);
-                p.add(label);
             }
         }
 
         return panel;
+    }
+    public JPanel drawTimerPanel(){
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.BLACK);
+
+        panel.add(countDownLabel);
+        String text = (gameLogic.state.currentCount -count)+"";
+        setCountDownLabelText(text);
+
+        countDownLabel.setForeground(Color.YELLOW);
+        countDownLabel.setFont(new Font(Font.DIALOG,Font.BOLD,14));
+
+        return panel;
+    }
+
+    public void setCountDownLabelText(String text) {
+        countDownLabel.setText(text);
+    }
+
+    public void start() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (count < gameLogic.state.currentCount) {
+                count++;
+                String text = (gameLogic.state.currentCount -count)+"";
+                setCountDownLabelText(text);
+            } else {
+                ((Timer) e.getSource()).stop();
+                gameLogic.setTimeOut();
+                gameLogic.updateState();
+                repaintPuzzle();
+            }
+        }).start();
     }
 }

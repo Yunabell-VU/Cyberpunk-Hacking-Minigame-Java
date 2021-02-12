@@ -1,9 +1,7 @@
 package game;
 
-import engine.Puzzle;
-import engine.PuzzlePanel;
-import engine.TimerPanel;
-import gamelogic.GameLogic;
+import engine.GamePanel;
+import entity.Puzzle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +9,6 @@ import java.awt.*;
 
 //Game process control: initiate game frame, handle events, set Timer
 public class Game {
-    public final static int AVAILABLE = 1111;
-    public final static int UNAVAILABLE = 2222;
-    public final static int SELECTED = 3333;
-    public final static int WAITING = 4444;
-    public final static int INBUFFER = 5555;
 
     public static void runGame()
     {
@@ -29,16 +22,13 @@ public class Game {
         //Set bufferSize here.
         int bufferOffset = 0;//FIXME
 
-        TimerPanel timePanel = new TimerPanel();
-        //GameLogic with new Puzzle
-        GameLogic logic = new GameLogic(new Puzzle(bufferOffset),timePanel);
+        Status gameState = new Status(new Puzzle(),bufferOffset,15,0);
 
-        //Add Timer Panel
-        frame.getContentPane().add(timePanel,BorderLayout.NORTH);
-        //Init Puzzle Panel
-        PuzzlePanel puzzlePanel = new PuzzlePanel(logic);
-        frame.getContentPane().add(puzzlePanel, BorderLayout.WEST);
+        GameLogic logic = new GameLogic(gameState);
 
+        //Init Game Panel
+        GamePanel gamePanel = new GamePanel(logic);
+        frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
     }
 
     public static void main (String[] args){
