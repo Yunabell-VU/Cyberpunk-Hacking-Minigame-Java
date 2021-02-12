@@ -1,5 +1,7 @@
 package entity;
 
+import engine.Parse;
+
 import java.util.ArrayList;
 
 import static entity.Sequence.UNCHECK;
@@ -20,43 +22,34 @@ public class Puzzle {
     private int bufferSize;
 
     public Puzzle(){
+        Parse map = new Parse();
+        map.readFile();
 
-        ///////////////////FIXME/////////////////////////
-        Tile t = new Tile("E9",UNAVAILABLE);
+        String[][] rawMatrix = map.matrix;
+        Tile t;
+
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
+                if (row == 0) {
+                    t = new Tile(rawMatrix[row][col],AVAILABLE);
+                } else {
+                    t = new Tile(rawMatrix[row][col],UNAVAILABLE);
+                }
                 codeMatrix[row][col] = t;
             }
         }
-        for (int col = 0; col < 5; col++) {
-            codeMatrix[0][col]= new Tile("E9",AVAILABLE);
+
+        for (int i = 0; i < map.seq.size(); i++) {
+            String[] rawSeq = map.seq.get(i);
+            ArrayList<Tile> currentSeq = new ArrayList<>(rawSeq.length);
+            for (String s : rawSeq) {
+                t = new Tile(s, WAITING);
+                currentSeq.add(t);
+            }
+            Sequence cookedSeq = new Sequence(currentSeq, UNCHECK);
+            sequences.add(cookedSeq);
         }
-
-        Tile t1 = new Tile("7C",WAITING);
-        Tile t2 = new Tile("55",WAITING);
-        Tile t3 = new Tile("BD",WAITING);
-        ArrayList<Tile> a1 = new ArrayList<>(3);
-        a1.add(t1);
-        a1.add(t2);
-        a1.add(t3);
-
-        Sequence seq1 = new Sequence(a1,UNCHECK);
-
-        Tile t4 = new Tile("E9",WAITING);
-        ArrayList<Tile> a2 = new ArrayList<>(4);
-
-        a2.add(t4);
-        a2.add(t3);
-        a2.add(t1);
-        a2.add(t2);
-        Sequence seq2 = new Sequence(a2,UNCHECK);
-        Sequence seq3 = new Sequence(a2,UNCHECK);
-        sequences.add(seq1);
-        sequences.add(seq2);
-        sequences.add(seq3);
-
-        bufferSize = 8;
-        ///////////////////////////////////////////////
+        bufferSize = map.bufferSize;
     }
 
     public int getBufferSize() {
