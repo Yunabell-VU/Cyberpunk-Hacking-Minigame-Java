@@ -17,18 +17,21 @@ import static entity.Tile.*;
 public class Puzzle {
 
     //do not modify the definitions here
-    private Tile[][] codeMatrix = new Tile[5][5];
-    private ArrayList<Sequence> sequences = new ArrayList<>();
-    private int bufferSize;
+    private final int matrixSpan;
+    private final Tile[][] codeMatrix;
+    private final ArrayList<Sequence> sequences = new ArrayList<>();
+    private final int bufferSize;
 
     public Puzzle(){
         Parse map = new Parse();
         map.readFile();
+        matrixSpan = map.getMatrixSpan();
+        System.out.println("matrix span: "+ matrixSpan);
         String[][] rawMatrix = map.getMatrix();
         Tile temp;
-
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 5; col++) {
+        codeMatrix = new Tile[matrixSpan][matrixSpan];
+        for (int row = 0; row < matrixSpan; row++) {
+            for (int col = 0; col < matrixSpan; col++) {
                 if (row == 0) {
                     temp = new Tile(rawMatrix[row][col],AVAILABLE);
                 } else {
@@ -50,16 +53,12 @@ public class Puzzle {
         }
         bufferSize = map.getBufferSize();
     }
+    //Do not modify the gets
+    public int getBufferSize() {return bufferSize;}
 
-    public int getBufferSize() {
-        return bufferSize;
-    }
+    public Tile[][] getCodeMatrix() {return codeMatrix;}
 
-    public Tile[][] getCodeMatrix() {
-        return codeMatrix;
-    }
+    public ArrayList<Sequence> getSequences() {return sequences;}
 
-    public ArrayList<Sequence> getSequences() {
-        return sequences;
-    }
+    public int getMatrixSpan() {return matrixSpan;}
 }

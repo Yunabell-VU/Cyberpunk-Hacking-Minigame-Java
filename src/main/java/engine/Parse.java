@@ -4,13 +4,15 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Random;
 
+import static game.Setting.MAX_MATRIX_SPAN;
+
 //Parse the puzzle from .txt
 //puzzle set should be stored in entity.Puzzle class
 public class Parse {
 
     private int bufferSize;
-    private String[][] matrix;
-    private ArrayList<String[]> seq;
+    private final String[][] matrix;
+    private final ArrayList<String[]> seq;
     private int matrixSpan;
     private int mapSeed;
     private final Random rand;
@@ -18,7 +20,7 @@ public class Parse {
 
     public Parse() {
         bufferSize = 0;
-        matrix = new String[6][6];
+        matrix = new String[MAX_MATRIX_SPAN][MAX_MATRIX_SPAN];
         seq = new ArrayList<>();
         matrixSpan = 0;
         mapSeed = 0;
@@ -29,6 +31,7 @@ public class Parse {
         System.out.println("Current map seed: " + mapSeed);
         System.out.println("Current buffer size: " + bufferSize);
         System.out.println();
+        System.out.println("Current matrix span: "+ matrixSpan);
         System.out.println("Current matrix: ");
         System.out.println();
         for (int i = 0; i < matrixSpan; i++) {
@@ -92,4 +95,6 @@ public class Parse {
     public String[][] getMatrix() {return matrix;}
 
     public ArrayList<String[]> getSeq() {return seq;}
+
+    public int getMatrixSpan() {return matrixSpan;}
 }

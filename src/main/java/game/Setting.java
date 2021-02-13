@@ -5,4 +5,5 @@ package game;
 
 public class Setting {
     public static final int TIMELIMIT = 15;
+    public static final int MAX_MATRIX_SPAN = 6;
 }

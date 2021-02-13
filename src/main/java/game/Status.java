@@ -17,14 +17,17 @@ public class Status {
     private ArrayList<Sequence> sequences;
     private int bufferSize;
     private ArrayList<String> buffer = new ArrayList<>();
+    private final int matrixSpan;
 
     public Status(Puzzle puzzle, int bufferSizeOffset, int count, int score){
 
+        this.matrixSpan = puzzle.getMatrixSpan();
         this.codeMatrix = puzzle.getCodeMatrix();
         this.sequences = puzzle.getSequences();
         this.bufferSize = puzzle.getBufferSize() + bufferSizeOffset;
         this.currentCount = count;
-        this.score = 0;
+        this.score = score;
+
 
         ////////////////FIXME///////////////////////
         for (int i = 0; i < bufferSize;i++){
@@ -41,13 +44,13 @@ public class Status {
         return score;
     }
 
-    public int getCurrentCount() {
-        return currentCount;
-    }
+    public int getCurrentCount() {return currentCount;}
 
     public ArrayList<Sequence> getSequences() {
         return sequences;
     }
+
+    public int getMatrixSpan() {return matrixSpan;}
 
     public Tile[][] getCodeMatrix() {
         return codeMatrix;
