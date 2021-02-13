@@ -18,10 +18,11 @@ public class Game {
     {
         JFrame frame = new JFrame("CHM - Endless Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(1200, 800);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
+        frame.setResizable(false);
+        Container contentPane = frame.getContentPane();
 
         //Set bufferSize here.
         int bufferOffset = 0;//FIXME
@@ -32,7 +33,9 @@ public class Game {
 
         //Init Game Panel
         GamePanel gamePanel = new GamePanel(logic);
-        frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
+        gamePanel.setBackground(Color.BLACK);
+        contentPane.add(gamePanel, BorderLayout.CENTER);
+
     }
 
     public static void main (String[] args){

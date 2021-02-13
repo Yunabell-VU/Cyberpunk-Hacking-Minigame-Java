@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import static entity.Sequence.FAIL;
 import static entity.Sequence.SUCCESS;
 import static entity.Tile.*;
+import static game.Setting.MAX_SEQ_NUM;
 
 
 //Game UI.
@@ -32,17 +33,23 @@ public class GamePanel extends JPanel {
     public GamePanel(GameLogic logic) {
         gameLogic = logic;
 
+        FlowLayout layout = (FlowLayout) getLayout();
+        layout.setHgap(20);
+        layout.setVgap(20);
         JPanel timePanel = drawTimerPanel();
         add(timePanel);
-
-        JPanel gridPanel = drawCodeMatrix();
-        add(gridPanel);
 
         JPanel bufferPanel = drawBuffer();
         add(bufferPanel);
 
+        JPanel gridPanel = drawCodeMatrix();
+        add(gridPanel);
+
         JPanel seqPanel = drawSequence();
         add(seqPanel);
+
+        JPanel scorePanel = drawScorePanel();
+        add(scorePanel);
     }
 
     //refresh the Panel
@@ -51,24 +58,47 @@ public class GamePanel extends JPanel {
         repaint();
         JPanel timePanel = drawTimerPanel();
         add(timePanel);
-        JPanel gridPanel = drawCodeMatrix();
-        add(gridPanel);
         JPanel bufferPanel = drawBuffer();
         add(bufferPanel);
+        JPanel gridPanel = drawCodeMatrix();
+        add(gridPanel);
         JPanel seqPanel = drawSequence();
         add(seqPanel);
+        JPanel scorePanel = drawScorePanel();
+        add(scorePanel);
         revalidate();
     }
 
     private JPanel drawCodeMatrix(){
 
         JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+        panel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85),2,true));
         panel.setBackground(Color.BLACK);
 
-        int matrixSpan = gameLogic.status.getMatrixSpan();
+        panel.setPreferredSize(new Dimension(450, 400));
+        JPanel titlePanel = new JPanel();
+        titlePanel.setPreferredSize(new Dimension(446, 25));
+        titlePanel.setBackground(new Color(222,255,85));
+        titlePanel.setBorder(null);
+        panel.add(titlePanel);
 
+        JLabel gridLabel = new JLabel("CODE MATRIX",SwingConstants.LEFT);
+        gridLabel.setFont(new Font("Consolas", Font.BOLD,20));
+        gridLabel.setPreferredSize(new Dimension(420, 25));
+        gridLabel.setForeground(new Color(0,0,0,90));
+        titlePanel.add(gridLabel);
+
+        JPanel codeMatrixPanel = new JPanel();
+        codeMatrixPanel.setPreferredSize(new Dimension(446, 360));
+        codeMatrixPanel.setBorder(null);
+        codeMatrixPanel.setBackground(Color.BLACK);
+        panel.add(codeMatrixPanel);
+
+        int matrixSpan = gameLogic.status.getMatrixSpan();
         final GridLayout gridLayout = new GridLayout(matrixSpan, matrixSpan);
-        panel.setLayout(gridLayout);
+        codeMatrixPanel.setLayout(gridLayout);
+
 
         JButton[][] buttons = new JButton[matrixSpan][matrixSpan];
 
@@ -79,16 +109,21 @@ public class GamePanel extends JPanel {
                 buttons[row][col] = new JButton(codeSource[row][col].getCode());
                 //style
                 buttons[row][col].setBackground(Color.BLACK);
-                buttons[row][col].setFont(new  java.awt.Font("Arial", Font.BOLD,  15));
+                buttons[row][col].setPreferredSize(new Dimension(60, 60));
+                buttons[row][col].setFont(new Font("Consolas",Font.BOLD,20));
                 //border
                 buttons[row][col].setBorderPainted(false);
-                buttons[row][col].setForeground(Color.YELLOW);
+                buttons[row][col].setForeground(new Color(222,255,85));
 
                 int finalRow = row;
                 int finalCol = col;
 
+                if(codeSource[row][col].getState()==SELECTED){
+                    buttons[row][col].setForeground(new Color(70,44,84));
+                }
+
                 if(codeSource[row][col].getState()==AVAILABLE){
-                    buttons[row][col].setBackground(Color.GRAY);
+                    buttons[row][col].setBackground(new Color(41,44,57));
                     int[] tileSelected = new int [2];
                     buttons[row][col].addMouseListener(new MouseListener() {
                         @Override
@@ -117,7 +152,7 @@ public class GamePanel extends JPanel {
                     });
                 }
 
-                panel.add(buttons[row][col]);
+                codeMatrixPanel.add(buttons[row][col]);
             }
         }
         return panel;
@@ -127,17 +162,22 @@ public class GamePanel extends JPanel {
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
+        panel.setPreferredSize(new Dimension(550, 120));
 
-        final GridLayout gridLayout = new GridLayout(1, 0);
-        panel.setLayout(gridLayout);
-        gridLayout.setHgap(5);
-        gridLayout.setVgap(5);
+        JLabel bufferText = new JLabel("BUFFER",SwingConstants.LEFT);
+        bufferText.setFont(new Font("Consolas",Font.BOLD,25));
+        bufferText.setPreferredSize(new Dimension(550, 40));
+        bufferText.setForeground(new Color(222,255,85));
+        panel.add(bufferText);
+
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
 
         for (int i = 0; i < gameLogic.status.getBufferSize(); i++) {
-            JLabel label = new JLabel();
-            label.setForeground(Color.YELLOW);
-            label.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-            label.setText(gameLogic.status.getBuffer().get(i));
+            JLabel label = new JLabel(gameLogic.status.getBuffer().get(i),SwingConstants.CENTER);
+            label.setPreferredSize(new Dimension(35, 35));
+            label.setForeground(new Color(222,255,85));
+            label.setFont(new Font("Consolas",Font.BOLD,18));
+            label.setBorder(BorderFactory.createDashedBorder(new Color(222,255,85,90),12,5));
             panel.add(label);
         }
         return panel;
@@ -145,50 +185,58 @@ public class GamePanel extends JPanel {
 
     private JPanel drawSequence() {
         JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85),1));
         panel.setBackground(Color.BLACK);
+        panel.setPreferredSize(new Dimension(550, 350));
 
-        final GridLayout gridLayout = new GridLayout(4, 0);
-        panel.setLayout(gridLayout);
-        gridLayout.setHgap(5);
-        gridLayout.setVgap(5);
+        JLabel seqTextLabel = new JLabel(" SEQUENCE REQUIRED TO UPLOAD",SwingConstants.LEFT);
+        seqTextLabel.setFont(new Font("Consolas",Font.BOLD,20));
+        seqTextLabel.setPreferredSize(new Dimension(550, 30));
+        seqTextLabel.setForeground(new Color(222,255,85));
+        seqTextLabel.setBorder(BorderFactory.createMatteBorder(0,0,1,0,new Color(222,255,85)));
+        panel.add(seqTextLabel);
 
         ArrayList<Sequence> sequences = gameLogic.status.getSequences();
 
         for (Sequence sequence : sequences) {
             JPanel p = new JPanel();
             p.setBackground(Color.BLACK);
+            p.setPreferredSize(new Dimension(548, 65));
+            p.setLayout(new FlowLayout(FlowLayout.LEFT));
             panel.add(p);
-            final GridLayout gridLayout2 = new GridLayout(1, 0);
-            gridLayout2.setHgap(5);
-            gridLayout2.setVgap(5);
 
             if(sequence.getState()==SUCCESS){
-                JLabel label = new JLabel();
-                label.setForeground(Color.BLACK);
+                JLabel label = new JLabel(" SUCCEEDED",SwingConstants.LEFT);
+                label.setForeground(new Color(0,0,0,98));
                 label.setOpaque(true);
-                label.setBackground(Color.GREEN);
-                label.setText("SUCCESS");
-                label.setFont(new Font(Font.DIALOG,Font.BOLD,9));
-                panel.add(label);
+                label.setBackground(new Color(27,213,117));
+                label.setPreferredSize(new Dimension(548, 65));
+                label.setFont(new Font("Consolas",Font.BOLD,20));
+                p.add(label);
             }
             else if(sequence.getState()==FAIL){
-                JLabel label = new JLabel();
-                label.setForeground(Color.BLACK);
-                label.setText("FAIL");
+                JLabel label = new JLabel(" FAILED",SwingConstants.LEFT);
+                label.setForeground(new Color(0,0,0,98));
                 label.setOpaque(true);
-                label.setBackground(Color.RED);
-                label.setFont(new Font(Font.DIALOG,Font.BOLD,9));
-                panel.add(label);
+                label.setPreferredSize(new Dimension(548, 65));
+                label.setBackground(new Color(255,87,81));
+                label.setFont(new Font("Consolas",Font.BOLD,20));
+                p.add(label);
             }
             else{
                 for (int j = 0; j < sequence.getSeq().size(); j++) {
-                    JLabel label = new JLabel();
+                    JLabel label = new JLabel(sequence.getSeq().get(j).getCode(),SwingConstants.CENTER);
+
+                    label.setPreferredSize(new Dimension(50, 50));
                     label.setForeground(Color.WHITE);
-                    if (sequence.getSeq().get(j).getState()==ADDED) {
-                        label.setForeground(Color.YELLOW);
-                        label.setBorder(BorderFactory.createLineBorder(Color.CYAN));
+                    if (sequence.getSeq().get(j).getState()==SELECTED) {
+                        label.setForeground(new Color(222,255,85));
+                        label.setBorder(BorderFactory.createLineBorder(new Color(222,255,85)));
                     }
-                    label.setText(sequence.getSeq().get(j).getCode());
+                    if (sequence.getSeq().get(j).getState()==ADDED) {
+                        label.setForeground(new Color(222,255,85));
+                    }
+                    label.setFont(new Font("Consolas",Font.BOLD,20));
                     p.add(label);
                 }
             }
@@ -196,16 +244,42 @@ public class GamePanel extends JPanel {
 
         return panel;
     }
+
+    private JPanel drawScorePanel(){
+        JPanel panel = new JPanel();
+
+        panel.setPreferredSize(new Dimension(900, 100));
+        panel.setBackground(new Color(95,245,255,50));
+
+        JLabel textLabel = new JLabel("SCORE PANEL TO BE IMPLEMENTED",SwingConstants.CENTER);
+        textLabel.setFont(new Font("Consolas",Font.BOLD,20));
+        textLabel.setPreferredSize(new Dimension(900, 100));
+        textLabel.setForeground(new Color(95,245,255));
+        panel.add(textLabel);
+
+        return panel;
+    }
+
     private JPanel drawTimerPanel(){
         JPanel panel = new JPanel();
+        //panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+        panel.setPreferredSize(new Dimension(450, 100));
         panel.setBackground(Color.BLACK);
 
+        JLabel timeTextLabel = new JLabel("TIME REMAINING",SwingConstants.LEFT);
+        timeTextLabel.setFont(new Font("Consolas",Font.BOLD,35));
+        timeTextLabel.setPreferredSize(new Dimension(300, 100));
+        timeTextLabel.setForeground(new Color(222,255,85));
+        panel.add(timeTextLabel);
+
+        countDownLabel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85)));
+        countDownLabel.setPreferredSize(new Dimension(50, 50));
         panel.add(countDownLabel);
         String text = (gameLogic.status.getCurrentCount() -count)+"";
         setCountDownLabelText(text);
 
-        countDownLabel.setForeground(Color.YELLOW);
-        countDownLabel.setFont(new Font(Font.DIALOG,Font.BOLD,14));
+        countDownLabel.setForeground(new Color(222,255,85));
+        countDownLabel.setFont(new Font("Consolas",Font.BOLD,35));
 
         return panel;
     }
@@ -230,4 +304,5 @@ public class GamePanel extends JPanel {
             }
         }).start();
     }
+
 }

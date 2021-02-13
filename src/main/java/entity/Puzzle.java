@@ -33,9 +33,9 @@ public class Puzzle {
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
                 if (row == 0) {
-                    temp = new Tile(rawMatrix[row][col],AVAILABLE);
+                    temp = new Tile(rawMatrix[row][col].toUpperCase(),AVAILABLE);
                 } else {
-                    temp = new Tile(rawMatrix[row][col],UNAVAILABLE);
+                    temp = new Tile(rawMatrix[row][col].toUpperCase(),UNAVAILABLE);
                 }
                 codeMatrix[row][col] = temp;
             }
@@ -45,7 +45,7 @@ public class Puzzle {
         for (String[] strings : seq) {
             ArrayList<Tile> currentSeq = new ArrayList<>(strings.length);
             for (String s : strings) {
-                temp = new Tile(s, WAITING);
+                temp = new Tile(s.toUpperCase(), WAITING);
                 currentSeq.add(temp);
             }
             Sequence cookedSeq = new Sequence(currentSeq, UNCHECK);

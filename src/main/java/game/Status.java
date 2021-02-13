@@ -28,12 +28,9 @@ public class Status {
         this.currentCount = count;
         this.score = score;
 
+        for (int i = 0; i < bufferSize;i++)
+            buffer.add(" ");
 
-        ////////////////FIXME///////////////////////
-        for (int i = 0; i < bufferSize;i++){
-            buffer.add("    ");
-        }
-        ///////////////////////////////////////////
     }
 
     public int getBufferSize() {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import static entity.Sequence.FAIL;
 import static entity.Sequence.SUCCESS;
 import static entity.Tile.ADDED;
+import static entity.Tile.SELECTED;
 
 public class GameLogic {
 
@@ -37,11 +38,11 @@ public class GameLogic {
         status.setBuffer(tmpbuf);
 
          Tile[][] tmpGrid = status.getCodeMatrix();
-         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[ ]",1);
+         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[ ]",SELECTED);
          status.setCodeMatrix(tmpGrid);
 
         ArrayList<Sequence> tmpSeq = status.getSequences();
-        tmpSeq.get(1).getSeq().get(0).setState(ADDED);
+        tmpSeq.get(1).getSeq().get(0).setState(SELECTED);
         tmpSeq.get(0).setState(SUCCESS);
         tmpSeq.get(2).setState(FAIL);
         status.setSequences(tmpSeq);
