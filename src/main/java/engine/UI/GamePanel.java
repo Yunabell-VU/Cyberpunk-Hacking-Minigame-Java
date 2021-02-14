@@ -1,4 +1,4 @@
-package engine;
+package engine.UI;
 
 import entity.Sequence;
 import entity.Tile;
@@ -10,10 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import static entity.Sequence.FAIL;
-import static entity.Sequence.SUCCESS;
+import static entity.Sequence.*;
 import static entity.Tile.*;
-import static game.Setting.MAX_SEQ_NUM;
+
 
 
 //Game UI.
@@ -27,78 +26,63 @@ public class GamePanel extends JPanel {
     private static final int TIMER_PERIOD = 1000;
     private int count;
 
-    JLabel countDownLabel = new JLabel("", SwingConstants.CENTER);
+    TextLabel countDownLabel = new TextLabel("", 50, 50);
 
     //init GamePanel
     public GamePanel(GameLogic logic) {
         gameLogic = logic;
 
-        FlowLayout layout = (FlowLayout) getLayout();
-        layout.setHgap(20);
-        layout.setVgap(20);
-        JPanel timePanel = drawTimerPanel();
-        add(timePanel);
+        this.setLayout(new FlowLayout(FlowLayout.CENTER,20,20));
+        drawGamingPanel();
 
-        JPanel bufferPanel = drawBuffer();
-        add(bufferPanel);
+    }
 
-        JPanel gridPanel = drawCodeMatrix();
-        add(gridPanel);
-
-        JPanel seqPanel = drawSequence();
-        add(seqPanel);
-
-        JPanel scorePanel = drawScorePanel();
-        add(scorePanel);
+    private void drawGamingPanel(){
+        this.add(drawTimerPanel());
+        this.add(drawBuffer());
+        this.add(drawCodeMatrix());
+        this.add(drawSequence());
+        this.add(drawScorePanel());
+    }
+    private void drawGamingOver(){
+        removeAll();
+        repaint();
+        this.add(drawTimerPanel());
+        this.add(drawBuffer());
+        this.add(drawTimeOutPanel());
+        this.add(drawSequence());
+        this.add(drawScorePanel());
+        revalidate();
     }
 
     //refresh the Panel
     private void repaintPuzzle() {
         removeAll();
         repaint();
-        JPanel timePanel = drawTimerPanel();
-        add(timePanel);
-        JPanel bufferPanel = drawBuffer();
-        add(bufferPanel);
-        JPanel gridPanel = drawCodeMatrix();
-        add(gridPanel);
-        JPanel seqPanel = drawSequence();
-        add(seqPanel);
-        JPanel scorePanel = drawScorePanel();
-        add(scorePanel);
+        drawGamingPanel();
         revalidate();
     }
 
     private JPanel drawCodeMatrix(){
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+        Panel panel = new Panel(450,400);
         panel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85),2,true));
-        panel.setBackground(Color.BLACK);
 
-        panel.setPreferredSize(new Dimension(450, 400));
-        JPanel titlePanel = new JPanel();
-        titlePanel.setPreferredSize(new Dimension(446, 25));
+        Panel titlePanel = new Panel(446, 25);
         titlePanel.setBackground(new Color(222,255,85));
-        titlePanel.setBorder(null);
         panel.add(titlePanel);
 
-        JLabel gridLabel = new JLabel("CODE MATRIX",SwingConstants.LEFT);
+        TextLabel gridLabel = new TextLabel("CODE MATRIX",420,25);
         gridLabel.setFont(new Font("Consolas", Font.BOLD,20));
-        gridLabel.setPreferredSize(new Dimension(420, 25));
         gridLabel.setForeground(new Color(0,0,0,90));
         titlePanel.add(gridLabel);
 
-        JPanel codeMatrixPanel = new JPanel();
-        codeMatrixPanel.setPreferredSize(new Dimension(446, 360));
-        codeMatrixPanel.setBorder(null);
-        codeMatrixPanel.setBackground(Color.BLACK);
+        Panel codeMatrixPanel = new Panel(446, 360);
         panel.add(codeMatrixPanel);
 
         int matrixSpan = gameLogic.status.getMatrixSpan();
         final GridLayout gridLayout = new GridLayout(matrixSpan, matrixSpan);
         codeMatrixPanel.setLayout(gridLayout);
-
 
         JButton[][] buttons = new JButton[matrixSpan][matrixSpan];
 
@@ -107,11 +91,11 @@ public class GamePanel extends JPanel {
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
                 buttons[row][col] = new JButton(codeSource[row][col].getCode());
-                //style
+
                 buttons[row][col].setBackground(Color.BLACK);
                 buttons[row][col].setPreferredSize(new Dimension(60, 60));
                 buttons[row][col].setFont(new Font("Consolas",Font.BOLD,20));
-                //border
+
                 buttons[row][col].setBorderPainted(false);
                 buttons[row][col].setForeground(new Color(222,255,85));
 
@@ -145,10 +129,9 @@ public class GamePanel extends JPanel {
                         @Override
                         public void mouseReleased(MouseEvent e) {}
                         @Override
-                        public void mouseEntered(MouseEvent e) {}
+                        public void mouseEntered(MouseEvent e) {buttons[finalRow][finalCol].setForeground(new Color(95,245,255));}
                         @Override
-                        public void mouseExited(MouseEvent e) {
-                        }
+                        public void mouseExited(MouseEvent e) {buttons[finalRow][finalCol].setForeground(new Color(222,255,85));}
                     });
                 }
 
@@ -160,22 +143,16 @@ public class GamePanel extends JPanel {
 
     private JPanel drawBuffer() {
 
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.BLACK);
-        panel.setPreferredSize(new Dimension(550, 120));
-
-        JLabel bufferText = new JLabel("BUFFER",SwingConstants.LEFT);
-        bufferText.setFont(new Font("Consolas",Font.BOLD,25));
-        bufferText.setPreferredSize(new Dimension(550, 40));
-        bufferText.setForeground(new Color(222,255,85));
-        panel.add(bufferText);
-
+        Panel panel = new Panel(550, 120);
         panel.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
 
+        TextLabel bufferText = new TextLabel("BUFFER",550, 40);
+        bufferText.setFont(new Font("Consolas",Font.BOLD,25));
+        panel.add(bufferText);
+
         for (int i = 0; i < gameLogic.status.getBufferSize(); i++) {
-            JLabel label = new JLabel(gameLogic.status.getBuffer().get(i),SwingConstants.CENTER);
-            label.setPreferredSize(new Dimension(35, 35));
-            label.setForeground(new Color(222,255,85));
+            TextLabel label = new TextLabel(gameLogic.status.getBuffer().get(i),35, 35);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setFont(new Font("Consolas",Font.BOLD,18));
             label.setBorder(BorderFactory.createDashedBorder(new Color(222,255,85,90),12,5));
             panel.add(label);
@@ -184,59 +161,43 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel drawSequence() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel(550, 350);
         panel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85),1));
-        panel.setBackground(Color.BLACK);
-        panel.setPreferredSize(new Dimension(550, 350));
 
-        JLabel seqTextLabel = new JLabel(" SEQUENCE REQUIRED TO UPLOAD",SwingConstants.LEFT);
+        TextLabel seqTextLabel = new TextLabel(" SEQUENCE REQUIRED TO UPLOAD",550, 35);
         seqTextLabel.setFont(new Font("Consolas",Font.BOLD,20));
-        seqTextLabel.setPreferredSize(new Dimension(550, 30));
-        seqTextLabel.setForeground(new Color(222,255,85));
-        seqTextLabel.setBorder(BorderFactory.createMatteBorder(0,0,1,0,new Color(222,255,85)));
+        seqTextLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0,new Color(222,255,85)));
         panel.add(seqTextLabel);
 
         ArrayList<Sequence> sequences = gameLogic.status.getSequences();
 
         for (Sequence sequence : sequences) {
-            JPanel p = new JPanel();
-            p.setBackground(Color.BLACK);
-            p.setPreferredSize(new Dimension(548, 65));
-            p.setLayout(new FlowLayout(FlowLayout.LEFT));
+            Panel p = new Panel(548, 65);
             panel.add(p);
 
             if(sequence.getState()==SUCCESS){
-                JLabel label = new JLabel(" SUCCEEDED",SwingConstants.LEFT);
+                TextLabel label = new TextLabel(" SUCCEEDED",548, 55);
                 label.setForeground(new Color(0,0,0,98));
                 label.setOpaque(true);
                 label.setBackground(new Color(27,213,117));
-                label.setPreferredSize(new Dimension(548, 65));
                 label.setFont(new Font("Consolas",Font.BOLD,20));
                 p.add(label);
             }
             else if(sequence.getState()==FAIL){
-                JLabel label = new JLabel(" FAILED",SwingConstants.LEFT);
+                TextLabel label = new TextLabel(" FAILED",548, 55);
                 label.setForeground(new Color(0,0,0,98));
                 label.setOpaque(true);
-                label.setPreferredSize(new Dimension(548, 65));
                 label.setBackground(new Color(255,87,81));
                 label.setFont(new Font("Consolas",Font.BOLD,20));
                 p.add(label);
             }
             else{
                 for (int j = 0; j < sequence.getSeq().size(); j++) {
-                    JLabel label = new JLabel(sequence.getSeq().get(j).getCode(),SwingConstants.CENTER);
-
-                    label.setPreferredSize(new Dimension(50, 50));
-                    label.setForeground(Color.WHITE);
-                    if (sequence.getSeq().get(j).getState()==SELECTED) {
-                        label.setForeground(new Color(222,255,85));
-                        label.setBorder(BorderFactory.createLineBorder(new Color(222,255,85)));
-                    }
-                    if (sequence.getSeq().get(j).getState()==ADDED) {
-                        label.setForeground(new Color(222,255,85));
-                    }
+                    TextLabel label = new TextLabel(sequence.getSeq().get(j).getCode(),50, 50);
+                    label.setHorizontalAlignment(SwingConstants.CENTER);
                     label.setFont(new Font("Consolas",Font.BOLD,20));
+                    if (sequence.getSeq().get(j).getState()==WAITING) {label.setForeground(Color.WHITE);}
+                    if (sequence.getSeq().get(j).getState()==SELECTED) {label.setBorder(BorderFactory.createLineBorder(new Color(222,255,85)));}
                     p.add(label);
                 }
             }
@@ -246,48 +207,52 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel drawScorePanel(){
-        JPanel panel = new JPanel();
-
-        panel.setPreferredSize(new Dimension(900, 100));
+        Panel panel = new Panel(900, 100);
         panel.setBackground(new Color(95,245,255,50));
 
-        JLabel textLabel = new JLabel("SCORE PANEL TO BE IMPLEMENTED",SwingConstants.CENTER);
+        TextLabel textLabel = new TextLabel("SCORE PANEL TO BE IMPLEMENTED",900, 100);
         textLabel.setFont(new Font("Consolas",Font.BOLD,20));
-        textLabel.setPreferredSize(new Dimension(900, 100));
+        textLabel.setHorizontalAlignment(SwingConstants.CENTER);
         textLabel.setForeground(new Color(95,245,255));
         panel.add(textLabel);
 
         return panel;
     }
 
-    private JPanel drawTimerPanel(){
-        JPanel panel = new JPanel();
-        //panel.setBorder(BorderFactory.createLineBorder(Color.RED));
-        panel.setPreferredSize(new Dimension(450, 100));
-        panel.setBackground(Color.BLACK);
+    private JPanel drawTimeOutPanel(){
+        Panel panel = new Panel(450, 400);
+        panel.setBackground(new Color(255,87,81,90));
 
-        JLabel timeTextLabel = new JLabel("TIME REMAINING",SwingConstants.LEFT);
+        TextLabel textLabel = new TextLabel("TIME OUT",450, 400);
+        textLabel.setFont(new Font("Consolas",Font.BOLD,50));
+        textLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        textLabel.setForeground(new Color(255,87,81));
+        panel.add(textLabel);
+
+        return panel;
+    }
+
+    private JPanel drawTimerPanel(){
+        Panel panel = new Panel(450, 100);
+
+        TextLabel timeTextLabel = new TextLabel("TIME REMAINING",320, 100);
+        timeTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeTextLabel.setFont(new Font("Consolas",Font.BOLD,35));
-        timeTextLabel.setPreferredSize(new Dimension(300, 100));
-        timeTextLabel.setForeground(new Color(222,255,85));
         panel.add(timeTextLabel);
 
         countDownLabel.setBorder(BorderFactory.createLineBorder(new Color(222,255,85)));
-        countDownLabel.setPreferredSize(new Dimension(50, 50));
+        countDownLabel.setFont(new Font("Consolas",Font.BOLD,35));
+        countDownLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(countDownLabel);
+
         String text = (gameLogic.status.getCurrentCount() -count)+"";
         setCountDownLabelText(text);
-
-        countDownLabel.setForeground(new Color(222,255,85));
-        countDownLabel.setFont(new Font("Consolas",Font.BOLD,35));
 
         return panel;
     }
 
     //set Timer Label text
-    private void setCountDownLabelText(String text) {
-        countDownLabel.setText(text);
-    }
+    private void setCountDownLabelText(String text) {countDownLabel.setText(text);}
 
     //Timer event
     private void start() {
@@ -300,7 +265,7 @@ public class GamePanel extends JPanel {
                 ((Timer) e.getSource()).stop();
                 gameLogic.setTimeOut();
                 gameLogic.updateState();
-                repaintPuzzle();
+                drawGamingOver();
             }
         }).start();
     }

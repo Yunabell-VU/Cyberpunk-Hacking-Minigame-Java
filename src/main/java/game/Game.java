@@ -1,6 +1,6 @@
 package game;
 
-import engine.GamePanel;
+import engine.UI.GamePanel;
 import entity.Puzzle;
 
 import javax.swing.*;

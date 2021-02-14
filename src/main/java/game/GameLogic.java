@@ -38,7 +38,7 @@ public class GameLogic {
         status.setBuffer(tmpbuf);
 
          Tile[][] tmpGrid = status.getCodeMatrix();
-         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[ ]",SELECTED);
+         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[]",SELECTED);
          status.setCodeMatrix(tmpGrid);
 
         ArrayList<Sequence> tmpSeq = status.getSequences();
@@ -59,7 +59,7 @@ public class GameLogic {
 
     //Two states need to change in Status:
     //Inside a sequence: tile successively in the buffer-> state: ADDED
-    //Sequence: check if can be markded as SUCCESS or FAIL
+    //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateSequences(){}
 
     //Do Not modify this function!
