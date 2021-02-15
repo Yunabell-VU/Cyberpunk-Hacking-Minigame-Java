@@ -4,11 +4,6 @@ import entity.*;
 
 import java.util.ArrayList;
 
-import static entity.Sequence.FAIL;
-import static entity.Sequence.SUCCESS;
-import static entity.Tile.ADDED;
-import static entity.Tile.SELECTED;
-
 public class GameLogic {
 
     public int timeFlag = 0;
@@ -38,13 +33,17 @@ public class GameLogic {
         status.setBuffer(tmpbuf);
 
          Tile[][] tmpGrid = status.getCodeMatrix();
-         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[]",SELECTED);
+         tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[]");
+         tmpGrid[tileSelected[0]][tileSelected[1]].setSelected(true);
+        tmpGrid[tileSelected[0]][tileSelected[1]].setAvailable(true);
          status.setCodeMatrix(tmpGrid);
 
         ArrayList<Sequence> tmpSeq = status.getSequences();
-        tmpSeq.get(1).getSeq().get(0).setState(SELECTED);
-        tmpSeq.get(0).setState(SUCCESS);
-        tmpSeq.get(2).setState(FAIL);
+        tmpSeq.get(1).getSeq().get(1).setAdded(true);
+        tmpSeq.get(1).getSeq().get(1).setSelected(true);
+        tmpSeq.get(1).getSeq().get(0).setAdded(true);
+        tmpSeq.get(0).setSucceeded(true);
+        tmpSeq.get(2).setFailed(true);
         status.setSequences(tmpSeq);
         ///////////////////////////////////////////////
     }

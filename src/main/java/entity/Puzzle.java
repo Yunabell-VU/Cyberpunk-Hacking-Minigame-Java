@@ -4,7 +4,6 @@ import engine.Parse;
 
 import java.util.ArrayList;
 
-import static entity.Sequence.UNCHECK;
 import static entity.Tile.*;
 
 //store the pure puzzle here.
@@ -33,22 +32,24 @@ public class Puzzle {
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
                 if (row == 0) {
-                    temp = new Tile(rawMatrix[row][col].toUpperCase(),AVAILABLE);
+                    temp = new Tile(rawMatrix[row][col].toUpperCase());
+                    temp.setAvailable(true);
                 } else {
-                    temp = new Tile(rawMatrix[row][col].toUpperCase(),UNAVAILABLE);
+                    temp = new Tile(rawMatrix[row][col].toUpperCase());
                 }
                 codeMatrix[row][col] = temp;
             }
         }
 
+        SeqCode temp2;
         ArrayList<String[]> seq = map.getSeq();
         for (String[] strings : seq) {
-            ArrayList<Tile> currentSeq = new ArrayList<>(strings.length);
+            ArrayList<SeqCode> currentSeq = new ArrayList<>(strings.length);
             for (String s : strings) {
-                temp = new Tile(s.toUpperCase(), WAITING);
-                currentSeq.add(temp);
+                temp2 = new SeqCode(s.toUpperCase());
+                currentSeq.add(temp2);
             }
-            Sequence cookedSeq = new Sequence(currentSeq, UNCHECK);
+            Sequence cookedSeq = new Sequence(currentSeq);
             sequences.add(cookedSeq);
         }
         bufferSize = map.getBufferSize();

@@ -7,31 +7,23 @@ import java.util.ArrayList;
 //DO NOT modify this file!
 
 public class Sequence {
-    public final static int UNCHECK = 6666;
-    public final static int SUCCESS = 7777;
-    public final static int FAIL = 8888;
+    private boolean succeeded = false;
+    private boolean failed = false;
 
-    private ArrayList<Tile> seq;
-    private int state;
+    private ArrayList<SeqCode> seq;
+    public Sequence(ArrayList<SeqCode> seq){ this.seq = seq;}
 
-    public Sequence(ArrayList<Tile> seq, int state){
-        this.seq = seq;
-        this.state = state;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public ArrayList<Tile> getSeq() {
+    public ArrayList<SeqCode> getSeq() {
         return seq;
     }
 
-    public void setSeq(ArrayList<Tile> seq) {
+    public void setSeq(ArrayList<SeqCode> seq) {
         this.seq = seq;
     }
 
-    public void setState(int state) {
-        this.state = state;
-    }
+    public boolean isSucceeded(){return succeeded;}
+    public boolean isFailed(){return failed;}
+
+    public void setSucceeded(boolean succeeded){this.succeeded = succeeded;}
+    public void setFailed(boolean failed){this.failed = failed;}
 }
