@@ -266,7 +266,7 @@ public class GamePanel extends JPanel {
             } else {
                 ((Timer) e.getSource()).stop();
                 gameLogic.setTimeOut();
-                gameLogic.updateState();
+                gameLogic.finalCheck();
                 drawGamingOver();
             }
         }).start();

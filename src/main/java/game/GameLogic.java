@@ -39,6 +39,9 @@ public class GameLogic {
         status.setSequences(tmpSeq);
         ///////////////////////////////////////////////
     }
+    public void finalCheck(){
+        updateSequences();
+    }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
     //e.g. from AVAILABLE to SELECTED
