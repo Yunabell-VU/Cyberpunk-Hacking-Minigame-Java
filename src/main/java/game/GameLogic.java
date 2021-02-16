@@ -31,6 +31,7 @@ public class GameLogic {
         //Delete the the corresponding part you implemented
         /////////////FIXME//////////////////////////
         ArrayList<Sequence> tmpSeq = status.getSequences();
+        tmpSeq.get(1).getSeq().add(0,new SeqCode(""));
         tmpSeq.get(1).getSeq().get(1).setAdded(true);
         tmpSeq.get(1).getSeq().get(1).setSelected(true);
         tmpSeq.get(1).getSeq().get(0).setAdded(true);

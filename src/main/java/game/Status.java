@@ -6,6 +6,8 @@ import entity.Tile;
 
 import java.util.ArrayList;
 
+import static game.Settings.BUFFER_OFFSET;
+
 //status of each movement.
 //UI draws the panel based on the latest Status
 //Do Not modify this file!
@@ -19,12 +21,12 @@ public class Status {
     private ArrayList<String> buffer = new ArrayList<>();
     private final int matrixSpan;
 
-    public Status(Puzzle puzzle, int bufferSizeOffset, int count, int score){
+    public Status(Puzzle puzzle, int count, int score){
 
         this.matrixSpan = puzzle.getMatrixSpan();
         this.codeMatrix = puzzle.getCodeMatrix();
         this.sequences = puzzle.getSequences();
-        this.bufferSize = puzzle.getBufferSize() + bufferSizeOffset;
+        this.bufferSize = puzzle.getBufferSize() + BUFFER_OFFSET;
         this.currentCount = count;
         this.score = score;
 

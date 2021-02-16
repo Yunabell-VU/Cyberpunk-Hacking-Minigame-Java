@@ -11,7 +11,10 @@ public class Sequence {
     private boolean failed = false;
 
     private ArrayList<SeqCode> seq;
-    public Sequence(ArrayList<SeqCode> seq){ this.seq = seq;}
+
+    public Sequence(ArrayList<SeqCode> seq) {
+        this.seq = seq;
+    }
 
     public ArrayList<SeqCode> getSeq() {
         return seq;
@@ -21,9 +24,20 @@ public class Sequence {
         this.seq = seq;
     }
 
-    public boolean isSucceeded(){return succeeded;}
-    public boolean isFailed(){return failed;}
+    public boolean isSucceeded() {
+        return succeeded;
+    }
 
-    public void setSucceeded(boolean succeeded){this.succeeded = succeeded;}
-    public void setFailed(boolean failed){this.failed = failed;}
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setSucceeded(boolean succeeded) {
+        this.succeeded = succeeded;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
+
 }

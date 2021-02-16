@@ -1,10 +1,10 @@
-package engine;
+package entity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Random;
 
-import static game.Setting.MAX_MATRIX_SPAN;
+import static game.Settings.MAX_MATRIX_SPAN;
 
 //Parse the puzzle from .txt
 //puzzle set should be stored in entity.Puzzle class

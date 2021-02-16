@@ -1,10 +1,6 @@
 package entity;
 
-import engine.Parse;
-
 import java.util.ArrayList;
-
-import static entity.Tile.*;
 
 //store the pure puzzle here.
 //you can decide how to add state to each element you parsed
