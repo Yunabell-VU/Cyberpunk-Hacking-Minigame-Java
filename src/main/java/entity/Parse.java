@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Random;
 
-import static game.Settings.MAX_MATRIX_SPAN;
-
 //Parse the puzzle from .txt
 //puzzle set should be stored in entity.Puzzle class
 public class Parse {
@@ -20,7 +18,7 @@ public class Parse {
 
     public Parse() {
         bufferSize = 0;
-        matrix = new String[MAX_MATRIX_SPAN][MAX_MATRIX_SPAN];
+        matrix = new String[6][6];
         seq = new ArrayList<>();
         matrixSpan = 0;
         mapSeed = 0;

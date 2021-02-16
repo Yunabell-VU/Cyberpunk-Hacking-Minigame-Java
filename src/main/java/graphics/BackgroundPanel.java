@@ -11,6 +11,8 @@ public class BackgroundPanel extends JPanel {
         this.image = image;
 
     }
+
+    @Override
     protected void paintComponent(Graphics g) {
         g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
     }

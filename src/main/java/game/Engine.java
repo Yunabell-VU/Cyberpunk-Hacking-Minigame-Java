@@ -10,6 +10,9 @@ public class Engine {
     public static void runGame() {
         GameFrame frame = new GameFrame("CHM - Endless Challenge");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setSize(1200, 800);
+        frame.setVisible(true);
+        frame.setResizable(false);
     }
 
     public static void main(String[] args) {

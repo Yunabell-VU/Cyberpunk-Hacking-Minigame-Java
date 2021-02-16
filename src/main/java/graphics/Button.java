@@ -12,6 +12,6 @@ public class Button extends JButton {
 
         this.setBorderPainted(false);
         this.setOpaque(true);
-        this.setForeground(new Color(222, 255, 85));
+        this.setForeground(new Color(250, 247, 10));
     }
 }
