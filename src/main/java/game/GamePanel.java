@@ -4,6 +4,7 @@ import entity.*;
 import entity.Daemon;
 import entity.DaemonCell;
 import graphics.*;
+import graphics.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,7 +163,7 @@ public class GamePanel extends JPanel {
     }
 
     //Timer event
-    private void start() {
+    private void startTime() {
         new Timer(TIMER_PERIOD, e -> {
             if (count < gameLogic.status.getCurrentCount()) {
                 count++;
@@ -184,7 +185,7 @@ public class GamePanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (gameLogic.timeFlag == 0) {
                     gameLogic.timeFlag = 1;
-                    start();
+                    startTime();
                 }
 
                 tileSelected[0] = row;
@@ -212,6 +213,13 @@ public class GamePanel extends JPanel {
                 matrixCell.setForeground(new Color(222, 255, 85));
             }
         });
+    }
+
+    private JPanel drawMenuBar(){
+        JPanel menuBar = new MenuBar();
+        JButton exitButton = new ExitButton();
+        menuBar.add(exitButton);
+        return  menuBar;
     }
 
 }
