@@ -3,9 +3,9 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class Button extends JButton {
-    public Button(String text){
-        this.setText(text);
+public class MatrixCell extends JButton {
+    public MatrixCell(String text){
+        super(text);
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(60, 60));
         this.setFont(new Font("Consolas", Font.BOLD, 20));

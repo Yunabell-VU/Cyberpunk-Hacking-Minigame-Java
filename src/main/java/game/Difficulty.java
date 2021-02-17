@@ -67,4 +67,10 @@ class Difficulty {
         this.timeReward = 5;
     }
 
+    public String getDifficultyInfo() {
+        String info;
+        info = "<html> Initial Time Limit : "+ initTimeLimit + " seconds <br> Buffer Size : + "+ bufferOffset +
+                "<br> Time Reward : "+ timeReward + " seconds <br> Score Reward : "+ scoreReward + "</html>";
+        return info;
+    }
 }

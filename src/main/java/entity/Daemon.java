@@ -1,26 +1,26 @@
 package entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 //One single sequence set
 
 //DO NOT modify this file!
 
-public class Sequence {
+public class Daemon {
     private boolean succeeded = false;
     private boolean failed = false;
 
-    private ArrayList<SeqCode> seq;
+    private List<SeqCell> seq;
 
-    public Sequence(ArrayList<SeqCode> seq) {
+    public Daemon(List<SeqCell> seq) {
         this.seq = seq;
     }
 
-    public ArrayList<SeqCode> getSeq() {
+    public List<SeqCell> getSeq() {
         return seq;
     }
 
-    public void setSeq(ArrayList<SeqCode> seq) {
+    public void setSeq(List<SeqCell> seq) {
         this.seq = seq;
     }
 

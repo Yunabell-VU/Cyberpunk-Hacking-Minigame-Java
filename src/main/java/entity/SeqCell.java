@@ -1,10 +1,10 @@
 package entity;
 
-public class SeqCode extends Code{
+public class SeqCell extends Cell {
 
     private boolean added = false;
 
-    public SeqCode(String code){super(code);}
+    public SeqCell(String code){super(code);}
 
     public boolean isAdded() {return added;}
     public void setAdded(boolean added) {this.added = added;}

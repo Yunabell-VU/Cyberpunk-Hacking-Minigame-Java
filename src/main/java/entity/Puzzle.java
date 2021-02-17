@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //store the pure puzzle here.
 //you can decide how to add state to each element you parsed
@@ -14,14 +15,14 @@ public class Puzzle {
     //do not modify the definitions here
     private final int matrixSpan;
     private final Tile[][] codeMatrix;
-    private final ArrayList<Sequence> sequences = new ArrayList<>();
+    private final List<Daemon> daemons = new ArrayList<>();
     private final int bufferSize;
 
     public Puzzle(){
         Parse map = new Parse();
         map.readFile();
         matrixSpan = map.getMatrixSpan();
-        System.out.println("matrix span: "+ matrixSpan);
+        //System.out.println("matrix span: "+ matrixSpan);
         String[][] rawMatrix = map.getMatrix();
         Tile temp;
         codeMatrix = new Tile[matrixSpan][matrixSpan];
@@ -37,16 +38,16 @@ public class Puzzle {
             }
         }
 
-        SeqCode temp2;
-        ArrayList<String[]> seq = map.getSeq();
+        SeqCell temp2;
+        List<String[]> seq = map.getSeq();
         for (String[] strings : seq) {
-            ArrayList<SeqCode> currentSeq = new ArrayList<>(strings.length);
+            ArrayList<SeqCell> currentSeq = new ArrayList<>(strings.length);
             for (String s : strings) {
-                temp2 = new SeqCode(s.toUpperCase());
+                temp2 = new SeqCell(s.toUpperCase());
                 currentSeq.add(temp2);
             }
-            Sequence cookedSeq = new Sequence(currentSeq);
-            sequences.add(cookedSeq);
+            Daemon cookedSeq = new Daemon(currentSeq);
+            daemons.add(cookedSeq);
         }
         bufferSize = map.getBufferSize();
     }
@@ -55,7 +56,7 @@ public class Puzzle {
 
     public Tile[][] getCodeMatrix() {return codeMatrix;}
 
-    public ArrayList<Sequence> getSequences() {return sequences;}
+    public List<Daemon> getSequences() {return daemons;}
 
     public int getMatrixSpan() {return matrixSpan;}
 }

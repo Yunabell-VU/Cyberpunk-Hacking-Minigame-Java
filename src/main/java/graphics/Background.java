@@ -3,12 +3,14 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class BackgroundPanel extends JPanel {
+public class Background extends JPanel {
     private static final long serialVersionUID = -6352788025440244338L;
-    private Image image = null;
+    private Image image;
 
-    public BackgroundPanel(Image image) {
+    public Background(Image image) {
         this.image = image;
+        this.setPreferredSize(new Dimension(1200,800));
+        this.setLayout(null);
 
     }
 

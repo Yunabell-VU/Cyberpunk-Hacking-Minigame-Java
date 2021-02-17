@@ -2,7 +2,7 @@ package game;
 
 import entity.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GameLogic {
 
@@ -30,8 +30,8 @@ public class GameLogic {
 
         //Delete the the corresponding part you implemented
         /////////////FIXME//////////////////////////
-        ArrayList<Sequence> tmpSeq = status.getSequences();
-        tmpSeq.get(1).getSeq().add(0,new SeqCode(""));
+        List<Daemon> tmpSeq = status.getDaemons();
+        tmpSeq.get(1).getSeq().add(0,new SeqCell(""));
         tmpSeq.get(1).getSeq().get(1).setAdded(true);
         tmpSeq.get(1).getSeq().get(1).setSelected(true);
         tmpSeq.get(1).getSeq().get(0).setAdded(true);
@@ -73,7 +73,7 @@ public class GameLogic {
     //update buffer in Status
     private void updateBuffer(){
         if (bufferCount < status.getBufferSize()) {
-            ArrayList<String> tmpbuf = status.getBuffer();
+            List<String> tmpbuf = status.getBuffer();
             tmpbuf.set(bufferCount, status.getCodeMatrix()[tileSelected[0]][tileSelected[1]].getCode());
             status.setBuffer(tmpbuf);
             bufferCount += 1;

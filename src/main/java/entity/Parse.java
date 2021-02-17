@@ -4,13 +4,15 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Random;
 
+import static java.lang.System.*;
+
 //Parse the puzzle from .txt
 //puzzle set should be stored in entity.Puzzle class
 public class Parse {
 
     private int bufferSize;
     private final String[][] matrix;
-    private final ArrayList<String[]> seq;
+    private final List<String[]> seq;
     private int matrixSpan;
     private int mapSeed;
     private final Random rand;
@@ -25,7 +27,7 @@ public class Parse {
         rand = new Random();
     }
 
-    public void print() {
+    /*public void print() {
         System.out.println("Current map seed: " + mapSeed);
         System.out.println("Current buffer size: " + bufferSize);
         System.out.println();
@@ -47,7 +49,7 @@ public class Parse {
                 if (j == strings.length - 1) System.out.println();
             }
         }
-    }
+    }*/
 
     public void readFile() {
         try {
@@ -67,7 +69,7 @@ public class Parse {
                 if (line.length() != 0) {
                     String[] firstLine = line.split(" ");
                     matrixSpan = firstLine.length;
-                    System.arraycopy(firstLine, 0, matrix[0], 0, matrixSpan);
+                    arraycopy(firstLine, 0, matrix[0], 0, matrixSpan);
                     break;
                 }
             }
@@ -81,10 +83,10 @@ public class Parse {
                 String[] seqArr = seqStr.split(" ");
                 if (seqStr.length() > 0) seq.add(seqArr);
             }
-            print();
+            //print();
             reader.close();
         } catch (FileNotFoundException e){
-            System.out.println("Error occurs when loading puzzles");
+            //out.println("Error occurs when loading puzzles");
             e.printStackTrace();
         }
     }
@@ -92,7 +94,7 @@ public class Parse {
 
     public String[][] getMatrix() {return matrix;}
 
-    public ArrayList<String[]> getSeq() {return seq;}
+    public List<String[]> getSeq() {return seq;}
 
     public int getMatrixSpan() {return matrixSpan;}
 }

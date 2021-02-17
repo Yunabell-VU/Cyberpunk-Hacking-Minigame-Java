@@ -1,10 +1,4 @@
 
-O
-src/main/java/engine/Parse.java,3\e\3e781efe1be84cd26acb78dda234e2123119f034
-V
-&src/main/java/engine/UI/TextLabel.java,5\4\54a747e2ea99216aabd66865ec6df2d9f4e1377a
-O
-src/main/java/game/Setting.java,3\c\3c65e2da88eeaed2dcaa6a1f39836d32650e2559
 H
 src/main/java/txt/01.txt,2\9\29d28104c34462453305b0782c390fd00ee2c686
 H
@@ -35,25 +29,19 @@ H
 src/main/java/txt/07.txt,7\a\7a47a496e4d19666f0e2e74bad56c991c4c3f58a
 H
 src/main/java/txt/06.txt,6\f\6ff0858a6e7029491e63314642c90e68d7c92a07
-L
-src/main/java/game/Game.java,3\2\325ffc7f519c9d9385dff10619989cebe253f784
-R
-"src/main/java/engine/UI/Panel.java,1\3\13a351b604ae1983e857a939ed2a062ff79934ea
-V
-&src/main/java/engine/UI/GamePanel.java,a\e\aecb8db8bd0c37aa60c1a85013296ebcd9f03510
 N
 src/main/java/entity/Tile.java,2\6\26b59b302e804bd0029190e03838aefff96585cc
-Q
-!src/main/java/entity/SeqCode.java,a\9\a9c3f05c7c6ef8fb9a85b7962807d107a4d57a3a
 P
  src/main/java/entity/Puzzle.java,8\1\81bfbc2f256e9ca45542073af7aa48f20d912a4d
-N
-src/main/java/entity/Code.java,2\e\2ee59b4c02f1027d6761dc6016ec2c5b414708bf
 N
 src/main/java/game/Status.java,e\5\e5695f345be934ad736df069b2a2032cf702aae5
 Q
 !src/main/java/game/GameLogic.java,3\a\3a76db90b1133ac80f9a5c6f86f58381f6d2043f
 R
-"src/main/java/entity/Sequence.java,1\d\1d523979023a233d3312f8c40658faa1fc68a04b
-S
-#src/main/java/engine/UI/Button.java,4\a\4af2c9991ac812e5267fd2e8e14e28b31f0fe24c
+"src/main/java/game/Difficulty.java,9\3\93c99e8700d904a933f14cffd42586f61bfdbae9
+N
+src/main/java/game/Engine.java,6\d\6dacee780aa133a10f3a3353ca0f544bde01b1b4
+Q
+!src/main/java/game/GameFrame.java,5\f\5f898f81047b6c398bea80e780d42ea6815fcb7c
+O
+src/main/java/entity/Parse.java,2\0\20904b14b27722f177ee1db6fe95295db78a47e1

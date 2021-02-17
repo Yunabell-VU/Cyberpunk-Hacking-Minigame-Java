@@ -1,23 +1,24 @@
 package game;
 
 import entity.Puzzle;
-import entity.Sequence;
+import entity.Daemon;
 import entity.Tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //status of each movement.
 //UI draws the panel based on the latest Status
 //Do Not modify this file!
 
-public class Status {
+ class Status {
 
     private int currentCount;
     private int score;
     private Tile[][] codeMatrix;
-    private ArrayList<Sequence> sequences;
+    private List<Daemon> daemons;
     private int bufferSize;
-    private ArrayList<String> buffer = new ArrayList<>();
+    private List<String> buffer = new ArrayList<>();
     private final int matrixSpan;
     private final Difficulty gameDifficulty;
 
@@ -25,7 +26,7 @@ public class Status {
 
         this.matrixSpan = puzzle.getMatrixSpan();
         this.codeMatrix = puzzle.getCodeMatrix();
-        this.sequences = puzzle.getSequences();
+        this.daemons = puzzle.getSequences();
         this.gameDifficulty = gameDifficulty;
         this.bufferSize = puzzle.getBufferSize() + gameDifficulty.getBufferOffset();
         this.currentCount = gameDifficulty.getInitTimeLimit();
@@ -33,7 +34,6 @@ public class Status {
 
         for (int i = 0; i < bufferSize;i++)
             buffer.add(" ");
-
     }
 
     public int getBufferSize() {
@@ -46,8 +46,8 @@ public class Status {
 
     public int getCurrentCount() {return currentCount;}
 
-    public ArrayList<Sequence> getSequences() {
-        return sequences;
+    public List<Daemon> getDaemons() {
+        return daemons;
     }
 
     public int getMatrixSpan() {return matrixSpan;}
@@ -56,23 +56,19 @@ public class Status {
         return codeMatrix;
     }
 
-    public ArrayList<String> getBuffer() {
+    public List<String> getBuffer() {
         return buffer;
     }
 
-    public void setSequences(ArrayList<Sequence> sequences) {
-        this.sequences = sequences;
+    public void setSequences(List<Daemon> daemons) {
+        this.daemons = daemons;
     }
 
     public void setCodeMatrix(Tile[][] codeMatrix) {
         this.codeMatrix = codeMatrix;
     }
 
-    public void setBufferSize(int bufferSize) {
-        this.bufferSize = bufferSize;
-    }
-
-    public void setBuffer(ArrayList<String> buffer) {
+    public void setBuffer(List<String> buffer) {
         this.buffer = buffer;
     }
 
@@ -83,4 +79,8 @@ public class Status {
     public void setScore(int score) {
         this.score = score;
     }
-}
+
+     public Difficulty getGameDifficulty() {
+         return gameDifficulty;
+     }
+ }

@@ -3,7 +3,7 @@ package entity;
 //One single Tile/Code
 //DO NOT modify this file!
 
-public class Tile extends Code{
+public class Tile extends Cell {
     private boolean available = false;
     public Tile(String code){super(code);}
 
