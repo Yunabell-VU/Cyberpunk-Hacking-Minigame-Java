@@ -77,6 +77,9 @@ public class GameLogic {
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateSequences(){
         List<Daemon> tmpSeq = status.getDaemons();
+        if(timeOut){
+            gameFailed();
+        }
         for(int i = 0; i < tmpSeq.size(); i++){
             if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()){
                 if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())) {
@@ -98,14 +101,20 @@ public class GameLogic {
                             emptyCount += 1;
                         }
                     }
-                    for(int n = 0; n < bufferCount-emptyCount; n++){
+                    for(int n = 0; n < bufferCount-emptyCount-1; n++){
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if(tmpSeq.get(i).getSeq().size() >= status.getBufferSize()){
-                        gameFailed();
+                    if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())){
+                        tmpSeq.get(i).getSeq().get(bufferCount-1).setAdded(true);
+                        tmpSeq.get(i).getSeq().get(bufferCount-1).setSelected(true);
+                    }
+                    else{
+                        tmpSeq.get(i).addEmptyCell();
+                    }
+                    if(tmpSeq.get(i).getSeq().size() > status.getBufferSize()){
+                        tmpSeq.get(i).setFailed(true);
                     }
                 }
-                //一个sequence里面所有的都是added的则 succeed
                 for(int j = 0; j < tmpSeq.get(i).getSeq().size(); j++){
                     tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getSeq().get(j).isAdded());
                 }
@@ -134,7 +143,6 @@ public class GameLogic {
     //Do Not modify this function!
     public void setTimeOut(){
         timeOut = true;
-        gameFailed();
     }
 
 }

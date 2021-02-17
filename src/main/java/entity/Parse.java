@@ -27,29 +27,29 @@ public class Parse {
         rand = new Random();
     }
 
-    /*public void print() {
-        System.out.println("Current map seed: " + mapSeed);
-        System.out.println("Current buffer size: " + bufferSize);
-        System.out.println();
-        System.out.println("Current matrix span: "+ matrixSpan);
-        System.out.println("Current matrix: ");
-        System.out.println();
-        for (int i = 0; i < matrixSpan; i++) {
-            for (int j = 0; j < matrixSpan; j++) {
-                System.out.print(matrix[i][j] + " ");
-                if (j == matrixSpan - 1) System.out.println();
-            }
-        }
-        System.out.println();
-        System.out.println("Current sequences: ");
-        System.out.println();
-        for (String[] strings : seq) {
-            for (int j = 0; j < strings.length; j++) {
-                System.out.print(strings[j] + " ");
-                if (j == strings.length - 1) System.out.println();
-            }
-        }
-    }*/
+//    public void print() {
+//        System.out.println("Current map seed: " + mapSeed);
+//        System.out.println("Current buffer size: " + bufferSize);
+//        System.out.println();
+//        System.out.println("Current matrix span: "+ matrixSpan);
+//        System.out.println("Current matrix: ");
+//        System.out.println();
+//        for (int i = 0; i < matrixSpan; i++) {
+//            for (int j = 0; j < matrixSpan; j++) {
+//                System.out.print(matrix[i][j] + " ");
+//                if (j == matrixSpan - 1) System.out.println();
+//            }
+//        }
+//        System.out.println();
+//        System.out.println("Current sequences: ");
+//        System.out.println();
+//        for (String[] strings : seq) {
+//            for (int j = 0; j < strings.length; j++) {
+//                System.out.print(strings[j] + " ");
+//                if (j == strings.length - 1) System.out.println();
+//            }
+//        }
+//    }
 
     public void readFile() {
         try {
@@ -89,6 +89,7 @@ public class Parse {
             //out.println("Error occurs when loading puzzles");
             e.printStackTrace();
         }
+//        print();
     }
     public int getBufferSize() {return bufferSize;}
 
