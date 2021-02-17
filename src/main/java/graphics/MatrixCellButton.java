@@ -3,8 +3,8 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class MatrixCell extends JButton {
-    public MatrixCell(String text){
+public class MatrixCellButton extends JButton {
+    public MatrixCellButton(String text){
         super(text);
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(60, 60));

@@ -8,7 +8,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class Engine {
 
     public static void runGame() {
-        GameFrame frame = new GameFrame("CHM - Endless Challenge");
+        Game frame = new Game("CHM - Endless Challenge");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(1200, 800);
         frame.setVisible(true);

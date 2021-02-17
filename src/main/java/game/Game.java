@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class GameFrame  extends JFrame {
+public class Game extends JFrame {
 
     Difficulty gameDifficulty= new Difficulty();
 
-    public GameFrame(String title){
+    public Game(String title){
         super(title);
         getContentPane().add(new MenuPanel(startGame(),gameDifficulty), BorderLayout.CENTER);
     }

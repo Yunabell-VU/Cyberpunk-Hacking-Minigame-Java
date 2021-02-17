@@ -2,7 +2,6 @@ package game;
 
 import entity.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameLogic {
@@ -20,8 +19,8 @@ public class GameLogic {
     }
 
     //Do Not modify this function!
-    public void setTileSelected(int[] tile) {
-        this.tileSelected = tile;
+    public void setTileSelected(int[] matrixCell) {
+        this.tileSelected = matrixCell;
     }
 
     //
@@ -38,15 +37,15 @@ public class GameLogic {
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
     //e.g. from AVAILABLE to SELECTED
     private void updateCodeMatrix(){
-        Tile[][] tmpGrid = status.getCodeMatrix();
+        MatrixCell[][] tmpGrid = status.getCodeMatrix();
         disableTiles(tmpGrid);
-        tmpGrid[tileSelected[0]][tileSelected[1]]=new Tile("[ ]");
+        tmpGrid[tileSelected[0]][tileSelected[1]]=new MatrixCell("[ ]");
         tmpGrid[tileSelected[0]][tileSelected[1]].setSelected(true);
         if (colAvailable) {
             colAvailable = false;
-            for (Tile[] tiles : tmpGrid)
-                if (!tiles[tileSelected[1]].isAvailable())
-                    tiles[tileSelected[1]].setAvailable(true);
+            for (MatrixCell[] matrixCells : tmpGrid)
+                if (!matrixCells[tileSelected[1]].isAvailable())
+                    matrixCells[tileSelected[1]].setAvailable(true);
 
         } else {
             colAvailable = true;
@@ -60,7 +59,7 @@ public class GameLogic {
 
     }
 
-    //ADD corresponding tile in the buffer
+    //ADD corresponding matrixCell in the buffer
     //update buffer in Status
     private void updateBuffer(){
         if (bufferCount < status.getBufferSize()) {
@@ -73,7 +72,7 @@ public class GameLogic {
     }
 
     //Two states need to change in Status:
-    //Inside a sequence: tile successively in the buffer-> state: ADDED
+    //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateSequences(){
         List<Daemon> tmpSeq = status.getDaemons();
@@ -124,9 +123,9 @@ public class GameLogic {
         //System.out.println("matrix span: "+ matrixSpan);
     }
 
-    private void disableTiles(Tile[][] grid) {
-        for (Tile[] tiles : grid)
-            for (Tile tile : tiles) if (tile.isAvailable()) tile.setAvailable(false);
+    private void disableTiles(MatrixCell[][] grid) {
+        for (MatrixCell[] matrixCells : grid)
+            for (MatrixCell matrixCell : matrixCells) if (matrixCell.isAvailable()) matrixCell.setAvailable(false);
 
     }
 

@@ -2,7 +2,7 @@ package game;
 
 import entity.Puzzle;
 import entity.Daemon;
-import entity.Tile;
+import entity.MatrixCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 
     private int currentCount;
     private int score;
-    private Tile[][] codeMatrix;
+    private MatrixCell[][] codeMatrix;
     private List<Daemon> daemons;
     private int bufferSize;
     private List<String> buffer = new ArrayList<>();
@@ -52,7 +52,7 @@ import java.util.List;
 
     public int getMatrixSpan() {return matrixSpan;}
 
-    public Tile[][] getCodeMatrix() {
+    public MatrixCell[][] getCodeMatrix() {
         return codeMatrix;
     }
 
@@ -64,7 +64,7 @@ import java.util.List;
         this.daemons = daemons;
     }
 
-    public void setCodeMatrix(Tile[][] codeMatrix) {
+    public void setCodeMatrix(MatrixCell[][] codeMatrix) {
         this.codeMatrix = codeMatrix;
     }
 

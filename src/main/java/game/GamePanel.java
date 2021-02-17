@@ -1,8 +1,8 @@
 package game;
 
-import entity.*;
 import entity.Daemon;
 import entity.DaemonCell;
+import entity.MatrixCell;
 import graphics.*;
 import graphics.MenuBar;
 
@@ -75,7 +75,7 @@ public class GamePanel extends JPanel {
 
         CodeMatrix panel = new CodeMatrix(matrixSpan);
 
-        Tile[][] codeSource = gameLogic.status.getCodeMatrix();
+        MatrixCell[][] codeSource = gameLogic.status.getCodeMatrix();
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
@@ -86,8 +86,8 @@ public class GamePanel extends JPanel {
         return panel;
     }
 
-    private JButton drawMatrixCell(Tile tile, int row, int col) {
-        JButton matrixCell = new MatrixCell(tile.getCode());
+    private JButton drawMatrixCell(MatrixCell tile, int row, int col) {
+        JButton matrixCell = new MatrixCellButton(tile.getCode());
         if (tile.isSelected())
             matrixCell.setForeground(new Color(70, 44, 84));
 

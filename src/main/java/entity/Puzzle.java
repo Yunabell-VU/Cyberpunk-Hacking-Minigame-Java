@@ -7,16 +7,17 @@ import java.util.List;
 //you can decide how to add state to each element you parsed
 
 //State need to implement:
-//CodeMatrix : every tile in first row ->state: AVAILABLE, remaining tiles->state: UNAVAILABLE
-//Sequence: every tile in sequence->state: WAITING
+//CodeMatrix : every matrixCell in first row ->state: AVAILABLE, remaining tiles->state: UNAVAILABLE
+//Sequence: every matrixCell in sequence->state: WAITING
 
 public class Puzzle {
 
     //do not modify the definitions here
     private final int matrixSpan;
-    private final Tile[][] codeMatrix;
+    private final MatrixCell[][] codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
     private final int bufferSize;
+
 
     public Puzzle(){
         Parse map = new Parse();
@@ -24,15 +25,15 @@ public class Puzzle {
         matrixSpan = map.getMatrixSpan();
         //System.out.println("matrix span: "+ matrixSpan);
         String[][] rawMatrix = map.getMatrix();
-        Tile temp;
-        codeMatrix = new Tile[matrixSpan][matrixSpan];
+        MatrixCell temp;
+        codeMatrix = new MatrixCell[matrixSpan][matrixSpan];
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
                 if (row == 0) {
-                    temp = new Tile(rawMatrix[row][col].toUpperCase());
+                    temp = new MatrixCell(rawMatrix[row][col].toUpperCase());
                     temp.setAvailable(true);
                 } else {
-                    temp = new Tile(rawMatrix[row][col].toUpperCase());
+                    temp = new MatrixCell(rawMatrix[row][col].toUpperCase());
                 }
                 codeMatrix[row][col] = temp;
             }
@@ -54,7 +55,7 @@ public class Puzzle {
     //Do not modify the gets
     public int getBufferSize() {return bufferSize;}
 
-    public Tile[][] getCodeMatrix() {return codeMatrix;}
+    public MatrixCell[][] getCodeMatrix() {return codeMatrix;}
 
     public List<Daemon> getSequences() {return daemons;}
 
