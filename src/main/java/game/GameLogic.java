@@ -2,6 +2,7 @@ package game;
 
 import entity.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameLogic {
@@ -12,6 +13,7 @@ public class GameLogic {
     private boolean colAvailable = true;
     private boolean timeOut = false;
     public Status status;
+    //private Sequence seqCode = new Sequence();
 
     public GameLogic(Status status){
         this.status = status;
@@ -28,17 +30,6 @@ public class GameLogic {
         updateCodeMatrix();
         updateSequences();
 
-        //Delete the the corresponding part you implemented
-        /////////////FIXME//////////////////////////
-        List<Daemon> tmpSeq = status.getDaemons();
-        tmpSeq.get(1).getSeq().add(0,new DaemonCell(""));
-        tmpSeq.get(1).getSeq().get(1).setAdded(true);
-        tmpSeq.get(1).getSeq().get(1).setSelected(true);
-        tmpSeq.get(1).getSeq().get(0).setAdded(true);
-        tmpSeq.get(0).setSucceeded(true);
-        tmpSeq.get(2).setFailed(true);
-        status.setSequences(tmpSeq);
-        ///////////////////////////////////////////////
     }
     public void finalCheck(){
         updateSequences();
@@ -64,7 +55,7 @@ public class GameLogic {
                     tmpGrid[tileSelected[0]][col].setAvailable(true);
 
         }
-        if (bufferCount >= status.getBufferSize()) disableTiles(tmpGrid);
+        //if (bufferCount >= status.getBufferSize()) disableTiles(tmpGrid);
         status.setCodeMatrix(tmpGrid);
 
     }
@@ -78,12 +69,51 @@ public class GameLogic {
             status.setBuffer(tmpbuf);
             bufferCount += 1;
         }
+        else gameFailed();
     }
 
     //Two states need to change in Status:
     //Inside a sequence: tile successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
-    private void updateSequences(){}
+    private void updateSequences(){
+        List<Daemon> tmpSeq = status.getDaemons();
+        for(int i = 0; i < tmpSeq.size(); i++){
+            if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()){
+                if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())) {
+                    if(!tmpSeq.get(i).getSeq().get(bufferCount - 1).isAdded()) {
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
+                    }
+                    else{
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getSeq().get(bufferCount - 2).setSelected(false);
+                    }
+                    tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                }
+                else{
+                    int emptyCount = 0;
+                    for(int m = 0; m < bufferCount-1; m++) {
+                        tmpSeq.get(i).getSeq().get(m).setAdded(false);
+                        tmpSeq.get(i).getSeq().get(m).setSelected(false);
+                        if(tmpSeq.get(i).getSeq().get(m).getCode() == ""){
+                            emptyCount += 1;
+                        }
+                    }
+                    for(int n = 0; n < bufferCount-emptyCount; n++){
+                        tmpSeq.get(i).addEmptyCell();
+                    }
+                    if(tmpSeq.get(i).getSeq().size() >= status.getBufferSize()){
+                        gameFailed();
+                    }
+                }
+                //一个sequence里面所有的都是added的则 succeed
+                for(int j = 0; j < tmpSeq.get(i).getSeq().size(); j++){
+                    tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getSeq().get(j).isAdded());
+                }
+            }
+        }
+        status.setSequences(tmpSeq);
+        //System.out.println("matrix span: "+ matrixSpan);
+    }
 
     private void disableTiles(Tile[][] grid) {
         for (Tile[] tiles : grid)
@@ -91,9 +121,20 @@ public class GameLogic {
 
     }
 
+    public void gameFailed(){
+        List<Daemon> tmpSeq = status.getDaemons();
+        for (Daemon sequence : tmpSeq) {
+            if (!sequence.isFailed() && !sequence.isSucceeded()) {
+                sequence.setFailed(true);
+            }
+        }
+        status.setSequences(tmpSeq);
+    }
+
     //Do Not modify this function!
     public void setTimeOut(){
         timeOut = true;
+        gameFailed();
     }
 
 }

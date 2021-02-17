@@ -40,4 +40,8 @@ public class Daemon {
         this.failed = failed;
     }
 
+    public void addEmptyCell(){
+        this.seq.add(0,new DaemonCell(""));
+    }
+
 }
