@@ -2,6 +2,7 @@ package game;
 
 import entity.*;
 import entity.Daemon;
+import entity.DaemonCell;
 import graphics.*;
 
 import javax.swing.*;
@@ -125,8 +126,8 @@ public class GamePanel extends JPanel {
         return panel;
     }
 
-    private JLabel drawDaemonCell(SeqCell seqCode){
-        JLabel label = new DaemonCell(seqCode.getCode());
+    private JLabel drawDaemonCell(DaemonCell seqCode){
+        JLabel label = new DaemonCellLabel(seqCode.getCode());
         if (!seqCode.isAdded())
             label.setForeground(Color.WHITE);
 

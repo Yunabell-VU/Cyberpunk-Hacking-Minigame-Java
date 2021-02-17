@@ -10,17 +10,17 @@ public class Daemon {
     private boolean succeeded = false;
     private boolean failed = false;
 
-    private List<SeqCell> seq;
+    private List<DaemonCell> seq;
 
-    public Daemon(List<SeqCell> seq) {
+    public Daemon(List<DaemonCell> seq) {
         this.seq = seq;
     }
 
-    public List<SeqCell> getSeq() {
+    public List<DaemonCell> getSeq() {
         return seq;
     }
 
-    public void setSeq(List<SeqCell> seq) {
+    public void setSeq(List<DaemonCell> seq) {
         this.seq = seq;
     }
 

@@ -31,7 +31,7 @@ public class GameLogic {
         //Delete the the corresponding part you implemented
         /////////////FIXME//////////////////////////
         List<Daemon> tmpSeq = status.getDaemons();
-        tmpSeq.get(1).getSeq().add(0,new SeqCell(""));
+        tmpSeq.get(1).getSeq().add(0,new DaemonCell(""));
         tmpSeq.get(1).getSeq().get(1).setAdded(true);
         tmpSeq.get(1).getSeq().get(1).setSelected(true);
         tmpSeq.get(1).getSeq().get(0).setAdded(true);

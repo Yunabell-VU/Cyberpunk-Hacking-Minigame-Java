@@ -38,12 +38,12 @@ public class Puzzle {
             }
         }
 
-        SeqCell temp2;
+        DaemonCell temp2;
         List<String[]> seq = map.getSeq();
         for (String[] strings : seq) {
-            ArrayList<SeqCell> currentSeq = new ArrayList<>(strings.length);
+            ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
             for (String s : strings) {
-                temp2 = new SeqCell(s.toUpperCase());
+                temp2 = new DaemonCell(s.toUpperCase());
                 currentSeq.add(temp2);
             }
             Daemon cookedSeq = new Daemon(currentSeq);
