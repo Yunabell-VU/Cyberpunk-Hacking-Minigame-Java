@@ -19,6 +19,10 @@ public class GameFrame  extends JFrame {
         return e -> initGame();
     }
 
+    public ActionListener exitGame(){
+        return e -> backToMenu();
+    }
+
     public void initGame(){
 
         getContentPane().removeAll();
@@ -28,9 +32,17 @@ public class GameFrame  extends JFrame {
         GameLogic logic = new GameLogic(gameState);
 
         //Init Game Panel
-        GamePanel gamePanel = new GamePanel(logic);
+        GamePanel gamePanel = new GamePanel(logic, exitGame());
 
         getContentPane().add(gamePanel, BorderLayout.CENTER);
+        getContentPane().revalidate();
+    }
+
+    public void backToMenu(){
+        getContentPane().removeAll();
+        getContentPane().repaint();
+
+        getContentPane().add(new MenuPanel(startGame(),gameDifficulty), BorderLayout.CENTER);
         getContentPane().revalidate();
     }
 

@@ -8,6 +8,7 @@ import graphics.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -25,10 +26,14 @@ public class GamePanel extends JPanel {
     JLabel countDownLabel = new CountDown("");
     private JPanel backgroundPanel;
 
+    private ActionListener exitGame;
+
     //init GamePanel
-    public GamePanel(GameLogic logic) {
+    public GamePanel(GameLogic logic, ActionListener exitGame) {
 
         gameLogic = logic;
+        this.exitGame = exitGame;
+
         this.setBackground(Color.BLACK);
 
         Image image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
@@ -45,6 +50,7 @@ public class GamePanel extends JPanel {
         backgroundPanel.add(drawCodeMatrix());
         backgroundPanel.add(drawSequence());
         backgroundPanel.add(drawScorePanel());
+        backgroundPanel.add(drawMenuBar());
     }
 
     private void drawGameOver() {
@@ -218,7 +224,9 @@ public class GamePanel extends JPanel {
     private JPanel drawMenuBar(){
         JPanel menuBar = new MenuBar();
         JButton exitButton = new ExitButton();
+        exitButton.addActionListener(exitGame);
         menuBar.add(exitButton);
+
         return  menuBar;
     }
 
