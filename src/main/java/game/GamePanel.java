@@ -21,11 +21,8 @@ import java.util.List;
  class GamePanel extends JPanel {
 
     private final GameLogic gameLogic;
-    private static final int TIMER_PERIOD = 1000;
-    private int count;
-    JLabel countDownLabel = new CountDownLabel("");
+     private static final int TIMER_PERIOD = 1000;
     private JPanel backgroundPanel;
-
     private ActionListener exitGame;
 
     //init GamePanel
@@ -48,7 +45,12 @@ import java.util.List;
      private void updatePanel() {
          backgroundPanel.removeAll();
          backgroundPanel.repaint();
-         drawGamingPanel();
+
+         if(gameLogic.isTimeOut())
+             drawGameOverPanel();
+         else
+             drawGamingPanel();
+
          backgroundPanel.revalidate();
      }
 
@@ -61,16 +63,13 @@ import java.util.List;
         backgroundPanel.add(drawMenuBar());
     }
 
-    private void drawGameOver() {
-        backgroundPanel.removeAll();
-        backgroundPanel.repaint();
+    private void drawGameOverPanel() {
         backgroundPanel.add(drawTimerPanel());
         backgroundPanel.add(drawBuffer());
         backgroundPanel.add(drawSequence());
         backgroundPanel.add(drawScorePanel());
         backgroundPanel.add(drawMenuBar());
         backgroundPanel.add(drawTimeOutPanel());
-        backgroundPanel.revalidate();
     }
 
     private JPanel drawCodeMatrix() {
@@ -158,39 +157,10 @@ import java.util.List;
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-
+        JLabel countDownLabel = new CountDownLabel(gameLogic.status.getTimeLimit()+"");
         panel.add(countDownLabel);
 
-        if(gameLogic.status.getTimeLimit() - count < 0)
-            count = 0;
-
-        String text = (gameLogic.status.getTimeLimit() - count) + "";
-        setCountDownLabelText(text);
-
         return panel;
-    }
-
-    //set Timer Label text
-    private void setCountDownLabelText(String text) {
-        countDownLabel.setText(text);
-    }
-
-    //Timer event
-    private void startTime() {
-        new Timer(TIMER_PERIOD, e -> {
-            if (count < gameLogic.status.getTimeLimit()) {
-                count++;
-
-                String text = (gameLogic.status.getTimeLimit() - count) + "";
-                setCountDownLabelText(text);
-
-            } else {
-                ((Timer) e.getSource()).stop();
-                gameLogic.setTimeOut();
-                gameLogic.finalCheck();
-                drawGameOver();
-            }
-        }).start();
     }
 
     private void addClickEvent(JButton matrixCell, int row, int col) {
@@ -200,7 +170,7 @@ import java.util.List;
             public void mouseClicked(MouseEvent e) {
                 if (gameLogic.timeFlag == 0) {
                     gameLogic.timeFlag = 1;
-                    //startTime();
+                    startTime();
                 }
 
                 tileSelected[0] = row;
@@ -229,6 +199,21 @@ import java.util.List;
             }
         });
     }
+
+     public void startTime() {
+         new Timer(TIMER_PERIOD, e -> {
+             if (gameLogic.status.getTimeLimit() > 0) {
+                 gameLogic.status.addTimeLimit(-1);
+                 updatePanel();
+
+             } else {
+                 ((Timer) e.getSource()).stop();
+                 gameLogic.setTimeOut();
+                 gameLogic.finalCheck();
+                 updatePanel();
+             }
+         }).start();
+     }
 
     private JPanel drawMenuBar(){
         JPanel menuBar = new MenuBar();

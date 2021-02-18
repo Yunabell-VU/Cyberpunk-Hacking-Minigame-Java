@@ -2,6 +2,7 @@ package game;
 
 import entity.*;
 
+import javax.swing.*;
 import java.util.List;
 
  class GameLogic {
@@ -12,7 +13,6 @@ import java.util.List;
     private boolean colAvailable = true;
     private boolean timeOut = false;
     public Status status;
-    //private Sequence seqCode = new Sequence();
 
     public GameLogic(Status status){
         this.status = status;
@@ -182,4 +182,9 @@ import java.util.List;
     private void punishTime(){
         status.addTimeLimit(-5);
     }
+
+     public boolean isTimeOut(){
+        return timeOut;
+     }
+
 }
