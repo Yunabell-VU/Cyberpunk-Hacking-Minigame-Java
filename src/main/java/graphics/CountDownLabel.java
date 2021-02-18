@@ -3,8 +3,8 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class CountDown extends JLabel {
-    public CountDown(String text){
+public class CountDownLabel extends JLabel {
+    public CountDownLabel(String text){
         super(text,CENTER);
         this.setPreferredSize(new Dimension(82,46));
         this.setForeground(new Color(250, 247, 10));

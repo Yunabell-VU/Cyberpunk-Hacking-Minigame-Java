@@ -18,12 +18,12 @@ import java.util.List;
 //Game UI.
 // DO NOT modify this file!
 
-public class GamePanel extends JPanel {
+ class GamePanel extends JPanel {
 
     private final GameLogic gameLogic;
     private static final int TIMER_PERIOD = 1000;
     private int count;
-    JLabel countDownLabel = new CountDown("");
+    JLabel countDownLabel = new CountDownLabel("");
     private JPanel backgroundPanel;
 
     private ActionListener exitGame;
@@ -44,6 +44,14 @@ public class GamePanel extends JPanel {
         drawGamingPanel();
     }
 
+     //refresh the Panel
+     private void updatePanel() {
+         backgroundPanel.removeAll();
+         backgroundPanel.repaint();
+         drawGamingPanel();
+         backgroundPanel.revalidate();
+     }
+
     private void drawGamingPanel() {
         backgroundPanel.add(drawTimerPanel());
         backgroundPanel.add(drawBuffer());
@@ -56,16 +64,12 @@ public class GamePanel extends JPanel {
     private void drawGameOver() {
         backgroundPanel.removeAll();
         backgroundPanel.repaint();
-        drawGamingPanel();
+        backgroundPanel.add(drawTimerPanel());
+        backgroundPanel.add(drawBuffer());
+        backgroundPanel.add(drawSequence());
+        backgroundPanel.add(drawScorePanel());
+        backgroundPanel.add(drawMenuBar());
         backgroundPanel.add(drawTimeOutPanel());
-        backgroundPanel.revalidate();
-    }
-
-    //refresh the Panel
-    private void updatePanel() {
-        backgroundPanel.removeAll();
-        backgroundPanel.repaint();
-        drawGamingPanel();
         backgroundPanel.revalidate();
     }
 
@@ -73,7 +77,7 @@ public class GamePanel extends JPanel {
 
         int matrixSpan = gameLogic.status.getMatrixSpan();
 
-        CodeMatrix panel = new CodeMatrix(matrixSpan);
+        CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
 
         MatrixCell[][] codeSource = gameLogic.status.getCodeMatrix();
 
@@ -101,7 +105,7 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel drawBuffer() {
-        JPanel panel = new Buffer();
+        JPanel panel = new BufferPanel();
         for (int i = 0; i < gameLogic.status.getBufferSize(); i++) {
             JLabel label = new BufferCell(gameLogic.status.getBuffer().get(i));
             panel.add(label);
@@ -149,7 +153,7 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel drawTimeOutPanel() {
-        return new GameOver(); //FIXME in graphics
+        return new GameOver();
     }
 
     private JPanel drawTimerPanel() {
@@ -157,7 +161,10 @@ public class GamePanel extends JPanel {
 
         panel.add(countDownLabel);
 
-        String text = (gameLogic.status.getCurrentCount() - count) + "";
+        if(gameLogic.status.getTimeLimit() - count < 0)
+            count = 0;
+
+        String text = (gameLogic.status.getTimeLimit() - count) + "";
         setCountDownLabelText(text);
 
         return panel;
@@ -171,10 +178,12 @@ public class GamePanel extends JPanel {
     //Timer event
     private void startTime() {
         new Timer(TIMER_PERIOD, e -> {
-            if (count < gameLogic.status.getCurrentCount()) {
+            if (count < gameLogic.status.getTimeLimit()) {
                 count++;
-                String text = (gameLogic.status.getCurrentCount() - count) + "";
+
+                String text = (gameLogic.status.getTimeLimit() - count) + "";
                 setCountDownLabelText(text);
+
             } else {
                 ((Timer) e.getSource()).stop();
                 gameLogic.setTimeOut();

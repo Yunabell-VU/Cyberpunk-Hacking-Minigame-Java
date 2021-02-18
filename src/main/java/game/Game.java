@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class Game extends JFrame {
+ class Game extends JFrame {
 
     Difficulty gameDifficulty= new Difficulty();
 
@@ -28,7 +28,7 @@ public class Game extends JFrame {
         getContentPane().removeAll();
         getContentPane().repaint();
 
-        Status gameState = new Status(new Puzzle(),gameDifficulty);
+        Status gameState = new Status(new Puzzle(),gameDifficulty, gameDifficulty.getInitTimeLimit(),0);
         GameLogic logic = new GameLogic(gameState);
 
         //Init Game Panel

@@ -3,9 +3,9 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class CodeMatrix extends JPanel {
+public class CodeMatrixPanel extends JPanel {
 
-    public CodeMatrix(int matrixSpan){
+    public CodeMatrixPanel(int matrixSpan){
 
         this.setBounds(90,192,449,370);
         this.setOpaque(false);

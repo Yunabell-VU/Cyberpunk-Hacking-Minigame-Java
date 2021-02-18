@@ -4,7 +4,7 @@ import entity.*;
 
 import java.util.List;
 
-public class GameLogic {
+ class GameLogic {
 
     public int timeFlag = 0;
     private  int[] tileSelected = new int [2];
@@ -28,8 +28,13 @@ public class GameLogic {
         updateBuffer();
         updateCodeMatrix();
         updateSequences();
+        updateReward();
 
+        if(isDaemonsAllChecked()&&!timeOut)
+            switchPuzzle();
     }
+
+    //checked when time out
     public void finalCheck(){
         updateSequences();
     }
@@ -54,7 +59,7 @@ public class GameLogic {
                     tmpGrid[tileSelected[0]][col].setAvailable(true);
 
         }
-        //if (bufferCount >= status.getBufferSize()) disableTiles(tmpGrid);
+        if (bufferCount >= status.getBufferSize()) disableTiles(tmpGrid);
         status.setCodeMatrix(tmpGrid);
 
     }
@@ -120,7 +125,6 @@ public class GameLogic {
             }
         }
         status.setSequences(tmpSeq);
-        //System.out.println("matrix span: "+ matrixSpan);
     }
 
     private void disableTiles(MatrixCell[][] grid) {
@@ -144,4 +148,38 @@ public class GameLogic {
         timeOut = true;
     }
 
+    private boolean isDaemonsAllChecked(){
+        List<Daemon> daemons = status.getDaemons();
+        for (Daemon daemon : daemons) {
+            if (!daemon.isFailed() && !daemon.isSucceeded())
+                return false;
+            }
+        return true;
+    }
+
+    private void switchPuzzle(){
+        status = new Status(new Puzzle(),status.getGameDifficulty(),status.getTimeLimit(),status.getScore());
+        bufferCount = 0;
+        colAvailable = true;
+    }
+
+    private void updateReward(){
+        List<Daemon> daemons = status.getDaemons();
+        for(Daemon daemon : daemons) {
+            if (daemon.isFailed()){
+                punishTime();
+            }
+            if (daemon.isSucceeded()){
+                rewardTime();
+            }
+        }
+    }
+
+    private void rewardTime(){
+        int time = status.getGameDifficulty().getTimeReward();
+        status.addTimeLimit(time);
+    }
+    private void punishTime(){
+        status.addTimeLimit(-5);
+    }
 }

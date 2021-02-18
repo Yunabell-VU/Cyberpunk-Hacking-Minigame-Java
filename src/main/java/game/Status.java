@@ -13,7 +13,7 @@ import java.util.List;
 
  class Status {
 
-    private int currentCount;
+    private int timeLimit;
     private int score;
     private MatrixCell[][] codeMatrix;
     private List<Daemon> daemons;
@@ -22,15 +22,15 @@ import java.util.List;
     private final int matrixSpan;
     private final Difficulty gameDifficulty;
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty){
+    public Status(Puzzle puzzle, Difficulty gameDifficulty, int count, int score){
 
         this.matrixSpan = puzzle.getMatrixSpan();
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getSequences();
         this.gameDifficulty = gameDifficulty;
         this.bufferSize = puzzle.getBufferSize() + gameDifficulty.getBufferOffset();
-        this.currentCount = gameDifficulty.getInitTimeLimit();
-        this.score = 0;
+        this.timeLimit = count;
+        this.score = score;
 
         for (int i = 0; i < bufferSize;i++)
             buffer.add(" ");
@@ -44,7 +44,7 @@ import java.util.List;
         return score;
     }
 
-    public int getCurrentCount() {return currentCount;}
+    public int getTimeLimit() {return timeLimit;}
 
     public List<Daemon> getDaemons() {
         return daemons;
@@ -72,8 +72,8 @@ import java.util.List;
         this.buffer = buffer;
     }
 
-    public void setCurrentCount(int currentCount) {
-        this.currentCount = currentCount;
+    public void addTimeLimit(int offset) {
+        timeLimit = Math.max(timeLimit + offset, 0);
     }
 
     public void setScore(int score) {

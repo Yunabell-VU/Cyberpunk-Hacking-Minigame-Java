@@ -23,7 +23,7 @@ public class Puzzle {
         Parse map = new Parse();
         map.readFile();
         matrixSpan = map.getMatrixSpan();
-        //System.out.println("matrix span: "+ matrixSpan);
+
         String[][] rawMatrix = map.getMatrix();
         MatrixCell temp;
         codeMatrix = new MatrixCell[matrixSpan][matrixSpan];
