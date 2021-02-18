@@ -1,5 +1,6 @@
 package game;
 
+import entity.CodeMatrix;
 import entity.Daemon;
 import entity.DaemonCell;
 import entity.MatrixCell;
@@ -79,11 +80,11 @@ import java.util.List;
 
         CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
 
-        MatrixCell[][] codeSource = gameLogic.status.getCodeMatrix();
+        CodeMatrix codeSource = gameLogic.status.getCodeMatrix();
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
-                JButton matrixCell = drawMatrixCell(codeSource[row][col], row, col);
+                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row,col), row, col);
                 panel.add(matrixCell);
             }
         }
@@ -106,8 +107,8 @@ import java.util.List;
 
     private JPanel drawBuffer() {
         JPanel panel = new BufferPanel();
-        for (int i = 0; i < gameLogic.status.getBufferSize(); i++) {
-            JLabel label = new BufferCell(gameLogic.status.getBuffer().get(i));
+        for (int i = 0; i < gameLogic.status.getBuffer().getBufferSize(); i++) {
+            JLabel label = new BufferCell(gameLogic.status.getBuffer().getBufferCode(i));
             panel.add(label);
         }
         return panel;
@@ -176,7 +177,9 @@ import java.util.List;
 
                 tileSelected[0] = row;
                 tileSelected[1] = col;
-                gameLogic.setTileSelected(tileSelected);
+
+                gameLogic.status.getCodeMatrix().setCellSelected(tileSelected);
+
                 gameLogic.updateState();
                 updatePanel();
             }

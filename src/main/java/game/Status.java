@@ -1,10 +1,7 @@
 package game;
 
-import entity.Puzzle;
-import entity.Daemon;
-import entity.MatrixCell;
+import entity.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //status of each movement.
@@ -15,10 +12,9 @@ import java.util.List;
 
     private int timeLimit;
     private int score;
-    private MatrixCell[][] codeMatrix;
+    private CodeMatrix codeMatrix;
     private List<Daemon> daemons;
-    private int bufferSize;
-    private List<String> buffer = new ArrayList<>();
+    private Buffer buffer;
     private final int matrixSpan;
     private final Difficulty gameDifficulty;
 
@@ -28,16 +24,10 @@ import java.util.List;
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getSequences();
         this.gameDifficulty = gameDifficulty;
-        this.bufferSize = puzzle.getBufferSize() + gameDifficulty.getBufferOffset();
+        this.buffer = new Buffer(puzzle.getBufferSize() + gameDifficulty.getBufferOffset());
         this.timeLimit = timeLimit;
         this.score = score;
 
-        for (int i = 0; i < bufferSize;i++)
-            buffer.add(" ");
-    }
-
-    public int getBufferSize() {
-        return bufferSize;
     }
 
     public int getScore() {
@@ -52,24 +42,16 @@ import java.util.List;
 
     public int getMatrixSpan() {return matrixSpan;}
 
-    public MatrixCell[][] getCodeMatrix() {
+    public CodeMatrix getCodeMatrix() {
         return codeMatrix;
     }
 
-    public List<String> getBuffer() {
+    public Buffer getBuffer() {
         return buffer;
     }
 
     public void setSequences(List<Daemon> daemons) {
         this.daemons = daemons;
-    }
-
-    public void setCodeMatrix(MatrixCell[][] codeMatrix) {
-        this.codeMatrix = codeMatrix;
-    }
-
-    public void setBuffer(List<String> buffer) {
-        this.buffer = buffer;
     }
 
     public void addTimeLimit(int offset) {

@@ -14,10 +14,9 @@ public class Puzzle {
 
     //do not modify the definitions here
     private final int matrixSpan;
-    private final MatrixCell[][] codeMatrix;
+    private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
     private final int bufferSize;
-
 
     public Puzzle(){
         Parse map = new Parse();
@@ -26,7 +25,10 @@ public class Puzzle {
 
         String[][] rawMatrix = map.getMatrix();
         MatrixCell temp;
-        codeMatrix = new MatrixCell[matrixSpan][matrixSpan];
+        MatrixCell[][] emptyMatrix = new MatrixCell[matrixSpan][matrixSpan];
+
+        codeMatrix = new CodeMatrix(emptyMatrix);
+
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
                 if (row == 0) {
@@ -35,7 +37,7 @@ public class Puzzle {
                 } else {
                     temp = new MatrixCell(rawMatrix[row][col].toUpperCase());
                 }
-                codeMatrix[row][col] = temp;
+                codeMatrix.setCell(row,col,temp);
             }
         }
 
@@ -55,7 +57,7 @@ public class Puzzle {
     //Do not modify the gets
     public int getBufferSize() {return bufferSize;}
 
-    public MatrixCell[][] getCodeMatrix() {return codeMatrix;}
+    public CodeMatrix getCodeMatrix() {return codeMatrix;}
 
     public List<Daemon> getSequences() {return daemons;}
 

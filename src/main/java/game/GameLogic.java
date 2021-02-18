@@ -6,9 +6,6 @@ import java.util.List;
 
 class GameLogic {
 
-    private int[] tileSelected = new int[2];
-    private int bufferCount = 0;
-    private boolean colAvailable = true;
     private boolean timeOut = false;
     public Status status;
 
@@ -16,10 +13,6 @@ class GameLogic {
         this.status = status;
     }
 
-    //Do Not modify this function!
-    public void setTileSelected(int[] matrixCell) {
-        this.tileSelected = matrixCell;
-    }
 
     //
     public void updateState() {
@@ -40,37 +33,21 @@ class GameLogic {
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
     //e.g. from AVAILABLE to SELECTED
     private void updateCodeMatrix() {
-        MatrixCell[][] tmpGrid = status.getCodeMatrix();
-        disableTiles(tmpGrid);
-        tmpGrid[tileSelected[0]][tileSelected[1]] = new MatrixCell("[ ]");
-        tmpGrid[tileSelected[0]][tileSelected[1]].setSelected(true);
-        if (colAvailable) {
-            colAvailable = false;
-            for (MatrixCell[] matrixCells : tmpGrid)
-                if (!matrixCells[tileSelected[1]].isAvailable())
-                    matrixCells[tileSelected[1]].setAvailable(true);
+        CodeMatrix codeMatrix = status.getCodeMatrix();
+        codeMatrix.disableAllCells();
 
-        } else {
-            colAvailable = true;
-            for (int col = 0; col < tmpGrid[tileSelected[0]].length; col++)
-                if (!tmpGrid[tileSelected[0]][col].isAvailable())
-                    tmpGrid[tileSelected[0]][col].setAvailable(true);
+        if (codeMatrix.isColAvailable()) codeMatrix.setOneRowAvailable();
+        else codeMatrix.setOneColAvailable();
 
-        }
-        if (bufferCount >= status.getBufferSize()) disableTiles(tmpGrid);
-        status.setCodeMatrix(tmpGrid);
+        if (status.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
 
     }
 
     //ADD corresponding matrixCell in the buffer
     //update buffer in Status
     private void updateBuffer() {
-        if (bufferCount < status.getBufferSize()) {
-            List<String> tmpbuf = status.getBuffer();
-            tmpbuf.set(bufferCount, status.getCodeMatrix()[tileSelected[0]][tileSelected[1]].getCode());
-            status.setBuffer(tmpbuf);
-            bufferCount += 1;
-        }
+        if (!status.getBuffer().isBufferFull())
+            status.getBuffer().addCellToBuffer(status.getCodeMatrix().getSelectedCharacter());
     }
 
     //Two states need to change in Status:
@@ -80,10 +57,12 @@ class GameLogic {
         if (timeOut) {
             gameFailed();
         }
+        Buffer buffer = status.getBuffer();
+        int bufferCount = buffer.getBufferCounter();
         List<Daemon> tmpSeq = status.getDaemons();
         for (int i = 0; i < tmpSeq.size(); i++) {
             if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()) {
-                if (status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
+                if (buffer.getBufferCode( bufferCount- 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
                     if (bufferCount >= 2 && tmpSeq.get(i).getSeq().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getSeq().get(bufferCount - 2).setSelected(false);
@@ -104,13 +83,13 @@ class GameLogic {
                     for (int n = 0; n < bufferCount - emptyCount - 1; n++) {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if (status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
+                    if (status.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
                     } else {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if (tmpSeq.get(i).getSeq().size() > status.getBufferSize()) {
+                    if (tmpSeq.get(i).getSeq().size() > buffer.getBufferSize()) {
                         tmpSeq.get(i).setFailed(true);
                     }
                 }
@@ -122,11 +101,6 @@ class GameLogic {
         status.setSequences(tmpSeq);
     }
 
-    private void disableTiles(MatrixCell[][] grid) {
-        for (MatrixCell[] matrixCells : grid)
-            for (MatrixCell matrixCell : matrixCells) if (matrixCell.isAvailable()) matrixCell.setAvailable(false);
-
-    }
 
     public void gameFailed() {
         List<Daemon> tmpSeq = status.getDaemons();
@@ -153,8 +127,6 @@ class GameLogic {
 
     private void switchPuzzle() {
         status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit(), status.getScore());
-        bufferCount = 0;
-        colAvailable = true;
     }
 
     private void updateReward() {
@@ -178,7 +150,7 @@ class GameLogic {
     }
 
     private void punishTime() {
-        status.addTimeLimit(-5);
+        status.addTimeLimit(status.getGameDifficulty().getTimePunishment());
     }
 
     public boolean isTimeOut() {

@@ -9,6 +9,7 @@ class Difficulty {
     private int bufferOffset;
     private int scoreReward;
     private int timeReward;
+    private int timePunishment;
 
     public Difficulty() {
         level = "NORMAL";
@@ -16,6 +17,7 @@ class Difficulty {
         bufferOffset = 0;
         scoreReward = 35;
         timeReward = 10;
+        timePunishment = -5;
     }
 
     public int getBufferOffset() {
@@ -32,6 +34,9 @@ class Difficulty {
 
     public int getTimeReward() {
         return timeReward;
+    }
+    public int getTimePunishment(){
+        return  timePunishment;
     }
 
     public String getLevel() {
