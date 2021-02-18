@@ -200,7 +200,7 @@ import java.util.List;
             public void mouseClicked(MouseEvent e) {
                 if (gameLogic.timeFlag == 0) {
                     gameLogic.timeFlag = 1;
-                    startTime();
+                    //startTime();
                 }
 
                 tileSelected[0] = row;

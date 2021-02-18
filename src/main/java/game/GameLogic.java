@@ -73,35 +73,35 @@ import java.util.List;
             status.setBuffer(tmpbuf);
             bufferCount += 1;
         }
-        else gameFailed();
     }
 
     //Two states need to change in Status:
     //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateSequences(){
-        List<Daemon> tmpSeq = status.getDaemons();
         if(timeOut){
             gameFailed();
         }
+        List<Daemon> tmpSeq = status.getDaemons();
         for(int i = 0; i < tmpSeq.size(); i++){
             if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()){
                 if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())) {
-                    if(!tmpSeq.get(i).getSeq().get(bufferCount - 1).isAdded()) {
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
-                    }
-                    else{
+                    if(bufferCount >= 2 && tmpSeq.get(i).getSeq().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getSeq().get(bufferCount - 2).setSelected(false);
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
                     }
-                    tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                    else{ //NEW SEQUENCE
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                    }
                 }
                 else{
                     int emptyCount = 0;
                     for(int m = 0; m < bufferCount-1; m++) {
                         tmpSeq.get(i).getSeq().get(m).setAdded(false);
                         tmpSeq.get(i).getSeq().get(m).setSelected(false);
-                        if(tmpSeq.get(i).getSeq().get(m).getCode() == ""){
+                        if(tmpSeq.get(i).getSeq().get(m).getCode().equals("")){
                             emptyCount += 1;
                         }
                     }
