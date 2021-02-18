@@ -22,6 +22,7 @@ import java.util.List;
 
     private final GameLogic gameLogic;
      private static final int TIMER_PERIOD = 1000;
+     private int timeFlag = 0;
     private JPanel backgroundPanel;
     private ActionListener exitGame;
 
@@ -168,8 +169,8 @@ import java.util.List;
         matrixCell.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (gameLogic.timeFlag == 0) {
-                    gameLogic.timeFlag = 1;
+                if (timeFlag == 0) {
+                    timeFlag = 1;
                     startTime();
                 }
 

@@ -2,19 +2,17 @@ package game;
 
 import entity.*;
 
-import javax.swing.*;
 import java.util.List;
 
- class GameLogic {
+class GameLogic {
 
-    public int timeFlag = 0;
-    private  int[] tileSelected = new int [2];
+    private int[] tileSelected = new int[2];
     private int bufferCount = 0;
     private boolean colAvailable = true;
     private boolean timeOut = false;
     public Status status;
 
-    public GameLogic(Status status){
+    public GameLogic(Status status) {
         this.status = status;
     }
 
@@ -24,27 +22,27 @@ import java.util.List;
     }
 
     //
-    public void updateState(){
+    public void updateState() {
         updateBuffer();
         updateCodeMatrix();
         updateSequences();
         updateReward();
 
-        if(isDaemonsAllChecked()&&!timeOut)
+        if (isDaemonsAllRewarded() && !timeOut)
             switchPuzzle();
     }
 
     //checked when time out
-    public void finalCheck(){
+    public void finalCheck() {
         updateSequences();
     }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
     //e.g. from AVAILABLE to SELECTED
-    private void updateCodeMatrix(){
+    private void updateCodeMatrix() {
         MatrixCell[][] tmpGrid = status.getCodeMatrix();
         disableTiles(tmpGrid);
-        tmpGrid[tileSelected[0]][tileSelected[1]]=new MatrixCell("[ ]");
+        tmpGrid[tileSelected[0]][tileSelected[1]] = new MatrixCell("[ ]");
         tmpGrid[tileSelected[0]][tileSelected[1]].setSelected(true);
         if (colAvailable) {
             colAvailable = false;
@@ -66,7 +64,7 @@ import java.util.List;
 
     //ADD corresponding matrixCell in the buffer
     //update buffer in Status
-    private void updateBuffer(){
+    private void updateBuffer() {
         if (bufferCount < status.getBufferSize()) {
             List<String> tmpbuf = status.getBuffer();
             tmpbuf.set(bufferCount, status.getCodeMatrix()[tileSelected[0]][tileSelected[1]].getCode());
@@ -78,48 +76,45 @@ import java.util.List;
     //Two states need to change in Status:
     //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
-    private void updateSequences(){
-        if(timeOut){
+    private void updateSequences() {
+        if (timeOut) {
             gameFailed();
         }
         List<Daemon> tmpSeq = status.getDaemons();
-        for(int i = 0; i < tmpSeq.size(); i++){
-            if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()){
-                if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())) {
-                    if(bufferCount >= 2 && tmpSeq.get(i).getSeq().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
+        for (int i = 0; i < tmpSeq.size(); i++) {
+            if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()) {
+                if (status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
+                    if (bufferCount >= 2 && tmpSeq.get(i).getSeq().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getSeq().get(bufferCount - 2).setSelected(false);
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
-                    }
-                    else{ //NEW SEQUENCE
+                    } else { //NEW SEQUENCE
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
                     }
-                }
-                else{
+                } else {
                     int emptyCount = 0;
-                    for(int m = 0; m < bufferCount-1; m++) {
+                    for (int m = 0; m < bufferCount - 1; m++) {
                         tmpSeq.get(i).getSeq().get(m).setAdded(false);
                         tmpSeq.get(i).getSeq().get(m).setSelected(false);
-                        if(tmpSeq.get(i).getSeq().get(m).getCode().equals("")){
+                        if (tmpSeq.get(i).getSeq().get(m).getCode().equals("")) {
                             emptyCount += 1;
                         }
                     }
-                    for(int n = 0; n < bufferCount-emptyCount-1; n++){
+                    for (int n = 0; n < bufferCount - emptyCount - 1; n++) {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if(status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount -1).getCode())){
-                        tmpSeq.get(i).getSeq().get(bufferCount-1).setAdded(true);
-                        tmpSeq.get(i).getSeq().get(bufferCount-1).setSelected(true);
-                    }
-                    else{
+                    if (status.getBuffer().get(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                    } else {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if(tmpSeq.get(i).getSeq().size() > status.getBufferSize()){
+                    if (tmpSeq.get(i).getSeq().size() > status.getBufferSize()) {
                         tmpSeq.get(i).setFailed(true);
                     }
                 }
-                for(int j = 0; j < tmpSeq.get(i).getSeq().size(); j++){
+                for (int j = 0; j < tmpSeq.get(i).getSeq().size(); j++) {
                     tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getSeq().get(j).isAdded());
                 }
             }
@@ -133,7 +128,7 @@ import java.util.List;
 
     }
 
-    public void gameFailed(){
+    public void gameFailed() {
         List<Daemon> tmpSeq = status.getDaemons();
         for (Daemon sequence : tmpSeq) {
             if (!sequence.isFailed() && !sequence.isSucceeded()) {
@@ -144,47 +139,50 @@ import java.util.List;
     }
 
     //Do Not modify this function!
-    public void setTimeOut(){
+    public void setTimeOut() {
         timeOut = true;
     }
 
-    private boolean isDaemonsAllChecked(){
-        List<Daemon> daemons = status.getDaemons();
-        for (Daemon daemon : daemons) {
-            if (!daemon.isFailed() && !daemon.isSucceeded())
+    private boolean isDaemonsAllRewarded() {
+        for (Daemon daemon : status.getDaemons()) {
+            if (!daemon.isRewarded())
                 return false;
-            }
+        }
         return true;
     }
 
-    private void switchPuzzle(){
-        status = new Status(new Puzzle(),status.getGameDifficulty(),status.getTimeLimit(),status.getScore());
+    private void switchPuzzle() {
+        status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit(), status.getScore());
         bufferCount = 0;
         colAvailable = true;
     }
 
-    private void updateReward(){
-        List<Daemon> daemons = status.getDaemons();
-        for(Daemon daemon : daemons) {
-            if (daemon.isFailed()){
-                punishTime();
-            }
-            if (daemon.isSucceeded()){
-                rewardTime();
+    private void updateReward() {
+        for (Daemon daemon : status.getDaemons()) {
+            if (!daemon.isRewarded()){
+                if(daemon.isSucceeded()){
+                    rewardTime();
+                    daemon.setRewarded(true);
+                }
+                if(daemon.isFailed()){
+                    punishTime();
+                    daemon.setRewarded(true);
+                }
             }
         }
     }
 
-    private void rewardTime(){
-        int time = status.getGameDifficulty().getTimeReward();
-        status.addTimeLimit(time);
+    private void rewardTime() {
+        int rewardTime = status.getGameDifficulty().getTimeReward();
+        status.addTimeLimit(rewardTime);
     }
-    private void punishTime(){
+
+    private void punishTime() {
         status.addTimeLimit(-5);
     }
 
-     public boolean isTimeOut(){
+    public boolean isTimeOut() {
         return timeOut;
-     }
+    }
 
 }

@@ -22,14 +22,14 @@ import java.util.List;
     private final int matrixSpan;
     private final Difficulty gameDifficulty;
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty, int count, int score){
+    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit, int score){
 
         this.matrixSpan = puzzle.getMatrixSpan();
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getSequences();
         this.gameDifficulty = gameDifficulty;
         this.bufferSize = puzzle.getBufferSize() + gameDifficulty.getBufferOffset();
-        this.timeLimit = count;
+        this.timeLimit = timeLimit;
         this.score = score;
 
         for (int i = 0; i < bufferSize;i++)

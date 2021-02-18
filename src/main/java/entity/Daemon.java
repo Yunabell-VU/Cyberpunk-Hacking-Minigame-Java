@@ -9,6 +9,7 @@ import java.util.List;
 public class Daemon {
     private boolean succeeded = false;
     private boolean failed = false;
+    private boolean rewarded = false;
 
     private List<DaemonCell> seq;
 
@@ -32,6 +33,10 @@ public class Daemon {
         return failed;
     }
 
+    public  boolean isRewarded(){
+        return rewarded;
+    }
+
     public void setSucceeded(boolean succeeded) {
         this.succeeded = succeeded;
     }
@@ -40,8 +45,12 @@ public class Daemon {
         this.failed = failed;
     }
 
-    public void addEmptyCell(){
-        this.seq.add(0,new DaemonCell(""));
+    public void setRewarded(boolean rewarded){
+        this.rewarded = rewarded;
+    }
+
+    public void addEmptyCell() {
+        this.seq.add(0, new DaemonCell(""));
     }
 
 }
