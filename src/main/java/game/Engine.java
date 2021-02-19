@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class Engine extends JFrame {
 
-    Difficulty gameDifficulty = new Difficulty();
+    private Difficulty gameDifficulty = new Difficulty();
 
     public Engine(String title) {
         super(title);
@@ -22,21 +22,21 @@ public class Engine extends JFrame {
         this.setResizable(false);
     }
 
-    public ActionListener startGame() {
+    private ActionListener startGame() {
         return e -> initGame();
     }
 
-    public ActionListener exitGame() {
+    private ActionListener exitGame() {
         return e -> displayMenu();
     }
 
-    public void initGame() {
+    private void initGame() {
         Status gameState = new Status(new Puzzle(), gameDifficulty, gameDifficulty.getInitTimeLimit(), 0);
         Game newGame = new Game(gameState);
         displayGamePanel(newGame);
     }
 
-    public void displayGamePanel(Game game) {
+    private void displayGamePanel(Game game) {
         getContentPane().removeAll();
         getContentPane().repaint();
 
@@ -46,7 +46,7 @@ public class Engine extends JFrame {
         getContentPane().revalidate();
     }
 
-    public void displayMenu() {
+    private void displayMenu() {
         getContentPane().removeAll();
         getContentPane().repaint();
 
@@ -54,7 +54,7 @@ public class Engine extends JFrame {
         getContentPane().revalidate();
     }
 
-    public static void runGame() {
+    private static void runGame() {
         new Engine("Cyberpunk Hacking - Infinity");
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 class Game {
 
-    private boolean timeOut = false;
+    private boolean gameOver = false;
     public Status status;
 
     public Game(Status status) {
@@ -20,13 +20,8 @@ class Game {
         updateDaemons();
         updateReward();
 
-        if (isDaemonsAllRewarded() && !timeOut)
+        if (isDaemonsAllRewarded() && !gameOver)
             switchPuzzle();
-    }
-
-    //checked when time out
-    public void finalCheck() {
-        updateDaemons();
     }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
@@ -53,9 +48,7 @@ class Game {
     //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateDaemons() {
-        if (timeOut) {
-            gameFailed();
-        }
+
         Buffer buffer = status.getBuffer();
         int bufferCount = buffer.getBufferCounter();
         List<Daemon> tmpSeq = status.getDaemons();
@@ -101,7 +94,7 @@ class Game {
     }
 
 
-    public void gameFailed() {
+    public void markUnrewardedDaemonsFailed() {
         List<Daemon> tmpSeq = status.getDaemons();
         for (Daemon sequence : tmpSeq) {
             if (!sequence.isFailed() && !sequence.isSucceeded()) {
@@ -112,8 +105,8 @@ class Game {
     }
 
     //Do Not modify this function!
-    public void setTimeOut() {
-        timeOut = true;
+    public void setGameOver() {
+        gameOver = true;
     }
 
     private boolean isDaemonsAllRewarded() {
@@ -152,8 +145,8 @@ class Game {
         status.addTimeLimit(status.getGameDifficulty().getTimePunishment());
     }
 
-    public boolean isTimeOut() {
-        return timeOut;
+    public boolean isGameOver() {
+        return gameOver;
     }
 
 }

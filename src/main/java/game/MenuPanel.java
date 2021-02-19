@@ -78,7 +78,7 @@ import java.awt.event.ActionListener;
                     gameDifficulty.setDifficultyEasy();
                     break;
                 case "HARD":
-                    gameDifficulty.setDifficultyEasy();
+                    gameDifficulty.setDifficultyHard();
                     break;
                 default:
                     gameDifficulty.setDifficultyNormal();

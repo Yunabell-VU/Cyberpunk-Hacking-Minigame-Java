@@ -48,7 +48,7 @@ import java.util.List;
          backgroundPanel.removeAll();
          backgroundPanel.repaint();
 
-         if(game.isTimeOut())
+         if(game.isGameOver())
              drawGameOverPanel();
          else
              drawGamingPanel();
@@ -212,8 +212,8 @@ import java.util.List;
 
              } else {
                  ((Timer) e.getSource()).stop();
-                 game.setTimeOut();
-                 game.finalCheck();
+                 game.setGameOver();
+                 game.markUnrewardedDaemonsFailed();
                  updatePanel();
              }
          }).start();
