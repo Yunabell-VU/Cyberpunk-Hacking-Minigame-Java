@@ -18,26 +18,76 @@ import static java.lang.System.arraycopy;
 
 public class Puzzle {
 
+    private final Buffer buffer;
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
-    private final Buffer buffer;
 
-    private int bufferSize = 0;
-    private final String[][] matrix = new String[6][6];
-    private final List<String[]> seq = new ArrayList<>();
-    private int matrixSpan = 0;
-    private int mapSeed = 0;
-    private final Random rand = new Random();
+    public Puzzle(){
+        Parse.emptySeq();
+        Parse.readFile();
+        //do not modify the definitions here
+        MatrixCell[][] emptyMatrix = new MatrixCell[Parse.getMatrixSpan()][Parse.getMatrixSpan()];
 
-    private void readFile() {
+        buffer = new Buffer(Parse.getBufferSize());
+        codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
+        setCodeMatrix();
+        setDaemons();
+    }
+
+    public void setCodeMatrix() {
+        MatrixCell temp;
+        for (int row = 0; row < Parse.getMatrixSpan(); row++) {
+            for (int col = 0; col < Parse.getMatrixSpan(); col++) {
+                if (row == 0) {
+                    temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
+                    temp.setAvailable(true);
+                } else {
+                    temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
+                }
+                codeMatrix.setCell(row,col,temp);
+            }
+        }
+    }
+
+    public void setDaemons() {
+        DaemonCell temp2;
+        for (String[] strings : Parse.getSeq()) {
+            ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
+            for (String s : strings) {
+                temp2 = new DaemonCell(s.toUpperCase());
+                currentSeq.add(temp2);
+            }
+            Daemon cookedSeq = new Daemon(currentSeq);
+            daemons.add(cookedSeq);
+        }
+    }
+
+    //Do not modify the gets
+    public Buffer getBuffer(){return buffer;}
+
+    public CodeMatrix getCodeMatrix() {return codeMatrix;}
+
+    public List<Daemon> getSequences() {return daemons;}
+}
+
+class Parse {
+
+    private static int bufferSize = 0;
+    private static final String[][] matrix = new String[6][6];
+    private static final List<String[]> seq = new ArrayList<>();
+    private static int matrixSpan = 0;
+    private static final Random rand = new Random();
+
+    private Parse() { throw new IllegalStateException("Utility class"); }
+
+    public static void readFile() {
         try {
             File dir = new File("src/main/java/txt");
             File[] files = dir.listFiles();
             assert files != null;
 
-            mapSeed = rand.nextInt(files.length);
+            int mapSeed = rand.nextInt(files.length);
             File file = files[mapSeed];
-            mapSeed++;
 
             Scanner reader = new Scanner(file);
             bufferSize = reader.nextInt();
@@ -61,75 +111,21 @@ public class Puzzle {
                 String[] seqArr = seqStr.split(" ");
                 if (seqStr.length() > 0) seq.add(seqArr);
             }
-            //print();
+
             reader.close();
         } catch (FileNotFoundException e){
-            //out.println("Error occurs when loading puzzles");
+            System.out.println("Error occurs when loading puzzles");
             e.printStackTrace();
         }
     }
 
-    public Puzzle(){
-        readFile();
-        //do not modify the definitions here
-        MatrixCell temp;
-        MatrixCell[][] emptyMatrix = new MatrixCell[matrixSpan][matrixSpan];
+    public static int getBufferSize() {return bufferSize;}
 
-        codeMatrix = new CodeMatrix(emptyMatrix, matrixSpan);
+    public static String[][] getMatrix() {return matrix;}
 
-        for (int row = 0; row < matrixSpan; row++) {
-            for (int col = 0; col < matrixSpan; col++) {
-                if (row == 0) {
-                    temp = new MatrixCell(matrix[row][col].toUpperCase());
-                    temp.setAvailable(true);
-                } else {
-                    temp = new MatrixCell(matrix[row][col].toUpperCase());
-                }
-                codeMatrix.setCell(row,col,temp);
-            }
-        }
+    public static List<String[]> getSeq() {return seq;}
 
-        DaemonCell temp2;
-        for (String[] strings : seq) {
-            ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
-            for (String s : strings) {
-                temp2 = new DaemonCell(s.toUpperCase());
-                currentSeq.add(temp2);
-            }
-            Daemon cookedSeq = new Daemon(currentSeq);
-            daemons.add(cookedSeq);
-        }
-        buffer = new Buffer(bufferSize);
-    }
+    public static int getMatrixSpan() {return matrixSpan;}
 
-//        public void print() {
-//        System.out.println("Current map seed: " + mapSeed);
-//        System.out.println("Current buffer size: " + bufferSize);
-//        System.out.println();
-//        System.out.println("Current matrix span: "+ matrixSpan);
-//        System.out.println("Current matrix: ");
-//        System.out.println();
-//        for (int i = 0; i < matrixSpan; i++) {
-//            for (int j = 0; j < matrixSpan; j++) {
-//                System.out.print(matrix[i][j] + " ");
-//                if (j == matrixSpan - 1) System.out.println();
-//            }
-//        }
-//        System.out.println();
-//        System.out.println("Current sequences: ");
-//        System.out.println();
-//        for (String[] strings : seq) {
-//            for (int j = 0; j < strings.length; j++) {
-//                System.out.print(strings[j] + " ");
-//                if (j == strings.length - 1) System.out.println();
-//            }
-//        }
-//    }
-
-    //Do not modify the gets
-    public Buffer getBuffer(){return buffer;}
-
-    public CodeMatrix getCodeMatrix() {return codeMatrix;}
-
-    public List<Daemon> getSequences() {return daemons;}
+    public static void emptySeq() {seq.clear();}
 }
