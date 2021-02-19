@@ -45,6 +45,8 @@ public class Puzzle {
                     temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
                 }
                 codeMatrix.setCell(row,col,temp);
+                codeMatrix.getMatrixCell(row,col).setCoordinate(row,col);
+
             }
         }
     }
