@@ -21,16 +21,16 @@ import java.util.List;
 
  class GamePanel extends JPanel {
 
-    private final GameLogic gameLogic;
+    private final Game game;
      private static final int TIMER_PERIOD = 1000;
      private int timeFlag = 0;
     private JPanel backgroundPanel;
     private ActionListener exitGame;
 
     //init GamePanel
-    public GamePanel(GameLogic logic, ActionListener exitGame) {
+    public GamePanel(Game game, ActionListener exitGame) {
 
-        gameLogic = logic;
+        this.game = game;
         this.exitGame = exitGame;
 
         this.setBackground(Color.BLACK);
@@ -48,7 +48,7 @@ import java.util.List;
          backgroundPanel.removeAll();
          backgroundPanel.repaint();
 
-         if(gameLogic.isTimeOut())
+         if(game.isTimeOut())
              drawGameOverPanel();
          else
              drawGamingPanel();
@@ -76,11 +76,11 @@ import java.util.List;
 
     private JPanel drawCodeMatrix() {
 
-        int matrixSpan = gameLogic.status.getMatrixSpan();
+        int matrixSpan = game.status.getMatrixSpan();
 
         CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
 
-        CodeMatrix codeSource = gameLogic.status.getCodeMatrix();
+        CodeMatrix codeSource = game.status.getCodeMatrix();
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
@@ -107,8 +107,8 @@ import java.util.List;
 
     private JPanel drawBuffer() {
         JPanel panel = new BufferPanel();
-        for (int i = 0; i < gameLogic.status.getBuffer().getBufferSize(); i++) {
-            JLabel label = new BufferCell(gameLogic.status.getBuffer().getBufferCode(i));
+        for (int i = 0; i < game.status.getBuffer().getBufferSize(); i++) {
+            JLabel label = new BufferCell(game.status.getBuffer().getBufferCode(i));
             panel.add(label);
         }
         return panel;
@@ -116,7 +116,7 @@ import java.util.List;
 
     private JPanel drawSequence() {
         JPanel panel = new Daemons();
-        List<Daemon> daemons = gameLogic.status.getDaemons();
+        List<Daemon> daemons = game.status.getDaemons();
 
         for (Daemon daemon : daemons) {
             JPanel daemonPanel = new DaemonLabel();
@@ -159,7 +159,7 @@ import java.util.List;
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(gameLogic.status.getTimeLimit()+"");
+        JLabel countDownLabel = new CountDownLabel(game.status.getTimeLimit()+"");
         panel.add(countDownLabel);
 
         return panel;
@@ -178,9 +178,9 @@ import java.util.List;
                 tileSelected[0] = row;
                 tileSelected[1] = col;
 
-                gameLogic.status.getCodeMatrix().setCellSelected(tileSelected);
+                game.status.getCodeMatrix().setCellSelected(tileSelected);
 
-                gameLogic.updateState();
+                game.updateStatus();
                 updatePanel();
             }
 
@@ -206,14 +206,14 @@ import java.util.List;
 
      public void startTime() {
          new Timer(TIMER_PERIOD, e -> {
-             if (gameLogic.status.getTimeLimit() > 0) {
-                 gameLogic.status.addTimeLimit(-1);
+             if (game.status.getTimeLimit() > 0) {
+                 game.status.addTimeLimit(-1);
                  updatePanel();
 
              } else {
                  ((Timer) e.getSource()).stop();
-                 gameLogic.setTimeOut();
-                 gameLogic.finalCheck();
+                 game.setTimeOut();
+                 game.finalCheck();
                  updatePanel();
              }
          }).start();

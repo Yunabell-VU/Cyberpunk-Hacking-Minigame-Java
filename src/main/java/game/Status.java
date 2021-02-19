@@ -12,9 +12,9 @@ import java.util.List;
 
     private int timeLimit;
     private int score;
-    private CodeMatrix codeMatrix;
+    private final CodeMatrix codeMatrix;
     private List<Daemon> daemons;
-    private Buffer buffer;
+    private final Buffer buffer;
     private final int matrixSpan;
     private final Difficulty gameDifficulty;
 
@@ -62,7 +62,7 @@ import java.util.List;
         this.score = score;
     }
 
-     public Difficulty getGameDifficulty() {
+    public Difficulty getGameDifficulty() {
          return gameDifficulty;
      }
  }

@@ -29,8 +29,6 @@ H
 src/main/java/txt/07.txt,7\a\7a47a496e4d19666f0e2e74bad56c991c4c3f58a
 H
 src/main/java/txt/06.txt,6\f\6ff0858a6e7029491e63314642c90e68d7c92a07
-N
-src/main/java/entity/Tile.java,2\6\26b59b302e804bd0029190e03838aefff96585cc
 P
  src/main/java/entity/Puzzle.java,8\1\81bfbc2f256e9ca45542073af7aa48f20d912a4d
 N
@@ -41,14 +39,10 @@ R
 "src/main/java/game/Difficulty.java,9\3\93c99e8700d904a933f14cffd42586f61bfdbae9
 N
 src/main/java/game/Engine.java,6\d\6dacee780aa133a10f3a3353ca0f544bde01b1b4
-Q
-!src/main/java/game/GameFrame.java,5\f\5f898f81047b6c398bea80e780d42ea6815fcb7c
 O
 src/main/java/entity/Parse.java,2\0\20904b14b27722f177ee1db6fe95295db78a47e1
 V
 &src/main/java/graphics/Background.java,5\9\59a9fec1482efaa613cf2b8fa2495dc2c282ee71
-R
-"src/main/java/graphics/Buffer.java,3\1\31bf624dafc46f5a092058537a58955c76ccabf0
 T
 $src/main/java/graphics/GameOver.java,4\c\4c6f97b94349f86a49151ef2195887f7a363184d
 Z
@@ -67,12 +61,6 @@ W
 +src/main/java/graphics/DifficultyLabel.java,6\e\6edee2e86bb1b29ae2335586333f57936be5b2af
 U
 %src/main/java/graphics/TimeLimit.java,a\4\a4075b15c4681c7fec3f73e4b599289de9c9b54f
-V
-&src/main/java/graphics/CodeMatrix.java,0\9\098723e3b1cc0292b65035917162d7710c48c93e
-V
-&src/main/java/graphics/MatrixCell.java,8\a\8a38c7d7b942aa94c8e7a37bf7045f8345afc8c0
-U
-%src/main/java/graphics/CountDown.java,a\0\a003d8c6fca37ab56f1bc167d34837c002aea871
 V
 &src/main/java/graphics/ExitButton.java,c\0\c033866b237130757d1d45e2c3c79ec1a32adbdb
 S
@@ -97,3 +85,21 @@ T
 $src/main/java/entity/DaemonCell.java,7\a\7a18b99ef421565b640960cba6511999b41eef74
 N
 src/main/java/entity/Cell.java,f\0\f030f544a64b6200402ec75f334b394e91d9790a
+Z
+*src/main/java/graphics/CountDownLabel.java,7\0\70ddb8dbf7dca369b8f48acfe800cb39475ff5b3
+[
++src/main/java/graphics/CodeMatrixPanel.java,d\d\dd0b51d031266d21d4b0e55b42dddadb0d10c65b
+W
+'src/main/java/graphics/BufferPanel.java,3\a\3a251ab0b84a5e3e360339116006bbdf072b197c
+\
+,src/main/java/graphics/MatrixCellButton.java,6\a\6a84a46a1225a4a467b8f36c1eed3aa6680c4267
+P
+ src/main/java/entity/Buffer.java,d\d\ddfeee53987d352b843803b53e64d2d117cd7c27
+T
+$src/main/java/entity/CodeMatrix.java,1\2\128fc81d7745b2c469646324fa87461df5b9e98e
+T
+$src/main/java/entity/MatrixCell.java,9\4\9439586b74161314d3866284e2cf085692acdf70
+L
+src/main/java/game/Game.java,3\2\325ffc7f519c9d9385dff10619989cebe253f784
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d

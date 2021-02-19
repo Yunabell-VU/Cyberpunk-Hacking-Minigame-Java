@@ -9,7 +9,7 @@ class Difficulty {
     private int bufferOffset;
     private int scoreReward;
     private int timeReward;
-    private int timePunishment;
+    private final int timePunishment;
 
     public Difficulty() {
         level = "NORMAL";

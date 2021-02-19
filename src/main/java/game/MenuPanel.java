@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
         Image image = new ImageIcon("src/main/java/image/background4.jpg").getImage();
         JPanel panel = new Background(image);
 
-        panel.add(drawSelection());
+        panel.add(drawSelectionButtons());
         panel.add(new DifficultyLabel(gameDifficulty.getLevel()));
         panel.add(new LevelInfoLabel(gameDifficulty.getDifficultyInfo()));
 
@@ -37,7 +37,7 @@ import java.awt.event.ActionListener;
         this.add(panel);
     }
 
-    private JPanel drawSelection(){
+    private JPanel drawSelectionButtons(){
         JPanel selectionPanel = new MenuSelection();
 
         JButton buttonVeryEasy = new DifficultyButton("VERY EASY");
@@ -70,17 +70,19 @@ import java.awt.event.ActionListener;
     private ActionListener selectDifficulty() {
         return e -> {
             String buttonName = e.getActionCommand();
-            if (buttonName.equals("VERY EASY")) {
-                gameDifficulty.setDifficultyVeryEasy();
-            }
-            if (buttonName.equals("EASY")) {
-                gameDifficulty.setDifficultyEasy();
-            }
-            if (buttonName.equals("NORMAL")) {
-                gameDifficulty.setDifficultyNormal();
-            }
-            if (buttonName.equals("HARD")) {
-                gameDifficulty.setDifficultyHard();
+            switch (buttonName){
+                case "VERY EASY":
+                    gameDifficulty.setDifficultyVeryEasy();
+                    break;
+                case "EASY":
+                    gameDifficulty.setDifficultyEasy();
+                    break;
+                case "HARD":
+                    gameDifficulty.setDifficultyEasy();
+                    break;
+                default:
+                    gameDifficulty.setDifficultyNormal();
+                    break;
             }
             updatePanel();
         };
