@@ -67,7 +67,7 @@ public class Puzzle {
 
     public CodeMatrix getCodeMatrix() {return codeMatrix;}
 
-    public List<Daemon> getSequences() {return daemons;}
+    public List<Daemon> getDaemons() {return daemons;}
 }
 
 class Parse {

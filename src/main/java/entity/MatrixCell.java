@@ -5,6 +5,7 @@ package entity;
 
 public class MatrixCell extends Cell {
     private boolean available = false;
+    private Coordinate coordinate;
 
     public MatrixCell(String code) {
         super(code);
@@ -18,4 +19,12 @@ public class MatrixCell extends Cell {
         this.available = available;
     }
 
+    public void setCoordinate(int x, int y){
+        coordinate.x = x;
+        coordinate.y = y;
+    }
+
+    public Coordinate getCoordinate(){
+        return coordinate;
+    }
 }

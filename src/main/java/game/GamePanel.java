@@ -126,8 +126,8 @@ class GamePanel extends JPanel {
                 daemonPanel.add(new FailedLabel());
 
             if (!daemon.isFailed() && !daemon.isSucceeded()) {
-                for (int j = 0; j < daemon.getSeq().size(); j++) {
-                    JLabel label = drawDaemonCell(daemon.getSeq().get(j));
+                for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
+                    JLabel label = drawDaemonCell(daemon.getDaemonCells().get(j));
                     daemonPanel.add(label);
                 }
             }

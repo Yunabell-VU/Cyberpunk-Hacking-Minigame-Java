@@ -6,7 +6,7 @@ public class CodeMatrix {
     private int[] cellSelected;
     private String selectedCharacter;
     private boolean colAvailable = true;
-    private int matrixSpan;
+    private final int matrixSpan;
 
     public CodeMatrix(MatrixCell[][] matrix, int span) {
         this.matrix = matrix;

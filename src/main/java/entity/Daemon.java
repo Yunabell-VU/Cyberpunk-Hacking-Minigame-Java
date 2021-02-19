@@ -11,18 +11,14 @@ public class Daemon {
     private boolean failed = false;
     private boolean rewarded = false;
 
-    private List<DaemonCell> seq;
+    private final List<DaemonCell> daemonCells;
 
-    public Daemon(List<DaemonCell> seq) {
-        this.seq = seq;
+    public Daemon(List<DaemonCell> daemonCells) {
+        this.daemonCells = daemonCells;
     }
 
-    public List<DaemonCell> getSeq() {
-        return seq;
-    }
-
-    public void setSeq(List<DaemonCell> seq) {
-        this.seq = seq;
+    public List<DaemonCell> getDaemonCells() {
+        return daemonCells;
     }
 
     public boolean isSucceeded() {
@@ -50,7 +46,7 @@ public class Daemon {
     }
 
     public void addEmptyCell() {
-        this.seq.add(0, new DaemonCell(""));
+        this.daemonCells.add(0, new DaemonCell(""));
     }
 
 }

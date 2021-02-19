@@ -54,39 +54,39 @@ class Game {
         List<Daemon> tmpSeq = status.getDaemons();
         for (int i = 0; i < tmpSeq.size(); i++) {
             if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()) {
-                if (buffer.getBufferCode( bufferCount- 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
-                    if (bufferCount >= 2 && tmpSeq.get(i).getSeq().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getSeq().get(bufferCount - 2).setSelected(false);
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                if (buffer.getBufferCode( bufferCount- 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
+                    if (bufferCount >= 2 && tmpSeq.get(i).getDaemonCells().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 2).setSelected(false);
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
                     } else { //NEW SEQUENCE
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
                     }
                 } else {
                     int emptyCount = 0;
                     for (int m = 0; m < bufferCount - 1; m++) {
-                        tmpSeq.get(i).getSeq().get(m).setAdded(false);
-                        tmpSeq.get(i).getSeq().get(m).setSelected(false);
-                        if (tmpSeq.get(i).getSeq().get(m).getCode().equals("")) {
+                        tmpSeq.get(i).getDaemonCells().get(m).setAdded(false);
+                        tmpSeq.get(i).getDaemonCells().get(m).setSelected(false);
+                        if (tmpSeq.get(i).getDaemonCells().get(m).getCode().equals("")) {
                             emptyCount += 1;
                         }
                     }
                     for (int n = 0; n < bufferCount - emptyCount - 1; n++) {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if (status.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getSeq().get(bufferCount - 1).getCode())) {
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getSeq().get(bufferCount - 1).setSelected(true);
+                    if (status.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
+                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
                     } else {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if (tmpSeq.get(i).getSeq().size() > buffer.getBufferSize()) {
+                    if (tmpSeq.get(i).getDaemonCells().size() > buffer.getBufferSize()) {
                         tmpSeq.get(i).setFailed(true);
                     }
                 }
-                for (int j = 0; j < tmpSeq.get(i).getSeq().size(); j++) {
-                    tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getSeq().get(j).isAdded());
+                for (int j = 0; j < tmpSeq.get(i).getDaemonCells().size(); j++) {
+                    tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getDaemonCells().get(j).isAdded());
                 }
             }
         }

@@ -22,7 +22,7 @@ class Status {
     public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit, int score) {
 
         this.codeMatrix = puzzle.getCodeMatrix();
-        this.daemons = puzzle.getSequences();
+        this.daemons = puzzle.getDaemons();
         this.gameDifficulty = gameDifficulty;
 
         int newBufferSize = puzzle.getBuffer().getBufferSize()+gameDifficulty.getBufferOffset();
