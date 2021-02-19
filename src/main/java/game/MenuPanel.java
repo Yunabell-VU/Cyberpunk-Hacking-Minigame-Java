@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 
  class MenuPanel extends JPanel {
 
-    ActionListener startGame;
-    Difficulty gameDifficulty;
+    private final ActionListener startGame;
+    private Difficulty gameDifficulty;
 
     public MenuPanel(ActionListener startGame, Difficulty gameDifficulty) {
 

@@ -6,10 +6,17 @@ public class CodeMatrix {
     private int[] cellSelected;
     private String selectedCharacter;
     private boolean colAvailable = true;
+    private int matrixSpan;
 
-    public CodeMatrix(MatrixCell[][] matrix) {
+    public CodeMatrix(MatrixCell[][] matrix, int span) {
         this.matrix = matrix;
         this.cellSelected = null;
+        this.matrixSpan = span;
+
+    }
+
+    public int getMatrixSpan() {
+        return matrixSpan;
     }
 
     public MatrixCell getMatrixCell(int row, int col) {

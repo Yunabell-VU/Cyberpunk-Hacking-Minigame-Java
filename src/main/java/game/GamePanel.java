@@ -19,13 +19,13 @@ import java.util.List;
 //Game UI.
 // DO NOT modify this file!
 
- class GamePanel extends JPanel {
+class GamePanel extends JPanel {
 
     private final Game game;
-     private static final int TIMER_PERIOD = 1000;
-     private int timeFlag = 0;
-    private JPanel backgroundPanel;
-    private ActionListener exitGame;
+    private static final int TIMER_PERIOD = 1000;
+    private int timeFlag = 0;
+    private final JPanel backgroundPanel;
+    private final ActionListener exitGame;
 
     //init GamePanel
     public GamePanel(Game game, ActionListener exitGame) {
@@ -38,29 +38,29 @@ import java.util.List;
         Image image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
         backgroundPanel = new Background(image);
 
-        add(backgroundPanel,new FlowLayout(FlowLayout.CENTER, 0, 0));
+        add(backgroundPanel, new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         drawGamingPanel();
     }
 
-     //refresh the Panel
-     private void updatePanel() {
-         backgroundPanel.removeAll();
-         backgroundPanel.repaint();
+    //refresh the Panel
+    private void updatePanel() {
+        backgroundPanel.removeAll();
+        backgroundPanel.repaint();
 
-         if(game.isGameOver())
-             drawGameOverPanel();
-         else
-             drawGamingPanel();
+        if (game.isGameOver())
+            drawGameOverPanel();
+        else
+            drawGamingPanel();
 
-         backgroundPanel.revalidate();
-     }
+        backgroundPanel.revalidate();
+    }
 
     private void drawGamingPanel() {
         backgroundPanel.add(drawTimerPanel());
         backgroundPanel.add(drawBuffer());
         backgroundPanel.add(drawCodeMatrix());
-        backgroundPanel.add(drawSequence());
+        backgroundPanel.add(drawDaemons());
         backgroundPanel.add(drawScorePanel());
         backgroundPanel.add(drawMenuBar());
     }
@@ -68,23 +68,21 @@ import java.util.List;
     private void drawGameOverPanel() {
         backgroundPanel.add(drawTimerPanel());
         backgroundPanel.add(drawBuffer());
-        backgroundPanel.add(drawSequence());
+        backgroundPanel.add(drawDaemons());
         backgroundPanel.add(drawScorePanel());
         backgroundPanel.add(drawMenuBar());
         backgroundPanel.add(drawTimeOutPanel());
     }
 
     private JPanel drawCodeMatrix() {
-
-        int matrixSpan = game.status.getMatrixSpan();
+        CodeMatrix codeSource = game.status.getCodeMatrix();
+        int matrixSpan = codeSource.getMatrixSpan();
 
         CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
 
-        CodeMatrix codeSource = game.status.getCodeMatrix();
-
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
-                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row,col), row, col);
+                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row, col), row, col);
                 panel.add(matrixCell);
             }
         }
@@ -114,8 +112,8 @@ import java.util.List;
         return panel;
     }
 
-    private JPanel drawSequence() {
-        JPanel panel = new Daemons();
+    private JPanel drawDaemons() {
+        JPanel panel = new DaemonsPanel();
         List<Daemon> daemons = game.status.getDaemons();
 
         for (Daemon daemon : daemons) {
@@ -129,7 +127,7 @@ import java.util.List;
 
             if (!daemon.isFailed() && !daemon.isSucceeded()) {
                 for (int j = 0; j < daemon.getSeq().size(); j++) {
-                    JLabel label= drawDaemonCell(daemon.getSeq().get(j));
+                    JLabel label = drawDaemonCell(daemon.getSeq().get(j));
                     daemonPanel.add(label);
                 }
             }
@@ -138,7 +136,7 @@ import java.util.List;
         return panel;
     }
 
-    private JLabel drawDaemonCell(DaemonCell seqCode){
+    private JLabel drawDaemonCell(DaemonCell seqCode) {
         JLabel label = new DaemonCellLabel(seqCode.getCode());
         if (!seqCode.isAdded())
             label.setForeground(Color.WHITE);
@@ -146,11 +144,11 @@ import java.util.List;
         if (seqCode.isSelected())
             label.setBorder(BorderFactory.createLineBorder(new Color(250, 247, 10)));
 
-        return  label;
+        return label;
     }
 
     private JPanel drawScorePanel() {
-       return new JPanel(); //TODO
+        return new JPanel(); //TODO
     }
 
     private JPanel drawTimeOutPanel() {
@@ -159,10 +157,19 @@ import java.util.List;
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(game.status.getTimeLimit()+"");
+        JLabel countDownLabel = new CountDownLabel(game.status.getTimeLimit() + "");
         panel.add(countDownLabel);
 
         return panel;
+    }
+
+    private JPanel drawMenuBar() {
+        JPanel menuBar = new MenuBar();
+        JButton exitButton = new ExitButton();
+        exitButton.addActionListener(exitGame);
+        menuBar.add(exitButton);
+
+        return menuBar;
     }
 
     private void addClickEvent(JButton matrixCell, int row, int col) {
@@ -204,28 +211,18 @@ import java.util.List;
         });
     }
 
-     public void startTime() {
-         new Timer(TIMER_PERIOD, e -> {
-             if (game.status.getTimeLimit() > 0) {
-                 game.status.addTimeLimit(-1);
-                 updatePanel();
+    public void startTime() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (game.status.getTimeLimit() > 0) {
+                game.status.addTimeLimit(-1);
+                updatePanel();
 
-             } else {
-                 ((Timer) e.getSource()).stop();
-                 game.setGameOver();
-                 game.markUnrewardedDaemonsFailed();
-                 updatePanel();
-             }
-         }).start();
-     }
-
-    private JPanel drawMenuBar(){
-        JPanel menuBar = new MenuBar();
-        JButton exitButton = new ExitButton();
-        exitButton.addActionListener(exitGame);
-        menuBar.add(exitButton);
-
-        return  menuBar;
+            } else {
+                ((Timer) e.getSource()).stop();
+                game.setGameOver();
+                game.markUnrewardedDaemonsFailed();
+                updatePanel();
+            }
+        }).start();
     }
-
 }

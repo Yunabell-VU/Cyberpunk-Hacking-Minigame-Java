@@ -12,22 +12,21 @@ import java.util.List;
 
 public class Puzzle {
 
-    //do not modify the definitions here
-    private final int matrixSpan;
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
-    private final int bufferSize;
+    private final Buffer buffer;
 
     public Puzzle(){
         Parse map = new Parse();
         map.readFile();
-        matrixSpan = map.getMatrixSpan();
+        //do not modify the definitions here
+        int matrixSpan = map.getMatrixSpan();
 
         String[][] rawMatrix = map.getMatrix();
         MatrixCell temp;
         MatrixCell[][] emptyMatrix = new MatrixCell[matrixSpan][matrixSpan];
 
-        codeMatrix = new CodeMatrix(emptyMatrix);
+        codeMatrix = new CodeMatrix(emptyMatrix, matrixSpan);
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
@@ -52,14 +51,13 @@ public class Puzzle {
             Daemon cookedSeq = new Daemon(currentSeq);
             daemons.add(cookedSeq);
         }
-        bufferSize = map.getBufferSize();
+
+        buffer = new Buffer(map.getBufferSize());
     }
     //Do not modify the gets
-    public int getBufferSize() {return bufferSize;}
+    public Buffer getBuffer(){return buffer;}
 
     public CodeMatrix getCodeMatrix() {return codeMatrix;}
 
     public List<Daemon> getSequences() {return daemons;}
-
-    public int getMatrixSpan() {return matrixSpan;}
 }

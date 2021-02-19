@@ -7,7 +7,7 @@ import java.util.List;
 class Game {
 
     private boolean gameOver = false;
-    public Status status;
+    Status status;
 
     public Game(Status status) {
         this.status = status;

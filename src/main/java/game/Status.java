@@ -8,23 +8,26 @@ import java.util.List;
 //UI draws the panel based on the latest Status
 //Do Not modify this file!
 
- class Status {
+class Status {
 
+    private final Difficulty gameDifficulty;
     private int timeLimit;
     private int score;
+
     private final CodeMatrix codeMatrix;
     private List<Daemon> daemons;
     private final Buffer buffer;
-    private final int matrixSpan;
-    private final Difficulty gameDifficulty;
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit, int score){
 
-        this.matrixSpan = puzzle.getMatrixSpan();
+    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit, int score) {
+
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getSequences();
         this.gameDifficulty = gameDifficulty;
-        this.buffer = new Buffer(puzzle.getBufferSize() + gameDifficulty.getBufferOffset());
+
+        int newBufferSize = puzzle.getBuffer().getBufferSize()+gameDifficulty.getBufferOffset();
+        this.buffer = new Buffer(newBufferSize);
+
         this.timeLimit = timeLimit;
         this.score = score;
 
@@ -34,13 +37,13 @@ import java.util.List;
         return score;
     }
 
-    public int getTimeLimit() {return timeLimit;}
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 
     public List<Daemon> getDaemons() {
         return daemons;
     }
-
-    public int getMatrixSpan() {return matrixSpan;}
 
     public CodeMatrix getCodeMatrix() {
         return codeMatrix;
@@ -58,11 +61,11 @@ import java.util.List;
         timeLimit = Math.max(timeLimit + offset, 0);
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore(int scoreReward) {
+        this.score += scoreReward;
     }
 
     public Difficulty getGameDifficulty() {
-         return gameDifficulty;
-     }
- }
+        return gameDifficulty;
+    }
+}

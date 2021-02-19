@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Buffer {
-    private int bufferSize;
-    private List<String> bufferContent = new ArrayList<>();
+    private final int bufferSize;
+    private final List<String> bufferContent = new ArrayList<>();
     private int bufferCounter;
 
     public Buffer(int size){
@@ -24,9 +24,11 @@ public class Buffer {
     public int getBufferSize() {
         return bufferSize;
     }
+
     public boolean isBufferFull(){
         return bufferCounter >= bufferSize;
     }
+
     public String getBufferCode(int index){
         return bufferContent.get(index);
     }
