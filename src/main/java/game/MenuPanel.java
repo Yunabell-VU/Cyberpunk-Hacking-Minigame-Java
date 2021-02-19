@@ -70,22 +70,8 @@ import java.awt.event.ActionListener;
     private ActionListener selectDifficulty() {
         return e -> {
             String buttonName = e.getActionCommand();
-            switch (buttonName){
-                case "VERY EASY":
-                    gameDifficulty.setDifficultyVeryEasy();
-                    break;
-                case "EASY":
-                    gameDifficulty.setDifficultyEasy();
-                    break;
-                case "HARD":
-                    gameDifficulty.setDifficultyHard();
-                    break;
-                default:
-                    gameDifficulty.setDifficultyNormal();
-                    break;
-            }
+            gameDifficulty.setDifficulty(buttonName);
             updatePanel();
         };
     }
 }
-

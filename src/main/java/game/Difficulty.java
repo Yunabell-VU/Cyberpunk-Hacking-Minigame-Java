@@ -43,6 +43,23 @@ class Difficulty {
         return level;
     }
 
+    public void setDifficulty(String level){
+        switch (level){
+            case "VERY EASY":
+                this.setDifficultyVeryEasy();
+                break;
+            case "EASY":
+                this.setDifficultyEasy();
+                break;
+            case "HARD":
+                this.setDifficultyHard();
+                break;
+            default:
+                this.setDifficultyNormal();
+                break;
+        }
+    }
+
     public void setDifficultyVeryEasy(){
         this.level = "VERY EASY";
         this.initTimeLimit = 30;
