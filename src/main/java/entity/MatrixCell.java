@@ -9,6 +9,7 @@ public class MatrixCell extends Cell {
 
     public MatrixCell(String code) {
         super(code);
+        this.coordinate = new Coordinate(-1,-1);
     }
 
     public boolean isAvailable() {

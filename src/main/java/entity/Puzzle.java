@@ -46,7 +46,6 @@ public class Puzzle {
                 }
                 codeMatrix.setCell(row,col,temp);
                 codeMatrix.getMatrixCell(row,col).setCoordinate(row,col);
-
             }
         }
     }
