@@ -168,11 +168,27 @@ class Game extends JPanel {
 
     private JPanel drawMenuBar() {
         JPanel menuBar = new MenuBar();
-        JButton exitButton = new ExitButton();
+        JButton undoButton = new GameMenuButton("UNDO");
+        undoButton.addActionListener(undoEvent());
+        menuBar.add(undoButton);
+        JButton helpButton = new GameMenuButton("HELP");
+        menuBar.add(helpButton);
+        JButton exitButton = new GameMenuButton("EXIT");
         exitButton.addActionListener(exitGame);
         menuBar.add(exitButton);
 
         return menuBar;
+    }
+
+    private ActionListener undoEvent() {
+        return e -> undo();
+    }
+
+    private void undo(){
+        if(!statuses.empty()&&!statusHandler.isGameOver()){
+            currentStatus = statuses.pop();
+        }
+        updatePanel();
     }
 
     private void addClickEvent(JButton matrixCell, Coordinate coordinate) {
@@ -185,9 +201,21 @@ class Game extends JPanel {
                     startTime();
                 }
 
-                currentStatus.getCodeMatrix().setCellPicked(coordinate);
-                statuses.push(statusHandler.updateStatus());
-                currentStatus = statuses.peek();
+                Status newStatus = null;
+                try {
+                    newStatus = (Status) currentStatus.deepClone();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+
+                statuses.push(currentStatus);
+
+                assert newStatus != null;
+
+                newStatus.getCodeMatrix().setCellPicked(coordinate);
+                currentStatus = statusHandler.updateStatus(newStatus);
+
+
                 updatePanel();
             }
 

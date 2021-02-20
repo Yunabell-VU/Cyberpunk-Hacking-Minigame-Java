@@ -1,9 +1,10 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Buffer {
+public class Buffer implements Serializable {
     private final int bufferSize;
     private final List<String> bufferContent = new ArrayList<>();
     private int bufferCounter;

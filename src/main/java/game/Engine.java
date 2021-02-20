@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class Engine extends JFrame {
 
-    private Difficulty gameDifficulty = new Difficulty();
+    private final Difficulty gameDifficulty = new Difficulty();
 
     public Engine(String title) {
         super(title);

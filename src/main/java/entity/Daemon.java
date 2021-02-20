@@ -1,12 +1,13 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 //One single sequence set
 
 //DO NOT modify this file!
 
-public class Daemon {
+public class Daemon implements Serializable {
     private boolean succeeded = false;
     private boolean failed = false;
     private boolean rewarded = false;

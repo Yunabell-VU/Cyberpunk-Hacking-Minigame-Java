@@ -3,7 +3,9 @@ package game;
 //Store settings that can modified by the use or developer
 //Do Not modify this function!
 
-class Difficulty {
+import java.io.Serializable;
+
+class Difficulty implements Serializable {
     private String level;
     private int initTimeLimit;
     private int bufferOffset;

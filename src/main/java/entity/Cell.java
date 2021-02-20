@@ -1,6 +1,8 @@
 package entity;
 
-public abstract class Cell {
+import java.io.Serializable;
+
+public abstract class Cell implements Serializable {
     private String code;
     private boolean selected = false;
 

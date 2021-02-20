@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  class Menu extends JPanel {
 
     private final ActionListener startGame;
-    private Difficulty gameDifficulty;
+    private final Difficulty gameDifficulty;
 
     public Menu(ActionListener startGame, Difficulty gameDifficulty) {
 

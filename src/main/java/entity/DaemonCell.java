@@ -1,6 +1,8 @@
 package entity;
 
-public class DaemonCell extends Cell {
+import java.io.Serializable;
+
+public class DaemonCell extends Cell implements Serializable {
 
     private boolean added = false;
 

@@ -2,13 +2,14 @@ package game;
 
 import entity.*;
 
+import java.io.*;
 import java.util.List;
 
 //status of each movement.
 //UI draws the panel based on the latest Status
 //Do Not modify this file!
 
-class Status {
+class Status implements Serializable {
 
     private final Difficulty gameDifficulty;
 
@@ -25,7 +26,7 @@ class Status {
         this.daemons = puzzle.getDaemons();
         this.gameDifficulty = gameDifficulty;
 
-        int newBufferSize = puzzle.getBuffer().getBufferSize()+gameDifficulty.getBufferOffset();
+        int newBufferSize = puzzle.getBuffer().getBufferSize() + gameDifficulty.getBufferOffset();
         this.buffer = new Buffer(newBufferSize);
         this.score = 0;
 
@@ -57,5 +58,20 @@ class Status {
 
     public Difficulty getGameDifficulty() {
         return gameDifficulty;
+    }
+
+    public Object deepClone() throws Exception
+    {
+        // Serialize
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+        oos.writeObject(this);
+
+        // Deserialize
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bis);
+
+        return ois.readObject();
     }
 }

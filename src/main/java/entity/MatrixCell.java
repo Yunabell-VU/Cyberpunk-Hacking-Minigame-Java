@@ -3,7 +3,9 @@ package entity;
 //One single Tile/Code
 //DO NOT modify this file!
 
-public class MatrixCell extends Cell {
+import java.io.Serializable;
+
+public class MatrixCell extends Cell implements Serializable {
     private boolean available = false;
     private final Coordinate coordinate;
 

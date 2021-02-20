@@ -16,7 +16,8 @@ class StatusHandler {
     }
 
     //
-    public Status updateStatus() {
+    public Status updateStatus(Status status) {
+        this.status = status;
         updateBuffer();
         updateCodeMatrix();
         updateDaemons();
@@ -24,7 +25,7 @@ class StatusHandler {
 
         if (isDaemonsAllRewarded() && !gameOver)
             switchPuzzle();
-        return status;
+        return this.status;
     }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix

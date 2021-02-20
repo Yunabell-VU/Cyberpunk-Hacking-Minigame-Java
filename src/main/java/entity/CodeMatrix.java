@@ -1,6 +1,8 @@
 package entity;
 
-public class CodeMatrix {
+import java.io.Serializable;
+
+public class CodeMatrix implements Serializable {
 
     private final MatrixCell[][] matrix;
     private MatrixCell cellPicked;
