@@ -31,17 +31,14 @@ public class Engine extends JFrame {
     }
 
     private void initGame() {
-        Status gameState = new Status(new Puzzle(), gameDifficulty, gameDifficulty.getInitTimeLimit(), 0);
-        StatusHandler newStatusHandler = new StatusHandler(gameState);
-        displayGamePanel(newStatusHandler);
+        Status firstStatus = new Status(new Puzzle(), gameDifficulty, gameDifficulty.getInitTimeLimit());
+        Game game = new Game(firstStatus, exitGame());
+        displayGamePanel(game);
     }
 
-    private void displayGamePanel(StatusHandler statusHandler) {
+    private void displayGamePanel(Game game) {
         getContentPane().removeAll();
         getContentPane().repaint();
-
-        Game game = new Game(statusHandler, exitGame());
-
         getContentPane().add(game, BorderLayout.CENTER);
         getContentPane().revalidate();
     }
@@ -49,7 +46,6 @@ public class Engine extends JFrame {
     private void displayMenu() {
         getContentPane().removeAll();
         getContentPane().repaint();
-
         getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
         getContentPane().revalidate();
     }

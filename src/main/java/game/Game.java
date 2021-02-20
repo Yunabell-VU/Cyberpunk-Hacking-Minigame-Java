@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import java.util.List;
+import java.util.Stack;
 
 
 //Game UI.
@@ -23,11 +24,15 @@ class Game extends JPanel {
     private int timeFlag = 0;
     private final JPanel backgroundPanel;
     private final ActionListener exitGame;
+    private final Stack<Status> statuses = new Stack<>();
+    private Status currentStatus;
 
     //init GamePanel
-    public Game(StatusHandler statusHandler, ActionListener exitGame) {
+    public Game(Status firstStatus,ActionListener exitGame ) {
 
-        this.statusHandler = statusHandler;
+        this.statusHandler = new StatusHandler(firstStatus);
+        this.statuses.push(firstStatus);
+        currentStatus = firstStatus;
         this.exitGame = exitGame;
 
         this.setBackground(Color.BLACK);
@@ -72,7 +77,7 @@ class Game extends JPanel {
     }
 
     private JPanel drawCodeMatrix() {
-        CodeMatrix codeSource = statusHandler.status.getCodeMatrix();
+        CodeMatrix codeSource = currentStatus.getCodeMatrix();
         int matrixSpan = codeSource.getMatrixSpan();
 
         CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
@@ -102,8 +107,8 @@ class Game extends JPanel {
 
     private JPanel drawBuffer() {
         JPanel panel = new BufferPanel();
-        for (int i = 0; i < statusHandler.status.getBuffer().getBufferSize(); i++) {
-            JLabel label = new BufferCell(statusHandler.status.getBuffer().getBufferCode(i));
+        for (int i = 0; i < currentStatus.getBuffer().getBufferSize(); i++) {
+            JLabel label = new BufferCell(currentStatus.getBuffer().getBufferCode(i));
             panel.add(label);
         }
         return panel;
@@ -111,7 +116,7 @@ class Game extends JPanel {
 
     private JPanel drawDaemons() {
         JPanel panel = new DaemonsPanel();
-        List<Daemon> daemons = statusHandler.status.getDaemons();
+        List<Daemon> daemons = currentStatus.getDaemons();
 
         for (Daemon daemon : daemons) {
             JPanel daemonPanel = new DaemonLabel();
@@ -154,7 +159,7 @@ class Game extends JPanel {
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(statusHandler.status.getTimeLimit() + "");
+        JLabel countDownLabel = new CountDownLabel(currentStatus.getTimeLimit() + "");
         panel.add(countDownLabel);
 
         return panel;
@@ -179,9 +184,9 @@ class Game extends JPanel {
                     startTime();
                 }
 
-                statusHandler.status.getCodeMatrix().setCellPicked(coordinate);
-
-                statusHandler.updateStatus();
+                currentStatus.getCodeMatrix().setCellPicked(coordinate);
+                statuses.push(statusHandler.updateStatus());
+                currentStatus = statuses.peek();
                 updatePanel();
             }
 
@@ -207,8 +212,8 @@ class Game extends JPanel {
 
     public void startTime() {
         new Timer(TIMER_PERIOD, e -> {
-            if (statusHandler.status.getTimeLimit() > 0) {
-                statusHandler.status.addTimeLimit(-1);
+            if (currentStatus.getTimeLimit() > 0) {
+                currentStatus.addTimeLimit(-1);
                 updatePanel();
 
             } else {

@@ -14,7 +14,7 @@ class StatusHandler {
     }
 
     //
-    public void updateStatus() {
+    public Status updateStatus() {
         updateBuffer();
         updateCodeMatrix();
         updateDaemons();
@@ -22,6 +22,7 @@ class StatusHandler {
 
         if (isDaemonsAllRewarded() && !gameOver)
             switchPuzzle();
+        return status;
     }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
@@ -118,7 +119,7 @@ class StatusHandler {
     }
 
     private void switchPuzzle() {
-        status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit(), status.getScore());
+        status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit());
     }
 
     private void updateReward() {

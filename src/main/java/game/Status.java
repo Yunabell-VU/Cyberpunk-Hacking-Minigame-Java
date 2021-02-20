@@ -19,7 +19,7 @@ class Status {
     private final Buffer buffer;
 
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit, int score) {
+    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit) {
 
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getDaemons();
@@ -29,7 +29,7 @@ class Status {
         this.buffer = new Buffer(newBufferSize);
 
         this.timeLimit = timeLimit;
-        this.score = score;
+        this.score = 0;
 
     }
 
