@@ -1,9 +1,6 @@
 package game;
 
-import entity.CodeMatrix;
-import entity.Daemon;
-import entity.DaemonCell;
-import entity.MatrixCell;
+import entity.*;
 import graphics.*;
 import graphics.MenuBar;
 
@@ -82,14 +79,14 @@ class Game extends JPanel {
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
-                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row, col), row, col);
+                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row, col));
                 panel.add(matrixCell);
             }
         }
         return panel;
     }
 
-    private JButton drawMatrixCell(MatrixCell tile, int row, int col) {
+    private JButton drawMatrixCell(MatrixCell tile) {
         JButton matrixCell = new MatrixCellButton(tile.getCode());
         if (tile.isSelected())
             matrixCell.setForeground(new Color(70, 44, 84));
@@ -98,7 +95,7 @@ class Game extends JPanel {
             matrixCell.setBackground(new Color(41, 44, 57));
 
             if (!tile.isSelected())
-                addClickEvent(matrixCell, row, col);
+                addClickEvent(matrixCell,tile.getCoordinate());
         }
         return matrixCell;
     }
@@ -172,8 +169,8 @@ class Game extends JPanel {
         return menuBar;
     }
 
-    private void addClickEvent(JButton matrixCell, int row, int col) {
-        int[] tileSelected = new int[2];
+    private void addClickEvent(JButton matrixCell, Coordinate coordinate) {
+
         matrixCell.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -182,10 +179,7 @@ class Game extends JPanel {
                     startTime();
                 }
 
-                tileSelected[0] = row;
-                tileSelected[1] = col;
-
-                statusHandler.status.getCodeMatrix().setCellSelected(tileSelected);
+                statusHandler.status.getCodeMatrix().setCellPicked(coordinate);
 
                 statusHandler.updateStatus();
                 updatePanel();

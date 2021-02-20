@@ -41,7 +41,7 @@ class StatusHandler {
     //update buffer in Status
     private void updateBuffer() {
         if (!status.getBuffer().isBufferFull())
-            status.getBuffer().addCellToBuffer(status.getCodeMatrix().getSelectedCharacter());
+            status.getBuffer().addCellToBuffer(status.getCodeMatrix().getPickedCharacter());
     }
 
     //Two states need to change in Status:

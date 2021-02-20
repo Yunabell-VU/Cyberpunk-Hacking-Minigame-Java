@@ -3,16 +3,15 @@ package entity;
 public class CodeMatrix {
 
     private final MatrixCell[][] matrix;
-    private int[] cellSelected;
-    private String selectedCharacter;
+    private MatrixCell cellPicked;
+    private String pickedCharacter;
     private boolean colAvailable = true;
     private final int matrixSpan;
 
     public CodeMatrix(MatrixCell[][] matrix, int span) {
         this.matrix = matrix;
-        this.cellSelected = null;
+        this.cellPicked = null;
         this.matrixSpan = span;
-
     }
 
     public int getMatrixSpan() {
@@ -27,6 +26,10 @@ public class CodeMatrix {
         return matrix[row][col];
     }
 
+    public String getPickedCharacter(){
+        return pickedCharacter;
+    }
+
     public void setCell(int row, int col, MatrixCell matrixCell) {
         this.matrix[row][col] = matrixCell;
     }
@@ -35,29 +38,25 @@ public class CodeMatrix {
         return colAvailable;
     }
 
-    public String getSelectedCharacter() {
-        return selectedCharacter;
-    }
-
-    public void setCellSelected(int[] cellSelected) {
-        this.cellSelected = cellSelected;
-        selectedCharacter = matrix[cellSelected[0]][cellSelected[1]].getCode();
-        matrix[cellSelected[0]][cellSelected[1]].setCode("[ ]");
-        matrix[cellSelected[0]][cellSelected[1]].setSelected(true);
+    public void setCellPicked(Coordinate coordinate) {
+        this.cellPicked = getMatrixCell(coordinate.getRow(),coordinate.getCol());
+        pickedCharacter = cellPicked.getCode();
+        cellPicked.setCode("[ ]");
+        cellPicked.setSelected(true);
     }
 
     public void setOneRowAvailable() {
         colAvailable = false;
         for (MatrixCell[] matrixCells : matrix)
-            if (!matrixCells[cellSelected[1]].isAvailable())
-                matrixCells[cellSelected[1]].setAvailable(true);
+            if (!matrixCells[cellPicked.getCoordinate().getCol()].isAvailable())
+                matrixCells[cellPicked.getCoordinate().getCol()].setAvailable(true);
     }
 
     public void setOneColAvailable() {
         colAvailable = true;
-        for (int col = 0; col < matrix[cellSelected[0]].length; col++)
-            if (!matrix[cellSelected[0]][col].isAvailable())
-                matrix[cellSelected[0]][col].setAvailable(true);
+        for (int col = 0; col < matrix[cellPicked.getCoordinate().getRow()].length; col++)
+            if (!matrix[cellPicked.getCoordinate().getRow()][col].isAvailable())
+                matrix[cellPicked.getCoordinate().getRow()][col].setAvailable(true);
     }
 
     public void disableAllCells() {
