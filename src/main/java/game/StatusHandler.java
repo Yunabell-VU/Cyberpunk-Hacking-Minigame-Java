@@ -7,10 +7,12 @@ import java.util.List;
 class StatusHandler {
 
     private boolean gameOver = false;
+    private int timeLimit;
     Status status;
 
     public StatusHandler(Status status) {
         this.status = status;
+        this.timeLimit = status.getGameDifficulty().getInitTimeLimit();
     }
 
     //
@@ -119,7 +121,7 @@ class StatusHandler {
     }
 
     private void switchPuzzle() {
-        status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit());
+        status = new Status(new Puzzle(), status.getGameDifficulty());
     }
 
     private void updateReward() {
@@ -138,16 +140,20 @@ class StatusHandler {
     }
 
     private void rewardTime() {
-        int rewardTime = status.getGameDifficulty().getTimeReward();
-        status.addTimeLimit(rewardTime);
+       updateTimeLimit(status.getGameDifficulty().getTimeReward());
     }
 
     private void punishTime() {
-        status.addTimeLimit(status.getGameDifficulty().getTimePunishment());
+        updateTimeLimit(status.getGameDifficulty().getTimePunishment());
+    }
+
+    public void updateTimeLimit( int offset) {
+        timeLimit = Math.max(timeLimit + offset, 0);
     }
 
     public boolean isGameOver() {
         return gameOver;
     }
+    public int getTimeLimit(){return timeLimit;}
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 class Status {
 
     private final Difficulty gameDifficulty;
-    private int timeLimit;
+
     private int score;
 
     private final CodeMatrix codeMatrix;
@@ -19,7 +19,7 @@ class Status {
     private final Buffer buffer;
 
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty, int timeLimit) {
+    public Status(Puzzle puzzle, Difficulty gameDifficulty) {
 
         this.codeMatrix = puzzle.getCodeMatrix();
         this.daemons = puzzle.getDaemons();
@@ -27,18 +27,12 @@ class Status {
 
         int newBufferSize = puzzle.getBuffer().getBufferSize()+gameDifficulty.getBufferOffset();
         this.buffer = new Buffer(newBufferSize);
-
-        this.timeLimit = timeLimit;
         this.score = 0;
 
     }
 
     public int getScore() {
         return score;
-    }
-
-    public int getTimeLimit() {
-        return timeLimit;
     }
 
     public List<Daemon> getDaemons() {
@@ -55,10 +49,6 @@ class Status {
 
     public void setSequences(List<Daemon> daemons) {
         this.daemons = daemons;
-    }
-
-    public void addTimeLimit(int offset) {
-        timeLimit = Math.max(timeLimit + offset, 0);
     }
 
     public void setScore(int scoreReward) {

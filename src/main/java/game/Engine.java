@@ -31,7 +31,7 @@ public class Engine extends JFrame {
     }
 
     private void initGame() {
-        Status firstStatus = new Status(new Puzzle(), gameDifficulty, gameDifficulty.getInitTimeLimit());
+        Status firstStatus = new Status(new Puzzle(), gameDifficulty);
         Game game = new Game(firstStatus, exitGame());
         displayGamePanel(game);
     }

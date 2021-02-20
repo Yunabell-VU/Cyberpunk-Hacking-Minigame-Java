@@ -21,7 +21,9 @@ class Game extends JPanel {
 
     private final StatusHandler statusHandler;
     private static final int TIMER_PERIOD = 1000;
+
     private int timeFlag = 0;
+
     private final JPanel backgroundPanel;
     private final ActionListener exitGame;
     private final Stack<Status> statuses = new Stack<>();
@@ -34,7 +36,6 @@ class Game extends JPanel {
         this.statuses.push(firstStatus);
         currentStatus = firstStatus;
         this.exitGame = exitGame;
-
         this.setBackground(Color.BLACK);
 
         Image image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
@@ -159,7 +160,7 @@ class Game extends JPanel {
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(currentStatus.getTimeLimit() + "");
+        JLabel countDownLabel = new CountDownLabel(statusHandler.getTimeLimit() + "");
         panel.add(countDownLabel);
 
         return panel;
@@ -212,8 +213,8 @@ class Game extends JPanel {
 
     public void startTime() {
         new Timer(TIMER_PERIOD, e -> {
-            if (currentStatus.getTimeLimit() > 0) {
-                currentStatus.addTimeLimit(-1);
+            if (statusHandler.getTimeLimit() > 0) {
+                statusHandler.updateTimeLimit(-1);
                 updatePanel();
 
             } else {
@@ -224,4 +225,5 @@ class Game extends JPanel {
             }
         }).start();
     }
+
 }
