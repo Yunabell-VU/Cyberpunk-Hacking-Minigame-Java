@@ -1,152 +1,228 @@
 package game;
 
-import entity.*;
+import entity.CodeMatrix;
+import entity.Daemon;
+import entity.DaemonCell;
+import entity.MatrixCell;
+import graphics.*;
+import graphics.MenuBar;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import java.util.List;
 
-class Game {
 
-    private boolean gameOver = false;
-    Status status;
+//Game UI.
+// DO NOT modify this file!
 
-    public Game(Status status) {
-        this.status = status;
+class Game extends JPanel {
+
+    private final StatusHandler statusHandler;
+    private static final int TIMER_PERIOD = 1000;
+    private int timeFlag = 0;
+    private final JPanel backgroundPanel;
+    private final ActionListener exitGame;
+
+    //init GamePanel
+    public Game(StatusHandler statusHandler, ActionListener exitGame) {
+
+        this.statusHandler = statusHandler;
+        this.exitGame = exitGame;
+
+        this.setBackground(Color.BLACK);
+
+        Image image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
+        backgroundPanel = new Background(image);
+
+        add(backgroundPanel, new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+        drawGamingPanel();
     }
 
-    //
-    public void updateStatus() {
-        updateBuffer();
-        updateCodeMatrix();
-        updateDaemons();
-        updateReward();
+    //refresh the Panel
+    private void updatePanel() {
+        backgroundPanel.removeAll();
+        backgroundPanel.repaint();
 
-        if (isDaemonsAllRewarded() && !gameOver)
-            switchPuzzle();
+        if (statusHandler.isGameOver())
+            drawGameOverPanel();
+        else
+            drawGamingPanel();
+
+        backgroundPanel.revalidate();
     }
 
-    //Change the whole code matrix tiles' state in the Status ->codeMatrix
-    //e.g. from AVAILABLE to SELECTED
-    private void updateCodeMatrix() {
-        CodeMatrix codeMatrix = status.getCodeMatrix();
-        codeMatrix.disableAllCells();
-
-        if (codeMatrix.isColAvailable()) codeMatrix.setOneRowAvailable();
-        else codeMatrix.setOneColAvailable();
-
-        if (status.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
-
+    private void drawGamingPanel() {
+        backgroundPanel.add(drawTimerPanel());
+        backgroundPanel.add(drawBuffer());
+        backgroundPanel.add(drawCodeMatrix());
+        backgroundPanel.add(drawDaemons());
+        backgroundPanel.add(drawScorePanel());
+        backgroundPanel.add(drawMenuBar());
     }
 
-    //ADD corresponding matrixCell in the buffer
-    //update buffer in Status
-    private void updateBuffer() {
-        if (!status.getBuffer().isBufferFull())
-            status.getBuffer().addCellToBuffer(status.getCodeMatrix().getSelectedCharacter());
+    private void drawGameOverPanel() {
+        backgroundPanel.add(drawTimerPanel());
+        backgroundPanel.add(drawBuffer());
+        backgroundPanel.add(drawDaemons());
+        backgroundPanel.add(drawScorePanel());
+        backgroundPanel.add(drawMenuBar());
+        backgroundPanel.add(drawTimeOutPanel());
     }
 
-    //Two states need to change in Status:
-    //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
-    //Sequence: check if can be marked as SUCCESS or FAIL
-    private void updateDaemons() {
+    private JPanel drawCodeMatrix() {
+        CodeMatrix codeSource = statusHandler.status.getCodeMatrix();
+        int matrixSpan = codeSource.getMatrixSpan();
 
-        Buffer buffer = status.getBuffer();
-        int bufferCount = buffer.getBufferCounter();
-        List<Daemon> tmpSeq = status.getDaemons();
-        for (int i = 0; i < tmpSeq.size(); i++) {
-            if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()) {
-                if (buffer.getBufferCode( bufferCount- 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
-                    if (bufferCount >= 2 && tmpSeq.get(i).getDaemonCells().get(bufferCount - 2).isAdded()) { //OLD SEQUENCE
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 2).setSelected(false);
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
-                    } else { //NEW SEQUENCE
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
-                    }
-                } else {
-                    int emptyCount = 0;
-                    for (int m = 0; m < bufferCount - 1; m++) {
-                        tmpSeq.get(i).getDaemonCells().get(m).setAdded(false);
-                        tmpSeq.get(i).getDaemonCells().get(m).setSelected(false);
-                        if (tmpSeq.get(i).getDaemonCells().get(m).getCode().equals("")) {
-                            emptyCount += 1;
-                        }
-                    }
-                    for (int n = 0; n < bufferCount - emptyCount - 1; n++) {
-                        tmpSeq.get(i).addEmptyCell();
-                    }
-                    if (status.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
-                        tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
-                    } else {
-                        tmpSeq.get(i).addEmptyCell();
-                    }
-                    if (tmpSeq.get(i).getDaemonCells().size() > buffer.getBufferSize()) {
-                        tmpSeq.get(i).setFailed(true);
-                    }
-                }
-                for (int j = 0; j < tmpSeq.get(i).getDaemonCells().size(); j++) {
-                    tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getDaemonCells().get(j).isAdded());
+        CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
+
+        for (int row = 0; row < matrixSpan; row++) {
+            for (int col = 0; col < matrixSpan; col++) {
+                JButton matrixCell = drawMatrixCell(codeSource.getMatrixCell(row, col), row, col);
+                panel.add(matrixCell);
+            }
+        }
+        return panel;
+    }
+
+    private JButton drawMatrixCell(MatrixCell tile, int row, int col) {
+        JButton matrixCell = new MatrixCellButton(tile.getCode());
+        if (tile.isSelected())
+            matrixCell.setForeground(new Color(70, 44, 84));
+
+        if (tile.isAvailable()) {
+            matrixCell.setBackground(new Color(41, 44, 57));
+
+            if (!tile.isSelected())
+                addClickEvent(matrixCell, row, col);
+        }
+        return matrixCell;
+    }
+
+    private JPanel drawBuffer() {
+        JPanel panel = new BufferPanel();
+        for (int i = 0; i < statusHandler.status.getBuffer().getBufferSize(); i++) {
+            JLabel label = new BufferCell(statusHandler.status.getBuffer().getBufferCode(i));
+            panel.add(label);
+        }
+        return panel;
+    }
+
+    private JPanel drawDaemons() {
+        JPanel panel = new DaemonsPanel();
+        List<Daemon> daemons = statusHandler.status.getDaemons();
+
+        for (Daemon daemon : daemons) {
+            JPanel daemonPanel = new DaemonLabel();
+            panel.add(daemonPanel);
+
+            if (daemon.isSucceeded())
+                daemonPanel.add(new SucceededLabel());
+            if (daemon.isFailed())
+                daemonPanel.add(new FailedLabel());
+
+            if (!daemon.isFailed() && !daemon.isSucceeded()) {
+                for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
+                    JLabel label = drawDaemonCell(daemon.getDaemonCells().get(j));
+                    daemonPanel.add(label);
                 }
             }
         }
-        status.setSequences(tmpSeq);
+
+        return panel;
     }
 
+    private JLabel drawDaemonCell(DaemonCell seqCode) {
+        JLabel label = new DaemonCellLabel(seqCode.getCode());
+        if (!seqCode.isAdded())
+            label.setForeground(Color.WHITE);
 
-    public void markUnrewardedDaemonsFailed() {
-        List<Daemon> tmpSeq = status.getDaemons();
-        for (Daemon sequence : tmpSeq) {
-            if (!sequence.isFailed() && !sequence.isSucceeded()) {
-                sequence.setFailed(true);
-            }
-        }
-        status.setSequences(tmpSeq);
+        if (seqCode.isSelected())
+            label.setBorder(BorderFactory.createLineBorder(new Color(250, 247, 10)));
+
+        return label;
     }
 
-    //Do Not modify this function!
-    public void setGameOver() {
-        gameOver = true;
+    private JPanel drawScorePanel() {
+        return new JPanel(); //TODO
     }
 
-    private boolean isDaemonsAllRewarded() {
-        for (Daemon daemon : status.getDaemons()) {
-            if (!daemon.isRewarded())
-                return false;
-        }
-        return true;
+    private JPanel drawTimeOutPanel() {
+        return new GameOver();
     }
 
-    private void switchPuzzle() {
-        status = new Status(new Puzzle(), status.getGameDifficulty(), status.getTimeLimit(), status.getScore());
+    private JPanel drawTimerPanel() {
+        JPanel panel = new TimeLimit();
+        JLabel countDownLabel = new CountDownLabel(statusHandler.status.getTimeLimit() + "");
+        panel.add(countDownLabel);
+
+        return panel;
     }
 
-    private void updateReward() {
-        for (Daemon daemon : status.getDaemons()) {
-            if (!daemon.isRewarded()){
-                if(daemon.isSucceeded()){
-                    rewardTime();
-                    daemon.setRewarded(true);
+    private JPanel drawMenuBar() {
+        JPanel menuBar = new MenuBar();
+        JButton exitButton = new ExitButton();
+        exitButton.addActionListener(exitGame);
+        menuBar.add(exitButton);
+
+        return menuBar;
+    }
+
+    private void addClickEvent(JButton matrixCell, int row, int col) {
+        int[] tileSelected = new int[2];
+        matrixCell.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (timeFlag == 0) {
+                    timeFlag = 1;
+                    startTime();
                 }
-                if(daemon.isFailed()){
-                    punishTime();
-                    daemon.setRewarded(true);
-                }
+
+                tileSelected[0] = row;
+                tileSelected[1] = col;
+
+                statusHandler.status.getCodeMatrix().setCellSelected(tileSelected);
+
+                statusHandler.updateStatus();
+                updatePanel();
             }
-        }
+
+            @Override
+            public void mousePressed(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                matrixCell.setForeground(Color.CYAN);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                matrixCell.setForeground(new Color(222, 255, 85));
+            }
+        });
     }
 
-    private void rewardTime() {
-        int rewardTime = status.getGameDifficulty().getTimeReward();
-        status.addTimeLimit(rewardTime);
-    }
+    public void startTime() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (statusHandler.status.getTimeLimit() > 0) {
+                statusHandler.status.addTimeLimit(-1);
+                updatePanel();
 
-    private void punishTime() {
-        status.addTimeLimit(status.getGameDifficulty().getTimePunishment());
+            } else {
+                ((Timer) e.getSource()).stop();
+                statusHandler.setGameOver();
+                statusHandler.markUnrewardedDaemonsFailed();
+                updatePanel();
+            }
+        }).start();
     }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
 }

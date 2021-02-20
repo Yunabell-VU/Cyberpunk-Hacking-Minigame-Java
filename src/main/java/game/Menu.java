@@ -6,12 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
- class MenuPanel extends JPanel {
+ class Menu extends JPanel {
 
     private final ActionListener startGame;
     private Difficulty gameDifficulty;
 
-    public MenuPanel(ActionListener startGame, Difficulty gameDifficulty) {
+    public Menu(ActionListener startGame, Difficulty gameDifficulty) {
 
         this.setBackground(new Color(250, 247, 10));
         this.setBorder(null);

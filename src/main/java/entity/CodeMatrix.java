@@ -19,6 +19,10 @@ public class CodeMatrix {
         return matrixSpan;
     }
 
+    public MatrixCell[][] getMatrix(){
+        return matrix;
+    }
+
     public MatrixCell getMatrixCell(int row, int col) {
         return matrix[row][col];
     }

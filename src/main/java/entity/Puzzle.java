@@ -20,7 +20,7 @@ public class Puzzle {
 
     private final Buffer buffer;
     private final CodeMatrix codeMatrix;
-    private final List<Daemon> daemons = new ArrayList<>();
+    private  List<Daemon> daemons = new ArrayList<>();
 
     public Puzzle(){
         Parse.emptySeq();
@@ -32,6 +32,12 @@ public class Puzzle {
         codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
         setCodeMatrix();
         setDaemons();
+    }
+
+    public Puzzle(Buffer buffer, CodeMatrix codeMatrix, List<Daemon> daemons){
+        this.buffer = new Buffer(buffer.getBufferSize());
+        this.codeMatrix = new CodeMatrix(codeMatrix.getMatrix(),codeMatrix.getMatrixSpan());
+        this.daemons = new ArrayList<>(daemons);
     }
 
     public void setCodeMatrix() {

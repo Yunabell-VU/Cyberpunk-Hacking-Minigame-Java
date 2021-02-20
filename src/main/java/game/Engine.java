@@ -15,7 +15,7 @@ public class Engine extends JFrame {
 
     public Engine(String title) {
         super(title);
-        getContentPane().add(new MenuPanel(startGame(), gameDifficulty), BorderLayout.CENTER);
+        getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(1200, 800);
         this.setVisible(true);
@@ -32,17 +32,17 @@ public class Engine extends JFrame {
 
     private void initGame() {
         Status gameState = new Status(new Puzzle(), gameDifficulty, gameDifficulty.getInitTimeLimit(), 0);
-        Game newGame = new Game(gameState);
-        displayGamePanel(newGame);
+        StatusHandler newStatusHandler = new StatusHandler(gameState);
+        displayGamePanel(newStatusHandler);
     }
 
-    private void displayGamePanel(Game game) {
+    private void displayGamePanel(StatusHandler statusHandler) {
         getContentPane().removeAll();
         getContentPane().repaint();
 
-        GamePanel gamePanel = new GamePanel(game, exitGame());
+        Game game = new Game(statusHandler, exitGame());
 
-        getContentPane().add(gamePanel, BorderLayout.CENTER);
+        getContentPane().add(game, BorderLayout.CENTER);
         getContentPane().revalidate();
     }
 
@@ -50,7 +50,7 @@ public class Engine extends JFrame {
         getContentPane().removeAll();
         getContentPane().repaint();
 
-        getContentPane().add(new MenuPanel(startGame(), gameDifficulty), BorderLayout.CENTER);
+        getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
         getContentPane().revalidate();
     }
 
