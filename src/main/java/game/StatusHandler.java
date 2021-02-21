@@ -8,44 +8,45 @@ class StatusHandler {
 
     private boolean gameOver = false;
     private int timeLimit;
-    Status status;
+    Status statusToBeDisplayed;
 
     public StatusHandler(Status status) {
-        this.status = status;
+        this.statusToBeDisplayed = status;
         this.timeLimit = status.getGameDifficulty().getInitTimeLimit();
     }
 
     //
-    public Status updateStatus(Status status) {
-        this.status = status;
+    public Status updateStatus(Status status, Coordinate clickedCellPosition) {
+        statusToBeDisplayed = status;
+        updateCodeMatrix(clickedCellPosition);
         updateBuffer();
-        updateCodeMatrix();
         updateDaemons();
         updateReward();
 
         if (isDaemonsAllRewarded() && !gameOver)
             switchPuzzle();
-        return this.status;
+        return statusToBeDisplayed;
     }
 
     //Change the whole code matrix tiles' state in the Status ->codeMatrix
     //e.g. from AVAILABLE to SELECTED
-    private void updateCodeMatrix() {
-        CodeMatrix codeMatrix = status.getCodeMatrix();
+    private void updateCodeMatrix(Coordinate clickedCellPosition) {
+        CodeMatrix codeMatrix = statusToBeDisplayed.getCodeMatrix();
+        codeMatrix.setCellPicked(clickedCellPosition);
         codeMatrix.disableAllCells();
 
         if (codeMatrix.isColAvailable()) codeMatrix.setOneRowAvailable();
         else codeMatrix.setOneColAvailable();
 
-        if (status.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
+        if (statusToBeDisplayed.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
 
     }
 
     //ADD corresponding matrixCell in the buffer
     //update buffer in Status
     private void updateBuffer() {
-        if (!status.getBuffer().isBufferFull())
-            status.getBuffer().addCellToBuffer(status.getCodeMatrix().getPickedCharacter());
+        if (!statusToBeDisplayed.getBuffer().isBufferFull())
+            statusToBeDisplayed.getBuffer().addCellToBuffer(statusToBeDisplayed.getCodeMatrix().getPickedCharacter());
     }
 
     //Two states need to change in Status:
@@ -53,9 +54,9 @@ class StatusHandler {
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateDaemons() {
 
-        Buffer buffer = status.getBuffer();
+        Buffer buffer = statusToBeDisplayed.getBuffer();
         int bufferCount = buffer.getBufferCounter();
-        List<Daemon> tmpSeq = status.getDaemons();
+        List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
         for (int i = 0; i < tmpSeq.size(); i++) {
             if (!tmpSeq.get(i).isFailed() && !tmpSeq.get(i).isSucceeded()) {
                 if (buffer.getBufferCode( bufferCount- 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
@@ -79,7 +80,7 @@ class StatusHandler {
                     for (int n = 0; n < bufferCount - emptyCount - 1; n++) {
                         tmpSeq.get(i).addEmptyCell();
                     }
-                    if (status.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
+                    if (statusToBeDisplayed.getBuffer().getBufferCode(bufferCount - 1).equals(tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).getCode())) {
                         tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setAdded(true);
                         tmpSeq.get(i).getDaemonCells().get(bufferCount - 1).setSelected(true);
                     } else {
@@ -94,18 +95,18 @@ class StatusHandler {
                 }
             }
         }
-        status.setSequences(tmpSeq);
+        statusToBeDisplayed.setSequences(tmpSeq);
     }
 
 
     public void markUnrewardedDaemonsFailed() {
-        List<Daemon> tmpSeq = status.getDaemons();
+        List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
         for (Daemon sequence : tmpSeq) {
             if (!sequence.isFailed() && !sequence.isSucceeded()) {
                 sequence.setFailed(true);
             }
         }
-        status.setSequences(tmpSeq);
+        statusToBeDisplayed.setSequences(tmpSeq);
     }
 
     //Do Not modify this function!
@@ -114,7 +115,7 @@ class StatusHandler {
     }
 
     private boolean isDaemonsAllRewarded() {
-        for (Daemon daemon : status.getDaemons()) {
+        for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
             if (!daemon.isRewarded())
                 return false;
         }
@@ -122,11 +123,11 @@ class StatusHandler {
     }
 
     private void switchPuzzle() {
-        status = new Status(new Puzzle(), status.getGameDifficulty());
+        statusToBeDisplayed = new Status(new Puzzle(), statusToBeDisplayed.getGameDifficulty());
     }
 
     private void updateReward() {
-        for (Daemon daemon : status.getDaemons()) {
+        for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
             if (!daemon.isRewarded()){
                 if(daemon.isSucceeded()){
                     rewardTime();
@@ -141,11 +142,11 @@ class StatusHandler {
     }
 
     private void rewardTime() {
-       updateTimeLimit(status.getGameDifficulty().getTimeReward());
+       updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimeReward());
     }
 
     private void punishTime() {
-        updateTimeLimit(status.getGameDifficulty().getTimePunishment());
+        updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimePunishment());
     }
 
     public void updateTimeLimit( int offset) {
@@ -155,6 +156,7 @@ class StatusHandler {
     public boolean isGameOver() {
         return gameOver;
     }
+
     public int getTimeLimit(){return timeLimit;}
 
 }

@@ -10,12 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
-
-
-//Game UI.
-// DO NOT modify this file!
 
 class Game extends JPanel {
 
@@ -26,7 +23,7 @@ class Game extends JPanel {
 
     private final JPanel backgroundPanel;
     private final ActionListener exitGame;
-    private final Stack<Status> statuses = new Stack<>();
+    private final Deque<Status> statuses = new LinkedList<>();
     private Status currentStatus;
 
     //init GamePanel
@@ -185,14 +182,13 @@ class Game extends JPanel {
     }
 
     private void undo(){
-        if(!statuses.empty()&&!statusHandler.isGameOver()){
+        if(!statuses.isEmpty() && !statusHandler.isGameOver()){
             currentStatus = statuses.pop();
         }
         updatePanel();
     }
 
-    private void addClickEvent(JButton matrixCell, Coordinate coordinate) {
-
+    private void addClickEvent(JButton matrixCell, Coordinate clickedCellPosition) {
         matrixCell.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -202,6 +198,7 @@ class Game extends JPanel {
                 }
 
                 Status newStatus = null;
+
                 try {
                     newStatus = (Status) currentStatus.deepClone();
                 } catch (Exception exception) {
@@ -210,11 +207,9 @@ class Game extends JPanel {
 
                 statuses.push(currentStatus);
 
-                assert newStatus != null;
-
-                newStatus.getCodeMatrix().setCellPicked(coordinate);
-                currentStatus = statusHandler.updateStatus(newStatus);
-
+                if(newStatus != null){
+                    currentStatus = statusHandler.updateStatus(newStatus, clickedCellPosition);
+                }
 
                 updatePanel();
             }

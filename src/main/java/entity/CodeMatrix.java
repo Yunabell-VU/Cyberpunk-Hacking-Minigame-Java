@@ -20,10 +20,6 @@ public class CodeMatrix implements Serializable {
         return matrixSpan;
     }
 
-    public MatrixCell[][] getMatrix(){
-        return matrix;
-    }
-
     public MatrixCell getMatrixCell(int row, int col) {
         return matrix[row][col];
     }

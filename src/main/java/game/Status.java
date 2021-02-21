@@ -5,10 +5,6 @@ import entity.*;
 import java.io.*;
 import java.util.List;
 
-//status of each movement.
-//UI draws the panel based on the latest Status
-//Do Not modify this file!
-
 class Status implements Serializable {
 
     private final Difficulty gameDifficulty;
@@ -60,8 +56,7 @@ class Status implements Serializable {
         return gameDifficulty;
     }
 
-    public Object deepClone() throws Exception
-    {
+    public Object deepClone() throws Exception {
         // Serialize
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);

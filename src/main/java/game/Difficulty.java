@@ -1,8 +1,5 @@
 package game;
 
-//Store settings that can modified by the use or developer
-//Do Not modify this function!
-
 import java.io.Serializable;
 
 class Difficulty implements Serializable {

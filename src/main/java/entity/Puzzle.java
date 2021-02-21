@@ -20,24 +20,18 @@ public class Puzzle {
 
     private final Buffer buffer;
     private final CodeMatrix codeMatrix;
-    private  List<Daemon> daemons = new ArrayList<>();
+    private final List<Daemon> daemons = new ArrayList<>();
 
     public Puzzle(){
         Parse.emptySeq();
         Parse.readFile();
-        //do not modify the definitions here
-        MatrixCell[][] emptyMatrix = new MatrixCell[Parse.getMatrixSpan()][Parse.getMatrixSpan()];
 
+        MatrixCell[][] emptyMatrix = new MatrixCell[Parse.getMatrixSpan()][Parse.getMatrixSpan()];
         buffer = new Buffer(Parse.getBufferSize());
         codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
+
         setCodeMatrix();
         setDaemons();
-    }
-
-    public Puzzle(Buffer buffer, CodeMatrix codeMatrix, List<Daemon> daemons){
-        this.buffer = new Buffer(buffer.getBufferSize());
-        this.codeMatrix = new CodeMatrix(codeMatrix.getMatrix(),codeMatrix.getMatrixSpan());
-        this.daemons = new ArrayList<>(daemons);
     }
 
     public void setCodeMatrix() {
@@ -121,7 +115,6 @@ class Parse {
 
             reader.close();
         } catch (FileNotFoundException e){
-            System.out.println("Error occurs when loading puzzles");
             e.printStackTrace();
         }
     }

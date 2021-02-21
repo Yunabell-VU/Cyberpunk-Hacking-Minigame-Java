@@ -33,14 +33,10 @@ P
  src/main/java/entity/Puzzle.java,8\1\81bfbc2f256e9ca45542073af7aa48f20d912a4d
 N
 src/main/java/game/Status.java,e\5\e5695f345be934ad736df069b2a2032cf702aae5
-Q
-!src/main/java/game/GameLogic.java,3\a\3a76db90b1133ac80f9a5c6f86f58381f6d2043f
 R
 "src/main/java/game/Difficulty.java,9\3\93c99e8700d904a933f14cffd42586f61bfdbae9
 N
 src/main/java/game/Engine.java,6\d\6dacee780aa133a10f3a3353ca0f544bde01b1b4
-O
-src/main/java/entity/Parse.java,2\0\20904b14b27722f177ee1db6fe95295db78a47e1
 V
 &src/main/java/graphics/Background.java,5\9\59a9fec1482efaa613cf2b8fa2495dc2c282ee71
 T
@@ -61,8 +57,6 @@ W
 +src/main/java/graphics/DifficultyLabel.java,6\e\6edee2e86bb1b29ae2335586333f57936be5b2af
 U
 %src/main/java/graphics/TimeLimit.java,a\4\a4075b15c4681c7fec3f73e4b599289de9c9b54f
-V
-&src/main/java/graphics/ExitButton.java,c\0\c033866b237130757d1d45e2c3c79ec1a32adbdb
 S
 #src/main/java/graphics/MenuBar.java,c\d\cd6bacdf94198e319831fd781726dfff7fe9ee50
 W
@@ -71,16 +65,10 @@ V
 &src/main/java/graphics/BufferCell.java,6\0\6056e19ef0cd97d8d1ad5f9ecb05343fb0736267
 [
 +src/main/java/graphics/DaemonCellLabel.java,e\3\e37a197083161076bea3a1424f571c26865529eb
-S
-#src/main/java/graphics/Daemons.java,c\5\c5f6fef5d46023705d36335ee540dcce6f363d94
 W
 'src/main/java/graphics/FailedLabel.java,5\2\52a62aa3a785ca5cc0415a643567015837a7819f
 Y
 )src/main/java/graphics/MenuSelection.java,d\2\d2e96ad68dcf58edb0189659b849b5462a4e4657
-Q
-!src/main/java/game/MenuPanel.java,b\a\ba8cdd5c94888a1da21449c47359c82629975bdc
-Q
-!src/main/java/game/GamePanel.java,7\5\75597890ad35291d98fca0a835484fd5fa3e2713
 T
 $src/main/java/entity/DaemonCell.java,7\a\7a18b99ef421565b640960cba6511999b41eef74
 N

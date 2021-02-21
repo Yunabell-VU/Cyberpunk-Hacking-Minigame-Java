@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-//Game process control: initiate game frame, init status, init game
-//DO NOT modify this file!
 
 public class Engine extends JFrame {
 
