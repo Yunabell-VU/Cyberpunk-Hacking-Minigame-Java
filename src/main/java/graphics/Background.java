@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Background extends JPanel {
     private static final long serialVersionUID = -6352788025440244338L;
-    private Image image;
+    private final transient Image image;
 
     public Background(Image image) {
         this.image = image;

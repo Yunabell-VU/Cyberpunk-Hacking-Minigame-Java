@@ -16,13 +16,14 @@ import java.util.List;
 
 class Game extends JPanel {
 
-    private final StatusHandler statusHandler;
+    private final transient StatusHandler statusHandler;
+
     private static final int TIMER_PERIOD = 1000;
 
-    private int timeFlag = 0;
+    private boolean timeStarted = false;
 
     private final JPanel backgroundPanel;
-    private final ActionListener exitGame;
+    private final transient ActionListener exitGame;
     private final Deque<Status> statuses = new LinkedList<>();
     private Status currentStatus;
 
@@ -54,6 +55,78 @@ class Game extends JPanel {
             drawGamingPanel();
 
         backgroundPanel.revalidate();
+    }
+
+    private void addClickEvent(JButton matrixCell, Coordinate clickedCellPosition) {
+        matrixCell.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!timeStarted) {
+                    timeStarted = true;
+                    startTime();
+                }
+
+                Status newStatus = null;
+
+                try {
+                    newStatus = (Status) currentStatus.deepClone();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+
+                statuses.push(currentStatus);
+
+                if(newStatus != null){
+                    currentStatus = statusHandler.updateStatus(newStatus, clickedCellPosition);
+                }
+
+                updatePanel();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                matrixCell.setForeground(Color.CYAN);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                matrixCell.setForeground(new Color(222, 255, 85));
+            }
+        });
+    }
+
+    public void startTime() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (statusHandler.getTimeLimit() > 0) {
+                statusHandler.updateTimeLimit(-1);
+                updatePanel();
+
+            } else {
+                ((Timer) e.getSource()).stop();
+                statusHandler.setGameOver();
+                statusHandler.markUnrewardedDaemonsFailed();
+                updatePanel();
+            }
+        }).start();
+    }
+
+    private ActionListener undoEvent() {
+        return e -> undo();
+    }
+
+    private void undo(){
+        if(!statuses.isEmpty() && !statusHandler.isGameOver()){
+            currentStatus = statuses.pop();
+        }
+        updatePanel();
     }
 
     private void drawGamingPanel() {
@@ -175,78 +248,6 @@ class Game extends JPanel {
         menuBar.add(exitButton);
 
         return menuBar;
-    }
-
-    private ActionListener undoEvent() {
-        return e -> undo();
-    }
-
-    private void undo(){
-        if(!statuses.isEmpty() && !statusHandler.isGameOver()){
-            currentStatus = statuses.pop();
-        }
-        updatePanel();
-    }
-
-    private void addClickEvent(JButton matrixCell, Coordinate clickedCellPosition) {
-        matrixCell.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (timeFlag == 0) {
-                    timeFlag = 1;
-                    startTime();
-                }
-
-                Status newStatus = null;
-
-                try {
-                    newStatus = (Status) currentStatus.deepClone();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-
-                statuses.push(currentStatus);
-
-                if(newStatus != null){
-                    currentStatus = statusHandler.updateStatus(newStatus, clickedCellPosition);
-                }
-
-                updatePanel();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {//no such request
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {//no such request
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                matrixCell.setForeground(Color.CYAN);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                matrixCell.setForeground(new Color(222, 255, 85));
-            }
-        });
-    }
-
-    public void startTime() {
-        new Timer(TIMER_PERIOD, e -> {
-            if (statusHandler.getTimeLimit() > 0) {
-                statusHandler.updateTimeLimit(-1);
-                updatePanel();
-
-            } else {
-                ((Timer) e.getSource()).stop();
-                statusHandler.setGameOver();
-                statusHandler.markUnrewardedDaemonsFailed();
-                updatePanel();
-            }
-        }).start();
     }
 
 }

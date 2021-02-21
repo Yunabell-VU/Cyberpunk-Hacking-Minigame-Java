@@ -15,7 +15,6 @@ class Status implements Serializable {
     private List<Daemon> daemons;
     private final Buffer buffer;
 
-
     public Status(Puzzle puzzle, Difficulty gameDifficulty) {
 
         this.codeMatrix = puzzle.getCodeMatrix();

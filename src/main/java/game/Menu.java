@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
- class Menu extends JPanel {
+class Menu extends JPanel {
 
-    private final ActionListener startGame;
+    private final transient ActionListener startGame;
     private final Difficulty gameDifficulty;
 
     public Menu(ActionListener startGame, Difficulty gameDifficulty) {
@@ -37,7 +37,7 @@ import java.awt.event.ActionListener;
         this.add(panel);
     }
 
-    private JPanel drawSelectionButtons(){
+    private JPanel drawSelectionButtons() {
         JPanel selectionPanel = new MenuSelection();
 
         JButton buttonVeryEasy = new DifficultyButton("VERY EASY");

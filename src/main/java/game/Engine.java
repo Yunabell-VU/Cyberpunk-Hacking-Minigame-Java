@@ -6,18 +6,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class Engine extends JFrame {
+
+public class Engine {
 
     private final Difficulty gameDifficulty = new Difficulty();
+    private final JFrame gameFrame = new JFrame("Cyberpunk Hacking - Infinity");
 
-    public Engine(String title) {
-        super(title);
-        getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(1200, 800);
-        this.setVisible(true);
-        this.setResizable(false);
+    public Engine() {
+
+        gameFrame.getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
+        gameFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        gameFrame.setSize(1200, 800);
+        gameFrame.setVisible(true);
+        gameFrame.setResizable(false);
     }
 
     private ActionListener startGame() {
@@ -35,21 +38,21 @@ public class Engine extends JFrame {
     }
 
     private void displayGamePanel(Game game) {
-        getContentPane().removeAll();
-        getContentPane().repaint();
-        getContentPane().add(game, BorderLayout.CENTER);
-        getContentPane().revalidate();
+        gameFrame.getContentPane().removeAll();
+        gameFrame.getContentPane().repaint();
+        gameFrame.getContentPane().add(game, BorderLayout.CENTER);
+        gameFrame.getContentPane().revalidate();
     }
 
     private void displayMenu() {
-        getContentPane().removeAll();
-        getContentPane().repaint();
-        getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
-        getContentPane().revalidate();
+        gameFrame.getContentPane().removeAll();
+        gameFrame.getContentPane().repaint();
+        gameFrame.getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
+        gameFrame.getContentPane().revalidate();
     }
 
     private static void runGame() {
-        new Engine("Cyberpunk Hacking - Infinity");
+        new Engine();
     }
 
     public static void main(String[] args) {
