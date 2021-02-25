@@ -13,6 +13,7 @@ public class CodeMatrix implements Serializable {
     public CodeMatrix(MatrixCell[][] matrix, int span) {
         this.matrix = matrix;
         this.cellPicked = null;
+        this.pickedCharacter = null;
         this.matrixSpan = span;
     }
 

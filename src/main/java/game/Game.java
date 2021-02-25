@@ -16,7 +16,7 @@ import java.util.List;
 
 class Game extends JPanel {
 
-    private final transient StatusHandler statusHandler;
+    private final transient GameLogic gameLogic;
 
     private static final int TIMER_PERIOD = 1000;
 
@@ -30,7 +30,7 @@ class Game extends JPanel {
     //init GamePanel
     public Game(Status firstStatus,ActionListener exitGame ) {
 
-        this.statusHandler = new StatusHandler(firstStatus);
+        this.gameLogic = new GameLogic(firstStatus);
         this.statuses.push(firstStatus);
         currentStatus = firstStatus;
         this.exitGame = exitGame;
@@ -49,7 +49,7 @@ class Game extends JPanel {
         backgroundPanel.removeAll();
         backgroundPanel.repaint();
 
-        if (statusHandler.isGameOver())
+        if (gameLogic.isGameOver())
             drawGameOverPanel();
         else
             drawGamingPanel();
@@ -57,7 +57,7 @@ class Game extends JPanel {
         backgroundPanel.revalidate();
     }
 
-    private void addClickEvent(JButton matrixCell, Coordinate clickedCellPosition) {
+    private void pickMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {
         matrixCell.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -66,18 +66,17 @@ class Game extends JPanel {
                     startTime();
                 }
 
-                Status newStatus = null;
+                statuses.push(currentStatus);
 
+                Status newStatus = null;
                 try {
                     newStatus = (Status) currentStatus.deepClone();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
 
-                statuses.push(currentStatus);
-
                 if(newStatus != null){
-                    currentStatus = statusHandler.updateStatus(newStatus, clickedCellPosition);
+                    currentStatus = gameLogic.updateStatus(newStatus, clickedCellPosition);
                 }
 
                 updatePanel();
@@ -105,16 +104,15 @@ class Game extends JPanel {
 
     public void startTime() {
         new Timer(TIMER_PERIOD, e -> {
-            if (statusHandler.getTimeLimit() > 0) {
-                statusHandler.updateTimeLimit(-1);
-                updatePanel();
+            if (gameLogic.getTimeLimit() > 0) {
+                gameLogic.updateTimeLimit(-1);
 
             } else {
                 ((Timer) e.getSource()).stop();
-                statusHandler.setGameOver();
-                statusHandler.markUnrewardedDaemonsFailed();
-                updatePanel();
+                gameLogic.setGameOver();
+                gameLogic.markUnrewardedDaemonsFailed();
             }
+            updatePanel();
         }).start();
     }
 
@@ -123,7 +121,7 @@ class Game extends JPanel {
     }
 
     private void undo(){
-        if(!statuses.isEmpty() && !statusHandler.isGameOver()){
+        if(!statuses.isEmpty() && !gameLogic.isGameOver()){
             currentStatus = statuses.pop();
         }
         updatePanel();
@@ -171,7 +169,7 @@ class Game extends JPanel {
             matrixCell.setBackground(new Color(41, 44, 57));
 
             if (!tile.isSelected())
-                addClickEvent(matrixCell,tile.getCoordinate());
+                pickMatrixCell(matrixCell,tile.getCoordinate());
         }
         return matrixCell;
     }
@@ -230,7 +228,7 @@ class Game extends JPanel {
 
     private JPanel drawTimerPanel() {
         JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(statusHandler.getTimeLimit() + "");
+        JLabel countDownLabel = new CountDownLabel(gameLogic.getTimeLimit() + "");
         panel.add(countDownLabel);
 
         return panel;
@@ -241,9 +239,9 @@ class Game extends JPanel {
         JButton undoButton = new GameMenuButton("UNDO");
         undoButton.addActionListener(undoEvent());
         menuBar.add(undoButton);
-        JButton helpButton = new GameMenuButton("HELP");
+        JButton helpButton = new GameMenuButton("END");
         menuBar.add(helpButton);
-        JButton exitButton = new GameMenuButton("EXIT");
+        JButton exitButton = new GameMenuButton("MENU");
         exitButton.addActionListener(exitGame);
         menuBar.add(exitButton);
 

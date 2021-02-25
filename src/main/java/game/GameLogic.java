@@ -4,13 +4,13 @@ import entity.*;
 
 import java.util.List;
 
-class StatusHandler {
+class GameLogic {
 
     private boolean gameOver = false;
     private int timeLimit;
     Status statusToBeDisplayed;
 
-    public StatusHandler(Status status) {
+    public GameLogic(Status status) {
         this.statusToBeDisplayed = status;
         this.timeLimit = status.getGameDifficulty().getInitTimeLimit();
     }
@@ -62,7 +62,7 @@ class StatusHandler {
     }
 
     private void updateMatchSeq(List<Daemon> tmpSeq, int i, int bufferCount){
-        if (bufferCount >= 2 && getSeqCell(tmpSeq, i,bufferCount-1).isAdded()) { //OLD SEQUENCE
+        if (bufferCount >= 2 && getSeqCell(tmpSeq, i,bufferCount-2).isAdded()) { //OLD SEQUENCE
             getSeqCell(tmpSeq, i, bufferCount-1).setAdded(true);
             getSeqCell(tmpSeq, i, bufferCount-2).setSelected(false);
             getSeqCell(tmpSeq, i, bufferCount-1).setSelected(true);
