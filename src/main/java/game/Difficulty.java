@@ -19,11 +19,6 @@ final class Difficulty implements Serializable {
         timePunishment = -5;
     }
 
-    public Difficulty(String level){
-        timePunishment = -5;
-        this.setDifficulty(level);
-    }
-
     public int getBufferOffset() {
         return bufferOffset;
     }
@@ -39,6 +34,7 @@ final class Difficulty implements Serializable {
     public int getTimeReward() {
         return timeReward;
     }
+
     public int getTimePunishment(){
         return  timePunishment;
     }
@@ -47,7 +43,7 @@ final class Difficulty implements Serializable {
         return level;
     }
 
-    private void setDifficulty(String level){
+    public void setDifficulty(String level){
         switch (level){
             case "VERY EASY":
                 this.setDifficultyVeryEasy();

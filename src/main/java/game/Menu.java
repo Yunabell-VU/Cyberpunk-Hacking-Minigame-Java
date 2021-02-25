@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 class Menu extends JPanel {
 
     private final transient ActionListener startGame;
-    private Difficulty gameDifficulty;
+    private final Difficulty gameDifficulty;
 
     public Menu(ActionListener startGame, Difficulty gameDifficulty) {
 
@@ -70,8 +70,12 @@ class Menu extends JPanel {
     private ActionListener selectDifficulty() {
         return e -> {
             String buttonName = e.getActionCommand();
-            gameDifficulty = new Difficulty(buttonName);
+            gameDifficulty.setDifficulty(buttonName);
             updatePanel();
         };
+    }
+
+    public Difficulty getGameDifficulty(){
+        return this.gameDifficulty;
     }
 }
