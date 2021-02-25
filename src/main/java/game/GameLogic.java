@@ -125,7 +125,6 @@ class GameLogic {
                 }
             }
         }
-        statusToBeDisplayed.setSequences(tmpSeq);
     }
 
 
@@ -136,7 +135,6 @@ class GameLogic {
                 sequence.setFailed(true);
             }
         }
-        statusToBeDisplayed.setSequences(tmpSeq);
     }
 
     //Do Not modify this function!
@@ -153,7 +151,7 @@ class GameLogic {
     }
 
     private void switchPuzzle() {
-        statusToBeDisplayed = new Status(new Puzzle(), statusToBeDisplayed.getGameDifficulty());
+        statusToBeDisplayed.switchPuzzle();
     }
 
     private void updateReward() {

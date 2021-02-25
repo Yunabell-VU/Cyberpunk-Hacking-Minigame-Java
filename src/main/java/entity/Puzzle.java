@@ -2,6 +2,7 @@ package entity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,25 +17,25 @@ import static java.lang.System.arraycopy;
 //CodeMatrix : every matrixCell in first row ->state: AVAILABLE, remaining tiles->state: UNAVAILABLE
 //Sequence: every matrixCell in sequence->state: WAITING
 
-public class Puzzle {
+public class Puzzle implements Serializable {
 
     private final Buffer buffer;
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
 
-    public Puzzle(){
+    public Puzzle(int bufferOffset){
         Parse.emptySeq();
         Parse.readFile();
 
         MatrixCell[][] emptyMatrix = new MatrixCell[Parse.getMatrixSpan()][Parse.getMatrixSpan()];
-        buffer = new Buffer(Parse.getBufferSize());
+        buffer = new Buffer(Parse.getBufferSize()+bufferOffset);
         codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
 
         setCodeMatrix();
         setDaemons();
     }
 
-    public void setCodeMatrix() {
+    private void setCodeMatrix() {
         MatrixCell temp;
         for (int row = 0; row < Parse.getMatrixSpan(); row++) {
             for (int col = 0; col < Parse.getMatrixSpan(); col++) {
@@ -50,7 +51,7 @@ public class Puzzle {
         }
     }
 
-    public void setDaemons() {
+    private void setDaemons() {
         DaemonCell temp2;
         for (String[] strings : Parse.getSeq()) {
             ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);

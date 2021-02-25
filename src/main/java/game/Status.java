@@ -11,20 +11,12 @@ class Status implements Serializable {
 
     private int score;
 
-    private final CodeMatrix codeMatrix;
-    private List<Daemon> daemons;
-    private final Buffer buffer;
+    private Puzzle puzzle;
 
     public Status(Puzzle puzzle, Difficulty gameDifficulty) {
-
-        this.codeMatrix = puzzle.getCodeMatrix();
-        this.daemons = puzzle.getDaemons();
         this.gameDifficulty = gameDifficulty;
-
-        int newBufferSize = puzzle.getBuffer().getBufferSize() + gameDifficulty.getBufferOffset();
-        this.buffer = new Buffer(newBufferSize);
+        this.puzzle = puzzle;
         this.score = 0;
-
     }
 
     public int getScore() {
@@ -32,19 +24,15 @@ class Status implements Serializable {
     }
 
     public List<Daemon> getDaemons() {
-        return daemons;
+        return puzzle.getDaemons();
     }
 
     public CodeMatrix getCodeMatrix() {
-        return codeMatrix;
+        return puzzle.getCodeMatrix();
     }
 
     public Buffer getBuffer() {
-        return buffer;
-    }
-
-    public void setSequences(List<Daemon> daemons) {
-        this.daemons = daemons;
+        return puzzle.getBuffer();
     }
 
     public void setScore(int scoreReward) {
@@ -67,5 +55,9 @@ class Status implements Serializable {
         ObjectInputStream ois = new ObjectInputStream(bis);
 
         return ois.readObject();
+    }
+
+    public void switchPuzzle(){
+        this.puzzle = new Puzzle(gameDifficulty.getBufferOffset());
     }
 }

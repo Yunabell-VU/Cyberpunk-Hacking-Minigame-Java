@@ -2,7 +2,7 @@ package game;
 
 import java.io.Serializable;
 
-class Difficulty implements Serializable {
+final class Difficulty implements Serializable {
     private String level;
     private int initTimeLimit;
     private int bufferOffset;
@@ -17,6 +17,11 @@ class Difficulty implements Serializable {
         scoreReward = 35;
         timeReward = 10;
         timePunishment = -5;
+    }
+
+    public Difficulty(String level){
+        timePunishment = -5;
+        this.setDifficulty(level);
     }
 
     public int getBufferOffset() {
@@ -42,7 +47,7 @@ class Difficulty implements Serializable {
         return level;
     }
 
-    public void setDifficulty(String level){
+    private void setDifficulty(String level){
         switch (level){
             case "VERY EASY":
                 this.setDifficultyVeryEasy();
