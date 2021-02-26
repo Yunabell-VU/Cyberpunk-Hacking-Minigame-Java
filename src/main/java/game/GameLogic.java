@@ -57,23 +57,22 @@ class GameLogic {
         return tmpSeq.get(i).getDaemonCells().get(index);
     }
 
-    private boolean isMatched(Buffer buffer, int bufferCount, List<Daemon> tmpSeq, int i){
-        return buffer.getBufferCode(bufferCount-1).equals(getSeqCell(tmpSeq, i, bufferCount-1).getCode());
+    private boolean isMatched(int bufferCount, List<Daemon> tmpSeq, int i){
+        return statusToBeDisplayed.getCodeMatrix().getPickedCharacter().equals(getSeqCell(tmpSeq, i, bufferCount-1).getCode());
+    }
+
+    private void unselectAllCells(Daemon tmpSeq){
+        for (int i = 0; i < tmpSeq.getDaemonCells().size(); i++){
+            tmpSeq.getDaemonCells().get(i).setSelected(false);
+        }
     }
 
     private void updateMatchSeq(List<Daemon> tmpSeq, int i, int bufferCount){
-        if (bufferCount >= 2 && getSeqCell(tmpSeq, i,bufferCount-2).isAdded()) { //OLD SEQUENCE
-            getSeqCell(tmpSeq, i, bufferCount-1).setAdded(true);
-            getSeqCell(tmpSeq, i, bufferCount-2).setSelected(false);
-            getSeqCell(tmpSeq, i, bufferCount-1).setSelected(true);
-        }
-        else { //NEW SEQUENCE
-            getSeqCell(tmpSeq, i, bufferCount-1).setAdded(true);
-            getSeqCell(tmpSeq, i, bufferCount-1).setSelected(true);
-        }
+        getSeqCell(tmpSeq, i, bufferCount-1).setAdded(true);
+        getSeqCell(tmpSeq, i, bufferCount-1).setSelected(true);
     }
 
-    private void updateUnmatchSeq(List<Daemon> tmpSeq, int i, Buffer buffer, int bufferCount){
+    private void updateUnmatchSeq(List<Daemon> tmpSeq, int i, int bufferCount){
         int emptyCount = 0;
         for (int m = 0; m < bufferCount - 1; m++) {
             getSeqCell(tmpSeq, i, m).setAdded(false);
@@ -83,8 +82,8 @@ class GameLogic {
             }
         }
         moveUnmatchSeq(tmpSeq, i, bufferCount-emptyCount);
-        matchLastCell(tmpSeq, i, buffer, bufferCount);
-        if(isExceed(tmpSeq, i, buffer)){tmpSeq.get(i).setFailed(true);}
+        matchLastCell(tmpSeq, i, bufferCount);
+        if(isExceed(tmpSeq, i)){tmpSeq.get(i).setFailed(true);}
     }
 
     private void moveUnmatchSeq(List<Daemon> tmpSeq, int i, int moves){
@@ -93,32 +92,32 @@ class GameLogic {
         }
     }
 
-    private void matchLastCell(List<Daemon> tmpSeq, int i, Buffer buffer, int bufferCount){
-        if(isMatched(buffer, bufferCount, tmpSeq, i)){ //compare last cell of buffer and the 1st of seq
+    private void matchLastCell(List<Daemon> tmpSeq, int i, int bufferCount){
+        if(isMatched(bufferCount, tmpSeq, i)){ //compare last cell of buffer and the 1st of seq
             getSeqCell(tmpSeq, i, bufferCount-1).setAdded(true);
             getSeqCell(tmpSeq, i, bufferCount-1).setSelected(true);
         }
         else tmpSeq.get(i).addEmptyCell();
     }
 
-    private boolean isExceed(List<Daemon> tmpSeq, int i, Buffer buffer){
-        return tmpSeq.get(i).getDaemonCells().size() > buffer.getBufferSize();
+    private boolean isExceed(List<Daemon> tmpSeq, int i){
+        return tmpSeq.get(i).getDaemonCells().size() > statusToBeDisplayed.getBuffer().getBufferSize();
     }
 
     //Two states need to change in Status:
     //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
     //Sequence: check if can be marked as SUCCESS or FAIL
     private void updateDaemons() {
-        Buffer buffer = statusToBeDisplayed.getBuffer();
-        int bufferCount = buffer.getBufferCounter();
+        int bufferCount = statusToBeDisplayed.getBuffer().getBufferCounter();
         List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
         for (int i = 0; i < tmpSeq.size(); i++) {
             if (!isMarked(tmpSeq,i)) { //if this is an unmarked sequence
-                if (isMatched(buffer, bufferCount, tmpSeq, i)) { //if seq code match with buffer
+                unselectAllCells(tmpSeq.get(i)); //unselected All Cells in the specific seq
+                if (isMatched(bufferCount, tmpSeq, i)) { //MATCHED SEQUENCE
                     updateMatchSeq(tmpSeq, i, bufferCount);
                 }
-                else {// MARKED SEQUENCE
-                    updateUnmatchSeq(tmpSeq, i, buffer, bufferCount);
+                else {//UNMATCHED SEQUENCE
+                    updateUnmatchSeq(tmpSeq, i, bufferCount);
                 }
                 for (int j = 0; j < tmpSeq.get(i).getDaemonCells().size(); j++) { //check if sequence successes
                     tmpSeq.get(i).setSucceeded(tmpSeq.get(i).getDaemonCells().get(j).isAdded());
