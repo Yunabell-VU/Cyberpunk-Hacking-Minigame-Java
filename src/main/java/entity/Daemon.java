@@ -22,6 +22,10 @@ public class Daemon implements Serializable {
         return daemonCells;
     }
 
+    public DaemonCell getDaemonCell(int index){
+        return daemonCells.get(index);
+    }
+
     public boolean isSucceeded() {
         return succeeded;
     }
@@ -30,24 +34,38 @@ public class Daemon implements Serializable {
         return failed;
     }
 
-    public  boolean isRewarded(){
-        return rewarded;
+    public  boolean isNotRewarded(){
+        return !rewarded;
     }
 
-    public void setSucceeded(boolean succeeded) {
-        this.succeeded = succeeded;
+    public void setDaemonSucceeded() {
+        this.succeeded = true;
     }
 
-    public void setFailed(boolean failed) {
-        this.failed = failed;
+    public boolean isLastCellAdded(){
+       return daemonCells.get(daemonCells.size()-1).isAdded();
     }
 
-    public void setRewarded(boolean rewarded){
-        this.rewarded = rewarded;
+    public void setDaemonFailed() {
+        this.failed = true;
+    }
+
+    public void setRewarded(){
+        this.rewarded = true;
     }
 
     public void addEmptyCell() {
         this.daemonCells.add(0, new DaemonCell(""));
     }
 
+    public void setAllDaemonCellsUnSelected(){
+        for (DaemonCell daemonCell : daemonCells) {
+            daemonCell.setSelected(false);
+        }
+    }
+    public void setAllDaemonCellsUnAdded(){
+        for (DaemonCell daemonCell : daemonCells) {
+            daemonCell.setAdded(false);
+        }
+    }
 }

@@ -34,6 +34,8 @@ public class Buffer implements Serializable {
         return bufferContent.get(index);
     }
 
+    public String getLastCodeInBuffer(){ return bufferContent.get(bufferCounter-1);}
+
     public void addCellToBuffer(String code){
         bufferContent.set(bufferCounter, code);
         bufferCounter++;

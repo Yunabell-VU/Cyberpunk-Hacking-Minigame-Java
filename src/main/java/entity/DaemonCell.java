@@ -17,4 +17,8 @@ public class DaemonCell extends Cell implements Serializable {
     public void setAdded(boolean added) {
         this.added = added;
     }
+
+    public boolean isMatch(String pickedCode){
+        return this.getCode().equals(pickedCode);
+    }
 }
