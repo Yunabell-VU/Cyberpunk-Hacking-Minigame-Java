@@ -57,7 +57,7 @@ class Status implements Serializable {
         return ois.readObject();
     }
 
-    public void switchPuzzle(){
+    public void switchPuzzle() {
         this.puzzle = new Puzzle(gameDifficulty.getBufferOffset());
     }
 }

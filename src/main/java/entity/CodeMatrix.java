@@ -25,7 +25,7 @@ public class CodeMatrix implements Serializable {
         return matrix[row][col];
     }
 
-    public String getPickedCharacter(){
+    public String getPickedCharacter() {
         return pickedCharacter;
     }
 
@@ -38,7 +38,7 @@ public class CodeMatrix implements Serializable {
     }
 
     public void setCellPicked(Coordinate coordinate) {
-        this.cellPicked = getMatrixCell(coordinate.getRow(),coordinate.getCol());
+        this.cellPicked = getMatrixCell(coordinate.getRow(), coordinate.getCol());
         pickedCharacter = cellPicked.getCode();
         cellPicked.setCode("[ ]");
         cellPicked.setSelected(true);

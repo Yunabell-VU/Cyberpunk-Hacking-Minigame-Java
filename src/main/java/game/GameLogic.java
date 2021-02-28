@@ -23,8 +23,7 @@ class GameLogic {
         updateDaemons();
         updateReward();
 
-        if (isDaemonsAllRewarded() && !gameOver)
-            statusToBeDisplayed.switchPuzzle();
+        if (isDaemonsAllRewarded() && !gameOver) statusToBeDisplayed.switchPuzzle();
         return statusToBeDisplayed;
     }
 
@@ -60,65 +59,63 @@ class GameLogic {
             if (daemon.isNotRewarded()) { //if this is an unmarked Daemon
                 updateDaemonCells(daemon, bufferCounter);
 
-                if (daemon.isLastCellAdded()) {
-                    daemon.setDaemonSucceeded();
-                }
-                if (isDaemonExceedsBuffer(daemon)) {
-                    daemon.setDaemonFailed();
-                }
+                if (daemon.isLastCellAdded()) daemon.setDaemonSucceeded();
+                if (isDaemonExceedsBuffer(daemon)) daemon.setDaemonFailed();
             }
         }
     }
 
-    private void updateDaemonCells(Daemon daemon, int bufferCounter){
+    private void updateDaemonCells(Daemon daemon, int bufferCounter) {
         daemon.setAllDaemonCellsUnSelected();
+        DaemonCell cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);
 
-        String pickedCharacter = statusToBeDisplayed.getCodeMatrix().getPickedCharacter();
-        String lastBufferCharacter = statusToBeDisplayed.getBuffer().getLastCodeInBuffer();
+        checkWaitingDaemonCell(cellWaitingToBeCheck);
 
-        DaemonCell cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter-1);
-
-        if(cellWaitingToBeCheck.isMatch(pickedCharacter)){
-            cellWaitingToBeCheck.setSelected(true);
-        }
-        if(cellWaitingToBeCheck.isMatch(lastBufferCharacter)){
-            cellWaitingToBeCheck.setAdded(true);
-        }
-        if(!cellWaitingToBeCheck.isAdded()){
+        if (!cellWaitingToBeCheck.isAdded()) {
             daemon.setAllDaemonCellsUnAdded();
-            alignDaemonCellWithBuffer(daemon,bufferCounter);
+            alignDaemonCellWithBuffer(daemon, bufferCounter);
+
+            cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);//switch waiting cell to first unEmpty cell
+            checkWaitingDaemonCell(cellWaitingToBeCheck);
+
+            if(!cellWaitingToBeCheck.isAdded()) daemon.addEmptyCell();
         }
     }
 
-    private void alignDaemonCellWithBuffer(Daemon daemon, int bufferCounter){
-        int positionOfWaitingCell = getPositionOfWaitingDaemonCell(daemon,bufferCounter);
-        for(int i = 0; i < positionOfWaitingCell; i++){
+    private void checkWaitingDaemonCell(DaemonCell waitingCell){
+        String pickedCharacter = statusToBeDisplayed.getCodeMatrix().getPickedCharacter();
+        String lastBufferCharacter = statusToBeDisplayed.getBuffer().getLastCodeInBuffer();
+        if (waitingCell.isMatch(pickedCharacter)) waitingCell.setSelected(true);
+        if (waitingCell.isMatch(lastBufferCharacter)) waitingCell.setAdded(true);
+    }
+
+    private void alignDaemonCellWithBuffer(Daemon daemon, int bufferCounter) {
+        int positionOfWaitingCell = getWaitingDaemonCellPosition(daemon, bufferCounter);
+        for (int i = 0; i < positionOfWaitingCell-1; i++) {
             daemon.addEmptyCell();
         }
     }
 
-    private int getPositionOfWaitingDaemonCell(Daemon daemon, int bufferCounter){
+    private int getWaitingDaemonCellPosition(Daemon daemon,int bufferCounter){
         int emptyCellCounter = 0;
         for (int i = 0; i < bufferCounter - 1; i++) {
-            if (daemon.getDaemonCell(i).getCode().equals("")) {
-                emptyCellCounter += 1;
-            }
+            if (daemon.getDaemonCell(i).getCode().equals("")) emptyCellCounter += 1;
         }
         return bufferCounter - emptyCellCounter;
     }
 
-    private boolean isDaemonExceedsBuffer(Daemon daemon){
+    private boolean isDaemonExceedsBuffer(Daemon daemon) {
         return daemon.getDaemonCells().size() > statusToBeDisplayed.getBuffer().getBufferSize();
     }
 
     private void updateReward() {
         for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
-            if (daemon.isNotRewarded()){
-                if(daemon.isSucceeded()){
+            if (daemon.isNotRewarded()) {
+                if (daemon.isSucceeded()) {
                     rewardTime();
                     daemon.setRewarded();
                 }
-                if(daemon.isFailed()){
+                if (daemon.isFailed()) {
                     punishTime();
                     daemon.setRewarded();
                 }
@@ -130,9 +127,7 @@ class GameLogic {
     public void markUnrewardedDaemonsFailed() {
         List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
         for (Daemon sequence : tmpSeq) {
-            if (!sequence.isFailed() && !sequence.isSucceeded()) {
-                sequence.setDaemonFailed();
-            }
+            if (!sequence.isFailed() && !sequence.isSucceeded()) sequence.setDaemonFailed();
         }
     }
 
@@ -143,21 +138,20 @@ class GameLogic {
 
     private boolean isDaemonsAllRewarded() {
         for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
-            if (daemon.isNotRewarded())
-                return false;
+            if (daemon.isNotRewarded()) return false;
         }
         return true;
     }
 
     private void rewardTime() {
-       updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimeReward());
+        updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimeReward());
     }
 
     private void punishTime() {
         updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimePunishment());
     }
 
-    public void updateTimeLimit( int offset) {
+    public void updateTimeLimit(int offset) {
         timeLimit = Math.max(timeLimit + offset, 0);
     }
 
@@ -165,6 +159,11 @@ class GameLogic {
         return gameOver;
     }
 
-    public int getTimeLimit(){return timeLimit;}
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 
+    public void setTimeLimitZero() {
+        timeLimit = 0;
+    }
 }

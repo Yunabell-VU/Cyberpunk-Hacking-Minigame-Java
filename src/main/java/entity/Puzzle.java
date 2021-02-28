@@ -23,12 +23,12 @@ public class Puzzle implements Serializable {
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
 
-    public Puzzle(int bufferOffset){
+    public Puzzle(int bufferOffset) {
         Parse.emptySeq();
         Parse.readFile();
 
         MatrixCell[][] emptyMatrix = new MatrixCell[Parse.getMatrixSpan()][Parse.getMatrixSpan()];
-        buffer = new Buffer(Parse.getBufferSize()+bufferOffset);
+        buffer = new Buffer(Parse.getBufferSize() + bufferOffset);
         codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
 
         setCodeMatrix();
@@ -45,8 +45,8 @@ public class Puzzle implements Serializable {
                 } else {
                     temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
                 }
-                codeMatrix.setCell(row,col,temp);
-                codeMatrix.getMatrixCell(row,col).setCoordinate(row,col);
+                codeMatrix.setCell(row, col, temp);
+                codeMatrix.getMatrixCell(row, col).setCoordinate(row, col);
             }
         }
     }
@@ -65,11 +65,17 @@ public class Puzzle implements Serializable {
     }
 
     //Do not modify the gets
-    public Buffer getBuffer(){return buffer;}
+    public Buffer getBuffer() {
+        return buffer;
+    }
 
-    public CodeMatrix getCodeMatrix() {return codeMatrix;}
+    public CodeMatrix getCodeMatrix() {
+        return codeMatrix;
+    }
 
-    public List<Daemon> getDaemons() {return daemons;}
+    public List<Daemon> getDaemons() {
+        return daemons;
+    }
 }
 
 class Parse {
@@ -80,7 +86,9 @@ class Parse {
     private static int matrixSpan = 0;
     private static final Random rand = new Random();
 
-    private Parse() { throw new IllegalStateException("Utility class"); }
+    private Parse() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static void readFile() {
         try {
@@ -115,18 +123,28 @@ class Parse {
             }
 
             reader.close();
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static int getBufferSize() {return bufferSize;}
+    public static int getBufferSize() {
+        return bufferSize;
+    }
 
-    public static String[][] getMatrix() {return matrix;}
+    public static String[][] getMatrix() {
+        return matrix;
+    }
 
-    public static List<String[]> getSeq() {return seq;}
+    public static List<String[]> getSeq() {
+        return seq;
+    }
 
-    public static int getMatrixSpan() {return matrixSpan;}
+    public static int getMatrixSpan() {
+        return matrixSpan;
+    }
 
-    public static void emptySeq() {seq.clear();}
+    public static void emptySeq() {
+        seq.clear();
+    }
 }

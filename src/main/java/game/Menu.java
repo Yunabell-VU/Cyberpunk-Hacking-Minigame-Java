@@ -74,8 +74,4 @@ class Menu extends JPanel {
             updatePanel();
         };
     }
-
-    public Difficulty getGameDifficulty(){
-        return this.gameDifficulty;
-    }
 }

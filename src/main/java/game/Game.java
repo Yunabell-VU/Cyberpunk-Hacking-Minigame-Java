@@ -28,7 +28,7 @@ class Game extends JPanel {
     private Status currentStatus;
 
     //init GamePanel
-    public Game(Status firstStatus,ActionListener exitGame ) {
+    public Game(Status firstStatus, ActionListener exitGame) {
 
         this.gameLogic = new GameLogic(firstStatus);
         this.statuses.push(firstStatus);
@@ -49,82 +49,10 @@ class Game extends JPanel {
         backgroundPanel.removeAll();
         backgroundPanel.repaint();
 
-        if (gameLogic.isGameOver())
-            drawGameOverPanel();
-        else
-            drawGamingPanel();
+        if (gameLogic.isGameOver()) drawGameOverPanel();
+        else drawGamingPanel();
 
         backgroundPanel.revalidate();
-    }
-
-    private void pickMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {
-        matrixCell.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!timeStarted) {
-                    timeStarted = true;
-                    startTime();
-                }
-
-                statuses.push(currentStatus);
-
-                Status newStatus = null;
-                try {
-                    newStatus = (Status) currentStatus.deepClone();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-
-                if(newStatus != null){
-                    currentStatus = gameLogic.updateStatus(newStatus, clickedCellPosition);
-                }
-
-                updatePanel();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {//no such request
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {//no such request
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                matrixCell.setForeground(Color.CYAN);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                matrixCell.setForeground(new Color(222, 255, 85));
-            }
-        });
-    }
-
-    public void startTime() {
-        new Timer(TIMER_PERIOD, e -> {
-            if (gameLogic.getTimeLimit() > 0) {
-                gameLogic.updateTimeLimit(-1);
-
-            } else {
-                ((Timer) e.getSource()).stop();
-                gameLogic.setGameOver();
-                gameLogic.markUnrewardedDaemonsFailed();
-            }
-            updatePanel();
-        }).start();
-    }
-
-    private ActionListener undoEvent() {
-        return e -> undo();
-    }
-
-    private void undo(){
-        if(!statuses.isEmpty() && !gameLogic.isGameOver()){
-            currentStatus = statuses.pop();
-        }
-        updatePanel();
     }
 
     private void drawGamingPanel() {
@@ -162,14 +90,11 @@ class Game extends JPanel {
 
     private JButton drawMatrixCell(MatrixCell tile) {
         JButton matrixCell = new MatrixCellButton(tile.getCode());
-        if (tile.isSelected())
-            matrixCell.setForeground(new Color(70, 44, 84));
+        if (tile.isSelected()) matrixCell.setForeground(new Color(70, 44, 84));
 
         if (tile.isAvailable()) {
             matrixCell.setBackground(new Color(41, 44, 57));
-
-            if (!tile.isSelected())
-                pickMatrixCell(matrixCell,tile.getCoordinate());
+            if (!tile.isSelected()) pickMatrixCell(matrixCell, tile.getCoordinate());
         }
         return matrixCell;
     }
@@ -191,10 +116,8 @@ class Game extends JPanel {
             JPanel daemonPanel = new DaemonLabel();
             panel.add(daemonPanel);
 
-            if (daemon.isSucceeded())
-                daemonPanel.add(new SucceededLabel());
-            if (daemon.isFailed())
-                daemonPanel.add(new FailedLabel());
+            if (daemon.isSucceeded()) daemonPanel.add(new SucceededLabel());
+            if (daemon.isFailed()) daemonPanel.add(new FailedLabel());
 
             if (!daemon.isFailed() && !daemon.isSucceeded()) {
                 for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
@@ -209,21 +132,18 @@ class Game extends JPanel {
 
     private JLabel drawDaemonCell(DaemonCell seqCode) {
         JLabel label = new DaemonCellLabel(seqCode.getCode());
-        if (!seqCode.isAdded())
-            label.setForeground(Color.WHITE);
-
-        if (seqCode.isSelected())
-            label.setBorder(BorderFactory.createLineBorder(new Color(250, 247, 10)));
+        if (!seqCode.isAdded()) label.setForeground(Color.WHITE);
+        if (seqCode.isSelected()) label.setBorder(BorderFactory.createLineBorder(new Color(250, 247, 10)));
 
         return label;
     }
 
     private JPanel drawScorePanel() {
-        return new JPanel(); //TODO
+        return new JPanel();
     }
 
     private JPanel drawTimeOutPanel() {
-        return new GameOver();
+        return new TimeOutPanel();
     }
 
     private JPanel drawTimerPanel() {
@@ -236,16 +156,82 @@ class Game extends JPanel {
 
     private JPanel drawMenuBar() {
         JPanel menuBar = new MenuBar();
+
         JButton undoButton = new GameMenuButton("UNDO");
-        undoButton.addActionListener(undoEvent());
+        undoButton.addActionListener(e -> undo());
         menuBar.add(undoButton);
-        JButton helpButton = new GameMenuButton("END");
-        menuBar.add(helpButton);
+
+        JButton endButton = new GameMenuButton("END");
+        endButton.addActionListener(e -> gameLogic.setTimeLimitZero());
+        menuBar.add(endButton);
+
         JButton exitButton = new GameMenuButton("MENU");
         exitButton.addActionListener(exitGame);
         menuBar.add(exitButton);
 
         return menuBar;
+    }
+
+    private void pickMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {
+        matrixCell.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!timeStarted) {
+                    timeStarted = true;
+                    startTime();
+                }
+                statuses.push(currentStatus);
+                updateCurrentStatus(clickedCellPosition);
+                updatePanel();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {//no such request
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                matrixCell.setForeground(Color.CYAN);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                matrixCell.setForeground(new Color(222, 255, 85));
+            }
+        });
+    }
+
+    private void updateCurrentStatus(Coordinate clickedCellPosition) {
+        Status newStatus = null;
+        try {
+            newStatus = (Status) currentStatus.deepClone();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        if (newStatus != null) currentStatus = gameLogic.updateStatus(newStatus, clickedCellPosition);
+    }
+
+    public void startTime() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (gameLogic.getTimeLimit() > 0) gameLogic.updateTimeLimit(-1);
+
+            else {
+                ((Timer) e.getSource()).stop();
+                gameLogic.setGameOver();
+                gameLogic.markUnrewardedDaemonsFailed();
+            }
+            updatePanel();
+        }).start();
+    }
+
+    private void undo() {
+        if (!statuses.isEmpty() && !gameLogic.isGameOver()) currentStatus = statuses.pop();
+        updatePanel();
     }
 
 }

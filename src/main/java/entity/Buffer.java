@@ -9,7 +9,7 @@ public class Buffer implements Serializable {
     private final List<String> bufferContent = new ArrayList<>();
     private int bufferCounter;
 
-    public Buffer(int size){
+    public Buffer(int size) {
         bufferSize = size;
 
         for (int i = 0; i < bufferSize; i++)
@@ -26,17 +26,19 @@ public class Buffer implements Serializable {
         return bufferSize;
     }
 
-    public boolean isBufferFull(){
+    public boolean isBufferFull() {
         return bufferCounter >= bufferSize;
     }
 
-    public String getBufferCode(int index){
+    public String getBufferCode(int index) {
         return bufferContent.get(index);
     }
 
-    public String getLastCodeInBuffer(){ return bufferContent.get(bufferCounter-1);}
+    public String getLastCodeInBuffer() {
+        return bufferContent.get(bufferCounter - 1);
+    }
 
-    public void addCellToBuffer(String code){
+    public void addCellToBuffer(String code) {
         bufferContent.set(bufferCounter, code);
         bufferCounter++;
     }

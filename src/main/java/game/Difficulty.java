@@ -35,16 +35,16 @@ final class Difficulty implements Serializable {
         return timeReward;
     }
 
-    public int getTimePunishment(){
-        return  timePunishment;
+    public int getTimePunishment() {
+        return timePunishment;
     }
 
     public String getLevel() {
         return level;
     }
 
-    public void setDifficulty(String level){
-        switch (level){
+    public void setDifficulty(String level) {
+        switch (level) {
             case "VERY EASY":
                 this.setDifficultyVeryEasy();
                 break;
@@ -60,28 +60,31 @@ final class Difficulty implements Serializable {
         }
     }
 
-    private void setDifficultyVeryEasy(){
+    private void setDifficultyVeryEasy() {
         this.level = "VERY EASY";
         this.initTimeLimit = 30;
         this.bufferOffset = 3;
         this.scoreReward = 15;
         this.timeReward = 15;
     }
-    private void setDifficultyEasy(){
+
+    private void setDifficultyEasy() {
         this.level = "EASY";
         this.initTimeLimit = 20;
         this.bufferOffset = 2;
         this.scoreReward = 25;
         this.timeReward = 10;
     }
-    private void setDifficultyNormal(){
+
+    private void setDifficultyNormal() {
         this.level = "NORMAL";
         this.initTimeLimit = 15;
         this.bufferOffset = 0;
         this.scoreReward = 35;
         this.timeReward = 10;
     }
-    private void setDifficultyHard(){
+
+    private void setDifficultyHard() {
         this.level = "HARD";
         this.initTimeLimit = 10;
         this.bufferOffset = 0;
@@ -91,8 +94,8 @@ final class Difficulty implements Serializable {
 
     public String getDifficultyInfo() {
         String info;
-        info = "<html> Initial Time Limit : "+ initTimeLimit + " seconds <br> Buffer Size : + "+ bufferOffset +
-                "<br> Time Reward : "+ timeReward + " seconds <br> Score Reward : "+ scoreReward + "</html>";
+        info = "<html> Initial Time Limit : " + initTimeLimit + " seconds <br> Buffer Size : + " + bufferOffset +
+                "<br> Time Reward : " + timeReward + " seconds <br> Score Reward : " + scoreReward + "</html>";
         return info;
     }
 }

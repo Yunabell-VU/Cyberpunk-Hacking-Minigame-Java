@@ -5,8 +5,8 @@ import java.awt.*;
 
 import static javax.swing.SwingConstants.CENTER;
 
-public class GameOver extends JPanel {
-    public GameOver(){
+public class TimeOutPanel extends JPanel {
+    public TimeOutPanel(){
         this.setBounds(90,160,450,405);
         this.setPreferredSize(new Dimension(450,400));
         this.setBackground(new Color(250,247,10));

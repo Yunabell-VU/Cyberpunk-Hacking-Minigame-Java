@@ -6,7 +6,7 @@ public class Coordinate implements Serializable {
     private int row;
     private int col;
 
-    public Coordinate(int row, int col){
+    public Coordinate(int row, int col) {
         this.setRow(row);
         this.setCol(col);
     }

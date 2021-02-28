@@ -11,7 +11,7 @@ public class MatrixCell extends Cell implements Serializable {
 
     public MatrixCell(String code) {
         super(code);
-        this.coordinate = new Coordinate(-1,-1);
+        this.coordinate = new Coordinate(-1, -1);
     }
 
     public boolean isAvailable() {
@@ -22,12 +22,12 @@ public class MatrixCell extends Cell implements Serializable {
         this.available = available;
     }
 
-    public void setCoordinate(int x, int y){
+    public void setCoordinate(int x, int y) {
         coordinate.setRow(x);
         coordinate.setCol(y);
     }
 
-    public Coordinate getCoordinate(){
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 }
