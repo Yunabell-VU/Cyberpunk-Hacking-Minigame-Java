@@ -15,8 +15,11 @@ public class Engine {
     private final JFrame gameFrame = new JFrame("Cyberpunk Hacking - Infinity");
 
     public Engine() {
-
+        initGameFrame();
         gameFrame.getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
+    }
+
+    private void initGameFrame(){
         gameFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         gameFrame.setSize(1200, 800);
         gameFrame.setVisible(true);

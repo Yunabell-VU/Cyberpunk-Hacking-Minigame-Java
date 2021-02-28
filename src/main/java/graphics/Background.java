@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Background extends JPanel {
-    private static final long serialVersionUID = -6352788025440244338L;
     private final transient Image image;
 
-    public Background(Image image) {
-        this.image = image;
+    public Background(String text) {
+        if(text.equals("MENU")) this.image = new ImageIcon("src/main/java/image/background4.jpg").getImage();
+        else this.image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
+
         this.setPreferredSize(new Dimension(1200,800));
         this.setLayout(null);
-
     }
 
     @Override

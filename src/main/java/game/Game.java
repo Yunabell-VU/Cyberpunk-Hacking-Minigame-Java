@@ -2,7 +2,6 @@ package game;
 
 import entity.*;
 import graphics.*;
-import graphics.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +12,8 @@ import java.awt.event.MouseListener;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+
+import static graphics.GameGraphicStyle.*;
 
 class Game extends JPanel {
 
@@ -31,13 +32,11 @@ class Game extends JPanel {
     public Game(Status firstStatus, ActionListener exitGame) {
 
         this.gameLogic = new GameLogic(firstStatus);
-        this.statuses.push(firstStatus);
         currentStatus = firstStatus;
         this.exitGame = exitGame;
         this.setBackground(Color.BLACK);
 
-        Image image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
-        backgroundPanel = new Background(image);
+        backgroundPanel = new Background("GAME");
 
         add(backgroundPanel, new FlowLayout(FlowLayout.CENTER, 0, 0));
 
@@ -77,7 +76,8 @@ class Game extends JPanel {
         CodeMatrix codeSource = currentStatus.getCodeMatrix();
         int matrixSpan = codeSource.getMatrixSpan();
 
-        CodeMatrixPanel panel = new CodeMatrixPanel(matrixSpan);
+        JPanel panel = new JPanel();
+        styleCodeMatrixPanel(panel,matrixSpan);
 
         for (int row = 0; row < matrixSpan; row++) {
             for (int col = 0; col < matrixSpan; col++) {
@@ -89,35 +89,48 @@ class Game extends JPanel {
     }
 
     private JButton drawMatrixCell(MatrixCell tile) {
-        JButton matrixCell = new MatrixCellButton(tile.getCode());
-        if (tile.isSelected()) matrixCell.setForeground(new Color(70, 44, 84));
+        JButton matrixCell = new JButton(tile.getCode());
+        styleMatrixCellButton(matrixCell);
+        if (tile.isSelected()) styleMatrixCellSelected(matrixCell);
 
         if (tile.isAvailable()) {
-            matrixCell.setBackground(new Color(41, 44, 57));
+            styleMatrixCellAvailable(matrixCell);
             if (!tile.isSelected()) pickMatrixCell(matrixCell, tile.getCoordinate());
         }
         return matrixCell;
     }
 
     private JPanel drawBuffer() {
-        JPanel panel = new BufferPanel();
+        JPanel panel = new JPanel();
+        styleBufferPanel(panel);
         for (int i = 0; i < currentStatus.getBuffer().getBufferSize(); i++) {
-            JLabel label = new BufferCell(currentStatus.getBuffer().getBufferCode(i));
-            panel.add(label);
+            JLabel bufferCellLabel = new JLabel(currentStatus.getBuffer().getBufferCode(i),SwingConstants.CENTER);
+            styleBufferCell(bufferCellLabel);
+            panel.add(bufferCellLabel);
         }
         return panel;
     }
 
     private JPanel drawDaemons() {
-        JPanel panel = new DaemonsPanel();
+        JPanel panel = new JPanel();
+        styleDaemonPanel(panel);
         List<Daemon> daemons = currentStatus.getDaemons();
 
         for (Daemon daemon : daemons) {
-            JPanel daemonPanel = new DaemonLabel();
+            JPanel daemonPanel = new JPanel();
+            GameGraphicStyle.styleDaemonsPanel(daemonPanel);
             panel.add(daemonPanel);
 
-            if (daemon.isSucceeded()) daemonPanel.add(new SucceededLabel());
-            if (daemon.isFailed()) daemonPanel.add(new FailedLabel());
+            if (daemon.isSucceeded()) {
+                JLabel succeededLable = new JLabel("SUCCEEDED");
+                styleResultLabel(succeededLable);
+                daemonPanel.add(succeededLable);
+            }
+            if (daemon.isFailed()) {
+                JLabel failedLable = new JLabel("FAILED");
+                styleResultLabel(failedLable);
+                daemonPanel.add(failedLable);
+            }
 
             if (!daemon.isFailed() && !daemon.isSucceeded()) {
                 for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
@@ -130,10 +143,11 @@ class Game extends JPanel {
         return panel;
     }
 
-    private JLabel drawDaemonCell(DaemonCell seqCode) {
-        JLabel label = new DaemonCellLabel(seqCode.getCode());
-        if (!seqCode.isAdded()) label.setForeground(Color.WHITE);
-        if (seqCode.isSelected()) label.setBorder(BorderFactory.createLineBorder(new Color(250, 247, 10)));
+    private JLabel drawDaemonCell(DaemonCell daemonCell) {
+        JLabel label = new JLabel(daemonCell.getCode(),SwingConstants.CENTER);
+        styleDaemonCellLabel(label);
+        if (!daemonCell.isAdded()) styleDaemonCellNotAdded(label);
+        if (daemonCell.isSelected()) styleDaemonCellSelected(label);
 
         return label;
     }
@@ -143,29 +157,42 @@ class Game extends JPanel {
     }
 
     private JPanel drawTimeOutPanel() {
-        return new TimeOutPanel();
+        JPanel panel = new JPanel();
+        styleTimeOutPanel(panel);
+
+        JLabel timeOutLabel = new JLabel("TIME OUT", SwingConstants.CENTER);
+        styleTimeOutLabel(timeOutLabel);
+
+        panel.add(timeOutLabel);
+        return panel;
     }
 
     private JPanel drawTimerPanel() {
-        JPanel panel = new TimeLimit();
-        JLabel countDownLabel = new CountDownLabel(gameLogic.getTimeLimit() + "");
+        JPanel panel = new JPanel();
+        styleTimeLimitPanel(panel);
+        JLabel countDownLabel = new JLabel(gameLogic.getTimeLimit() + "",SwingConstants.CENTER);
+        styleCountDownLabel(countDownLabel);
         panel.add(countDownLabel);
 
         return panel;
     }
 
     private JPanel drawMenuBar() {
-        JPanel menuBar = new MenuBar();
+        JPanel menuBar = new JPanel();
+        styleMenuBarPanel(menuBar);
 
-        JButton undoButton = new GameMenuButton("UNDO");
+        JButton undoButton = new JButton("UNDO");
+        styleGameMenuButton(undoButton);
         undoButton.addActionListener(e -> undo());
         menuBar.add(undoButton);
 
-        JButton endButton = new GameMenuButton("END");
+        JButton endButton = new JButton("END");
+        styleGameMenuButton(endButton);
         endButton.addActionListener(e -> gameLogic.setTimeLimitZero());
         menuBar.add(endButton);
 
-        JButton exitButton = new GameMenuButton("MENU");
+        JButton exitButton = new JButton("MENU");
+        styleGameMenuButton(exitButton);
         exitButton.addActionListener(exitGame);
         menuBar.add(exitButton);
 
@@ -196,12 +223,12 @@ class Game extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                matrixCell.setForeground(Color.CYAN);
+                styleMatrixCellMouseEnter(matrixCell);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                matrixCell.setForeground(new Color(222, 255, 85));
+                styleMatrixCellMouseExit(matrixCell);
             }
         });
     }
