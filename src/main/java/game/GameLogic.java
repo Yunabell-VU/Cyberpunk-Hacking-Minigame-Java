@@ -31,7 +31,7 @@ class GameLogic {
     //e.g. from AVAILABLE to SELECTED
     private void updateCodeMatrix(Coordinate clickedCellPosition) {
         CodeMatrix codeMatrix = statusToBeDisplayed.getCodeMatrix();
-        codeMatrix.setCellPicked(clickedCellPosition);
+        codeMatrix.updateCellPicked(clickedCellPosition);
         codeMatrix.disableAllCells();
 
         if (codeMatrix.isColAvailable()) codeMatrix.setOneRowAvailable();

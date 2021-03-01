@@ -31,11 +31,11 @@ public class Puzzle implements Serializable {
         buffer = new Buffer(Parse.getBufferSize() + bufferOffset);
         codeMatrix = new CodeMatrix(emptyMatrix, Parse.getMatrixSpan());
 
-        setCodeMatrix();
-        setDaemons();
+        initCodeMatrix();
+        initDaemons();
     }
 
-    private void setCodeMatrix() {
+    private void initCodeMatrix() {
         MatrixCell temp;
         for (int row = 0; row < Parse.getMatrixSpan(); row++) {
             for (int col = 0; col < Parse.getMatrixSpan(); col++) {
@@ -51,7 +51,7 @@ public class Puzzle implements Serializable {
         }
     }
 
-    private void setDaemons() {
+    private void initDaemons() {
         DaemonCell temp2;
         for (String[] strings : Parse.getSeq()) {
             ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
@@ -92,7 +92,7 @@ class Parse {
 
     public static void readFile() {
         try {
-            File dir = new File("src/main/java/txt");
+            File dir = new File("src/main/java/puzzles");
             File[] files = dir.listFiles();
             assert files != null;
 

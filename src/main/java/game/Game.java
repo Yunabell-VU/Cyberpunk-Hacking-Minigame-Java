@@ -243,7 +243,7 @@ class Game extends JPanel {
         if (newStatus != null) currentStatus = gameLogic.updateStatus(newStatus, clickedCellPosition);
     }
 
-    public void startTime() {
+    private void startTime() {
         new Timer(TIMER_PERIOD, e -> {
             if (gameLogic.getTimeLimit() > 0) gameLogic.updateTimeLimit(-1);
 
