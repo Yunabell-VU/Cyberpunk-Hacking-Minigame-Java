@@ -188,7 +188,7 @@ class Game extends JPanel {
 
         JButton endButton = new JButton("END");
         styleGameMenuButton(endButton);
-        endButton.addActionListener(e -> gameLogic.setTimeLimitZero());
+        endButton.addActionListener(e -> finishGame());
         menuBar.add(endButton);
 
         JButton exitButton = new JButton("MENU");
@@ -249,11 +249,16 @@ class Game extends JPanel {
 
             else {
                 ((Timer) e.getSource()).stop();
-                gameLogic.setGameOver();
-                gameLogic.markUnrewardedDaemonsFailed();
+                finishGame();
             }
             updatePanel();
         }).start();
+    }
+
+    private void finishGame(){
+        gameLogic.setTimeLimitZero();
+        gameLogic.setGameOver();
+        gameLogic.markUnrewardedDaemonsFailed();
     }
 
     private void undo() {

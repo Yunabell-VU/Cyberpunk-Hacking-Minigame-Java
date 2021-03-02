@@ -13,9 +13,9 @@ class Status implements Serializable {
 
     private Puzzle puzzle;
 
-    public Status(Puzzle puzzle, Difficulty gameDifficulty) {
+    public Status(Difficulty gameDifficulty) {
         this.gameDifficulty = gameDifficulty;
-        this.puzzle = puzzle;
+        this.puzzle = new Puzzle(gameDifficulty.getBufferOffset());
         this.score = 0;
     }
 

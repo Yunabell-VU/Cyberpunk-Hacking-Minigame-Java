@@ -35,7 +35,7 @@ public class Engine {
     }
 
     private void initGame() {
-        Status firstStatus = new Status(new Puzzle(gameDifficulty.getBufferOffset()), gameDifficulty);
+        Status firstStatus = new Status(gameDifficulty);
         Game game = new Game(firstStatus, exitGame());
         displayGamePanel(game);
     }

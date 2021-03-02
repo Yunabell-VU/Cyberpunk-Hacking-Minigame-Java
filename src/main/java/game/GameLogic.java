@@ -127,7 +127,7 @@ class GameLogic {
     public void markUnrewardedDaemonsFailed() {
         List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
         for (Daemon sequence : tmpSeq) {
-            if (!sequence.isFailed() && !sequence.isSucceeded()) sequence.setDaemonFailed();
+            if (sequence.isNotRewarded()) sequence.setDaemonFailed();
         }
     }
 
