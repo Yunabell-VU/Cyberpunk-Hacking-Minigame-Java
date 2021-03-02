@@ -131,6 +131,10 @@ class GameLogic {
         }
     }
 
+    public void switchLogicStatusToGameStatus(Status currentStatus){
+        statusToBeDisplayed = currentStatus;
+    }
+
     //Do Not modify this function!
     public void setGameOver() {
         gameOver = true;

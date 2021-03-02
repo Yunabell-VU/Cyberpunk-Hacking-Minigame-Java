@@ -1,7 +1,5 @@
 package game;
 
-import entity.Puzzle;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;

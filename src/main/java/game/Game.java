@@ -263,7 +263,7 @@ class Game extends JPanel {
 
     private void undo() {
         if (!statuses.isEmpty() && !gameLogic.isGameOver()) currentStatus = statuses.pop();
+        gameLogic.switchLogicStatusToGameStatus(currentStatus);
         updatePanel();
     }
-
 }
