@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public class DaemonCell extends Cell implements Serializable {
 
-    private boolean added = false;
+    private boolean matched = false;
 
     public DaemonCell(String code) {
         super(code);
     }
 
-    public boolean isAdded() {
-        return added;
+    public boolean isMatched() {
+        return matched;
     }
 
-    public void setAdded(boolean added) {
-        this.added = added;
+    public void setMatched(boolean matched) {
+        this.matched = matched;
     }
 
     public boolean isMatch(String pickedCode) {

@@ -43,7 +43,7 @@ public class Daemon implements Serializable {
     }
 
     public boolean isLastCellAdded() {
-        return daemonCells.get(daemonCells.size() - 1).isAdded();
+        return daemonCells.get(daemonCells.size() - 1).isMatched();
     }
 
     public void setDaemonFailed() {
@@ -66,7 +66,7 @@ public class Daemon implements Serializable {
 
     public void setAllDaemonCellsUnAdded() {
         for (DaemonCell daemonCell : daemonCells) {
-            daemonCell.setAdded(false);
+            daemonCell.setMatched(false);
         }
     }
 }

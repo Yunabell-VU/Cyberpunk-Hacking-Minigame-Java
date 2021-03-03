@@ -69,24 +69,24 @@ class GameLogic {
         daemon.setAllDaemonCellsUnSelected();
         DaemonCell cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);
 
-        checkWaitingDaemonCell(cellWaitingToBeCheck);
+        updateStatesOfMatchedDaemonCell(cellWaitingToBeCheck);
 
-        if (!cellWaitingToBeCheck.isAdded()) {
+        if (!cellWaitingToBeCheck.isMatched()) {
             daemon.setAllDaemonCellsUnAdded();
             alignDaemonCellWithBuffer(daemon, bufferCounter);
 
             cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);//switch waiting cell to first unEmpty cell
-            checkWaitingDaemonCell(cellWaitingToBeCheck);
+            updateStatesOfMatchedDaemonCell(cellWaitingToBeCheck);
 
-            if(!cellWaitingToBeCheck.isAdded()) daemon.addEmptyCell();
+            if(!cellWaitingToBeCheck.isMatched()) daemon.addEmptyCell();
         }
     }
 
-    private void checkWaitingDaemonCell(DaemonCell waitingCell){
+    private void updateStatesOfMatchedDaemonCell(DaemonCell waitingCell){
         String pickedCharacter = statusToBeDisplayed.getCodeMatrix().getPickedCharacter();
         String lastBufferCharacter = statusToBeDisplayed.getBuffer().getLastCodeInBuffer();
         if (waitingCell.isMatch(pickedCharacter)) waitingCell.setSelected(true);
-        if (waitingCell.isMatch(lastBufferCharacter)) waitingCell.setAdded(true);
+        if (waitingCell.isMatch(lastBufferCharacter)) waitingCell.setMatched(true);
     }
 
     private void alignDaemonCellWithBuffer(Daemon daemon, int bufferCounter) {

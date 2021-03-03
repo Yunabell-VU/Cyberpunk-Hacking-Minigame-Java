@@ -146,7 +146,7 @@ class Game extends JPanel {
     private JLabel drawDaemonCell(DaemonCell daemonCell) {
         JLabel label = new JLabel(daemonCell.getCode(),SwingConstants.CENTER);
         styleDaemonCellLabel(label);
-        if (!daemonCell.isAdded()) styleDaemonCellNotAdded(label);
+        if (!daemonCell.isMatched()) styleDaemonCellNotAdded(label);
         if (daemonCell.isSelected()) styleDaemonCellSelected(label);
 
         return label;
