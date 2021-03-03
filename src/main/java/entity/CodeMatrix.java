@@ -44,14 +44,14 @@ public class CodeMatrix implements Serializable {
         cellPicked.setSelected(true);
     }
 
-    public void setOneRowAvailable() {
+    public void setOneColAvailable() {
         rowAvailable = false;
         for (MatrixCell[] matrixCells : matrix)
             if (!matrixCells[cellPicked.getCoordinate().getCol()].isAvailable())
                 matrixCells[cellPicked.getCoordinate().getCol()].setAvailable(true);
     }
 
-    public void setOneColAvailable() {
+    public void setOneRowAvailable() {
         rowAvailable = true;
         for (int col = 0; col < matrix[cellPicked.getCoordinate().getRow()].length; col++)
             if (!matrix[cellPicked.getCoordinate().getRow()][col].isAvailable())
