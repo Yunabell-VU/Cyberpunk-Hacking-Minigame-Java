@@ -34,8 +34,8 @@ class GameLogic {
         codeMatrix.updateCellPicked(clickedCellPosition);
         codeMatrix.disableAllCells();
 
-        if (codeMatrix.isRowAvailable()) codeMatrix.setOneRowAvailable();
-        else codeMatrix.setOneColAvailable();
+        if (codeMatrix.isRowAvailable()) codeMatrix.setOneColAvailable();
+        else codeMatrix.setOneRowAvailable();
 
         if (statusToBeDisplayed.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
 
