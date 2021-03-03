@@ -7,7 +7,7 @@ public class CodeMatrix implements Serializable {
     private final MatrixCell[][] matrix;
     private MatrixCell cellPicked;
     private String pickedCharacter;
-    private boolean colAvailable = true;
+    private boolean rowAvailable = true;
     private final int matrixSpan;
 
     public CodeMatrix(MatrixCell[][] matrix, int span) {
@@ -33,8 +33,8 @@ public class CodeMatrix implements Serializable {
         this.matrix[row][col] = matrixCell;
     }
 
-    public boolean isColAvailable() {
-        return colAvailable;
+    public boolean isRowAvailable() {
+        return rowAvailable;
     }
 
     public void updateCellPicked(Coordinate coordinate) {
@@ -45,14 +45,14 @@ public class CodeMatrix implements Serializable {
     }
 
     public void setOneRowAvailable() {
-        colAvailable = false;
+        rowAvailable = false;
         for (MatrixCell[] matrixCells : matrix)
             if (!matrixCells[cellPicked.getCoordinate().getCol()].isAvailable())
                 matrixCells[cellPicked.getCoordinate().getCol()].setAvailable(true);
     }
 
     public void setOneColAvailable() {
-        colAvailable = true;
+        rowAvailable = true;
         for (int col = 0; col < matrix[cellPicked.getCoordinate().getRow()].length; col++)
             if (!matrix[cellPicked.getCoordinate().getRow()][col].isAvailable())
                 matrix[cellPicked.getCoordinate().getRow()][col].setAvailable(true);
