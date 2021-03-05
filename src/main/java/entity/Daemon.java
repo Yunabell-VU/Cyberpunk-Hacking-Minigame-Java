@@ -42,7 +42,7 @@ public class Daemon implements Serializable {
         this.succeeded = true;
     }
 
-    public boolean isLastCellAdded() {
+    public boolean isLastCellMatched() {
         return daemonCells.get(daemonCells.size() - 1).isMatched();
     }
 

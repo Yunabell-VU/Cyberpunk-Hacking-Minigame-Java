@@ -59,7 +59,7 @@ class GameLogic {
             if (daemon.isNotRewarded()) { //if this is an unmarked Daemon
                 updateDaemonCells(daemon, bufferCounter);
 
-                if (daemon.isLastCellAdded()) daemon.setDaemonSucceeded();
+                if (daemon.isLastCellMatched()) daemon.setDaemonSucceeded();
                 if (isDaemonExceedsBuffer(daemon)) daemon.setDaemonFailed();
             }
         }
