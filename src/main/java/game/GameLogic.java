@@ -15,7 +15,7 @@ class GameLogic {
         this.timeLimit = status.getGameDifficulty().getInitTimeLimit();
     }
 
-    //
+    //API called in Game, returned the updated status
     public Status updateStatus(Status status, Coordinate clickedCellPosition) {
         statusToBeDisplayed = status;
         updateCodeMatrix(clickedCellPosition);
@@ -27,8 +27,8 @@ class GameLogic {
         return statusToBeDisplayed;
     }
 
-    //Change the whole code matrix tiles' state in the Status ->codeMatrix
-    //e.g. from AVAILABLE to SELECTED
+    //Change the whole code matrix cell' state in the Status ->codeMatrix
+    //e.g. from available = true -> available = false
     private void updateCodeMatrix(Coordinate clickedCellPosition) {
         CodeMatrix codeMatrix = statusToBeDisplayed.getCodeMatrix();
         codeMatrix.updateCellPicked(clickedCellPosition);
@@ -42,15 +42,14 @@ class GameLogic {
     }
 
     //ADD corresponding matrixCell in the buffer
-    //update buffer in Status
     private void updateBuffer() {
         if (!statusToBeDisplayed.getBuffer().isBufferFull())
             statusToBeDisplayed.getBuffer().addCellToBuffer(statusToBeDisplayed.getCodeMatrix().getPickedCharacter());
     }
 
-    //Two states need to change in Status:
-    //Inside a sequence: matrixCell successively in the buffer-> state: ADDED
-    //Sequence: check if can be marked as SUCCESS or FAIL
+    //Two states need to changed:
+    //Inside a Daemon: matrixCell successively in the buffer-> state: matched = true, selected = true
+    //Daemon: check if can be marked as SUCCEEDED or FAILED
     private void updateDaemons() {
         int bufferCounter = statusToBeDisplayed.getBuffer().getBufferCounter();
         List<Daemon> daemons = statusToBeDisplayed.getDaemons();

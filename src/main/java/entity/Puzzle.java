@@ -10,12 +10,12 @@ import java.util.Scanner;
 
 import static java.lang.System.arraycopy;
 
-//store the pure puzzle here.
+//store a set of puzzle here.
 //you can decide how to add state to each element you parsed
 
 //State need to implement:
-//CodeMatrix : every matrixCell in first row ->state: AVAILABLE, remaining tiles->state: UNAVAILABLE
-//Sequence: every matrixCell in sequence->state: WAITING
+//CodeMatrix : every matrixCell in first row ->state: available = true, remaining tiles->state: available = false
+//Daemon: every matrixCell in daemon->state: default
 
 public class Puzzle implements Serializable {
 
@@ -92,7 +92,7 @@ class Parse {
 
     public static void readFile() {
         try {
-            File dir = new File("src/main/java/puzzles");
+            File dir = new File("./resources/puzzles");
             File[] files = dir.listFiles();
             assert files != null;
 

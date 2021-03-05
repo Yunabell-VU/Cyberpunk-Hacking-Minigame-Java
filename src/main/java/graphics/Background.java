@@ -7,8 +7,8 @@ public class Background extends JPanel {
     private final transient Image image;
 
     public Background(String text) {
-        if(text.equals("MENU")) this.image = new ImageIcon("src/main/java/image/background4.jpg").getImage();
-        else this.image = new ImageIcon("src/main/java/image/gamePanel2.jpg").getImage();
+        if(text.equals("MENU")) this.image = new ImageIcon("./resources/image/background4.jpg").getImage();
+        else this.image = new ImageIcon("./resources/image/gamePanel2.jpg").getImage();
 
         this.setPreferredSize(new Dimension(1200,800));
         this.setLayout(null);

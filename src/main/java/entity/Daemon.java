@@ -3,8 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.List;
 
-//One single sequence set
-
+//One single Daemon set
 //DO NOT modify this file!
 
 public class Daemon implements Serializable {
