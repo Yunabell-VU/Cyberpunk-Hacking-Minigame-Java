@@ -72,7 +72,7 @@ class GameLogic {
         updateStatesOfMatchedDaemonCell(cellWaitingToBeCheck);
 
         if (!cellWaitingToBeCheck.isMatched()) {
-            daemon.setAllDaemonCellsUnAdded();
+            daemon.setAllDaemonCellsUnMatched();
             alignDaemonCellWithBuffer(daemon, bufferCounter);
 
             cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);//switch waiting cell to first unEmpty cell

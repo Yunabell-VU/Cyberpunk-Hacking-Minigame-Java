@@ -64,7 +64,7 @@ public class Daemon implements Serializable {
         }
     }
 
-    public void setAllDaemonCellsUnAdded() {
+    public void setAllDaemonCellsUnMatched() {
         for (DaemonCell daemonCell : daemonCells) {
             daemonCell.setMatched(false);
         }
