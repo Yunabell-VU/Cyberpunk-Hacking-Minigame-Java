@@ -105,6 +105,18 @@ public class GameGraphicStyle {
         if(label.getText().equals("FAILED")) label.setBackground(failColor);
     }
 
+    public static void styleScorePanel(JPanel panel){
+        panel.setBounds(-10,650,1200,200);
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 330, 0));
+        panel.setOpaque(false);
+    }
+
+    public static void styleScoreLabel(JLabel label){
+        //label.setBorder(BorderFactory.createDashedBorder(Color.RED, 12, 5));
+        label.setPreferredSize(new Dimension(220,55));
+        label.setFont(new Font(fontStyle,Font.BOLD, 25));
+    }
+
     public static void styleGameMenuButton(JButton button){
         button.setForeground(subThemeColor);
         button.setPreferredSize(new Dimension(100,30));

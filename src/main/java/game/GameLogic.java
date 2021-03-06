@@ -4,11 +4,14 @@ import entity.*;
 
 import java.util.List;
 
+import static entity.ScoreHandler.loadHighestScore;
+
 class GameLogic {
 
     private boolean gameOver = false;
     private int timeLimit;
     Status statusToBeDisplayed;
+    private int highestScore = loadHighestScore();
 
     public GameLogic(Status status) {
         this.statusToBeDisplayed = status;
@@ -112,6 +115,7 @@ class GameLogic {
             if (daemon.isNotRewarded()) {
                 if (daemon.isSucceeded()) {
                     rewardTime();
+                    rewardScore();
                     daemon.setRewarded();
                 }
                 if (daemon.isFailed()) {
@@ -122,6 +126,13 @@ class GameLogic {
         }
     }
 
+    private void rewardScore(){
+        int scoreReward = statusToBeDisplayed.getGameDifficulty().getScoreReward();
+        statusToBeDisplayed.setScore(scoreReward);
+        if(highestScore < statusToBeDisplayed.getScore()){
+            highestScore = statusToBeDisplayed.getScore();
+        }
+    }
 
     public void markUnrewardedDaemonsFailed() {
         List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
@@ -169,4 +180,6 @@ class GameLogic {
     public void setTimeLimitZero() {
         timeLimit = 0;
     }
+
+    public int getHighestScore(){return highestScore;}
 }

@@ -20,7 +20,6 @@ class Game extends JPanel {
     private final transient GameLogic gameLogic;
 
     private static final int TIMER_PERIOD = 1000;
-
     private boolean timeStarted = false;
 
     private final JPanel backgroundPanel;
@@ -153,7 +152,15 @@ class Game extends JPanel {
     }
 
     private JPanel drawScorePanel() {
-        return new JPanel();
+        JPanel panel = new JPanel();
+        styleScorePanel(panel);
+        JLabel currentScore = new JLabel(String.valueOf(currentStatus.getScore()),SwingConstants.CENTER);
+        styleScoreLabel(currentScore);
+        JLabel highestScore = new JLabel(String.valueOf(gameLogic.getHighestScore()),SwingConstants.CENTER);
+        styleScoreLabel(highestScore);
+        panel.add(currentScore);
+        panel.add(highestScore);
+        return panel;
     }
 
     private JPanel drawTimeOutPanel() {
