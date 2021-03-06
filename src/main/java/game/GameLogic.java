@@ -4,14 +4,15 @@ import entity.*;
 
 import java.util.List;
 
-import static entity.ScoreHandler.loadHighestScore;
+import static entity.ScoreHandler.exportHighestScore;
+import static entity.ScoreHandler.importHighestScore;
 
 class GameLogic {
 
     private boolean gameOver = false;
     private int timeLimit;
     Status statusToBeDisplayed;
-    private int highestScore = loadHighestScore();
+    private int highestScore = importHighestScore();
 
     public GameLogic(Status status) {
         this.statusToBeDisplayed = status;
@@ -182,4 +183,5 @@ class GameLogic {
     }
 
     public int getHighestScore(){return highestScore;}
+    public void saveHighestScore(){exportHighestScore(highestScore);}
 }

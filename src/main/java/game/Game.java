@@ -195,7 +195,7 @@ class Game extends JPanel {
 
         JButton endButton = new JButton("END");
         styleGameMenuButton(endButton);
-        endButton.addActionListener(e -> finishGame());
+        endButton.addActionListener(e -> gameLogic.setTimeLimitZero());
         menuBar.add(endButton);
 
         JButton exitButton = new JButton("MENU");
@@ -263,9 +263,9 @@ class Game extends JPanel {
     }
 
     private void finishGame(){
-        gameLogic.setTimeLimitZero();
         gameLogic.setGameOver();
         gameLogic.markUnrewardedDaemonsFailed();
+        gameLogic.saveHighestScore();
     }
 
     private void undo() {
