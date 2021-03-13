@@ -11,10 +11,10 @@ public class ScoreHandler {
     public static int importHighestScore(){
         int highestScore = 0;
         try {
-            File saveFile = new File("./resources/save/score");
+            File saveFile = new File("./resources/save/score.txt");
             Scanner reader = new Scanner(saveFile);
             while (reader.hasNext()) {
-                String cookedScore = reader.nextLine();
+                String cookedScore = reader.next();
                 highestScore = parseScore(cookedScore);
             }
         } catch (FileNotFoundException e) {
@@ -26,7 +26,7 @@ public class ScoreHandler {
 
     public static void exportHighestScore(int score){
         try {
-            FileWriter scoreWriter = new FileWriter("./resources/save/score");
+            FileWriter scoreWriter = new FileWriter("./resources/save/score.txt");
             String cookedScore = encryptScore(score);
             scoreWriter.write(cookedScore);
             scoreWriter.close();
