@@ -14,8 +14,8 @@ public class ScoreHandler {
             File saveFile = new File("./resources/save/score");
             Scanner reader = new Scanner(saveFile);
             while (reader.hasNext()) {
-                String rawScore = reader.nextLine();
-                highestScore = parseScore(rawScore);
+                String cookedScore = reader.nextLine();
+                highestScore = parseScore(cookedScore);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error occurs when loading score");
