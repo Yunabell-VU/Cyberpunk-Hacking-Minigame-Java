@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public abstract class Cell implements Serializable {
     private String code;
+
     private boolean selected = false;
 
     protected Cell(String code) {

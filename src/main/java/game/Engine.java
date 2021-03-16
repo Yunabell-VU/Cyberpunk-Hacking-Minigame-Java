@@ -1,5 +1,7 @@
 package game;
 
+import graphics.Draw;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -7,7 +9,7 @@ import java.awt.event.ActionListener;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 
-public class Engine {
+public class Engine implements Draw {
 
     private final Difficulty gameDifficulty = new Difficulty();
     private final JFrame gameFrame = new JFrame("Cyberpunk Hacking - Infinity");
@@ -32,32 +34,18 @@ public class Engine {
         return e -> displayMenu();
     }
 
-    private void initGame() {
+    public void initGame() {
         Status firstStatus = new Status(gameDifficulty);
         Game game = new Game(firstStatus, exitGame());
         displayGamePanel(game);
     }
 
-    private void displayGamePanel(Game game) {
-        gameFrame.getContentPane().removeAll();
-        gameFrame.getContentPane().repaint();
-        gameFrame.getContentPane().add(game, BorderLayout.CENTER);
-        gameFrame.getContentPane().revalidate();
-    }
+    private void displayGamePanel(Game game) { Draw.redraw(gameFrame.getContentPane(),game); }
 
-    private void displayMenu() {
-        gameFrame.getContentPane().removeAll();
-        gameFrame.getContentPane().repaint();
-        gameFrame.getContentPane().add(new Menu(startGame(), gameDifficulty), BorderLayout.CENTER);
-        gameFrame.getContentPane().revalidate();
-    }
+    private void displayMenu() { Draw.redraw(gameFrame.getContentPane(),new Menu(startGame(), gameDifficulty)); }
 
-    private static void runGame() {
-        new Engine();
-    }
+    private static void runGame() { new Engine(); }
 
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(Engine::runGame);
-    }
+    public static void main(String[] args) { javax.swing.SwingUtilities.invokeLater(Engine::runGame); }
 }
 

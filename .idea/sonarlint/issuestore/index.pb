@@ -201,3 +201,13 @@ _
 /.idea/artifacts/software_design_vu_2020_jar.xml,b\4\b414b3d9add283f44ab456fe5bb870a853ebfadc
 V
 &src/main/java/entity/ScoreHandler.java,6\0\60609238a95c608dd62cbcb09e5bfb2aaa79b087
+H
+resources/save/score.txt,a\1\a179b1d66fa708104496f1be5c334d0d7c69f3b4
+P
+ src/main/java/graphics/Draw.java,c\4\c4a157b4124ff1ea577ac82653fb7c17657b8311
+N
+src/main/java/game/GameUI.java,d\7\d72e3b689c26dd98f2a9f3985557c34d1d46bcb1
+S
+#src/main/java/command/ICommand.java,6\0\6011ac85d7be56aaf92af172ac2dc1ef75955573
+[
++src/main/java/command/ClickCellCommand.java,f\6\f65fb4c581a2a5e78b1d9f82d65444bf4fca491b
