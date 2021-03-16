@@ -22,15 +22,15 @@ public class GameUI implements Draw {
     private final JPanel backgroundPanel;
     private final Game game;
 
-    public GameUI (Game game){
-        this.status = game.currentStatus;
+    public GameUI (Game game, Status status){
+        this.status = status;
         this.game = game;
         backgroundPanel = new Background("GAME");
         game.add(backgroundPanel, new FlowLayout(FlowLayout.CENTER, 0, 0));
     }
 
-    public void updateGameUI(int time, int score){
-        status = game.currentStatus;
+    public void updateGameUI(int time, int score, Status status){
+        this.status = status;
         backgroundPanel.removeAll();
         backgroundPanel.repaint();
 

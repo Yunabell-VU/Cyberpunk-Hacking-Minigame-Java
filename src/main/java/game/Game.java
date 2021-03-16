@@ -20,26 +20,25 @@ public class Game extends JPanel {
 
     public final transient ActionListener exitGame;
     private final Deque<Status> statuses = new LinkedList<>();
-    public Status currentStatus;
-    private final GameUI gameUI;
+    private Status currentStatus;
+    private final transient GameUI gameUI;
 
     //init GamePanel
     public Game(Status firstStatus, ActionListener exitGame) {
 
         this.gameLogic = new GameLogic(firstStatus);
         currentStatus = firstStatus;
-        this.gameUI = new GameUI(this);
+        this.gameUI = new GameUI(this, currentStatus);
         this.exitGame = exitGame;
 
         this.setBackground(Color.BLACK);
 
-        //gameUI.drawGamingPanel(gameLogic.getTimeLimit(), gameLogic.getHighestScore());
-        gameUI.updateGameUI(gameLogic.getTimeLimit(), gameLogic.getHighestScore());
+        gameUI.updateGameUI(gameLogic.getTimeLimit(), gameLogic.getHighestScore(),currentStatus);
     }
 
     //refresh the Panel
     public void updatePanel() {
-        gameUI.updateGameUI(gameLogic.getTimeLimit(),gameLogic.getHighestScore());
+        gameUI.updateGameUI(gameLogic.getTimeLimit(),gameLogic.getHighestScore(),currentStatus);
     }
 
     public void triggerGameTimer(){
