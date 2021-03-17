@@ -1,10 +1,12 @@
 package game;
 
+import command.BackToMenuCommand;
 import command.ClickCellCommand;
+import command.EndGameCommand;
 import command.UndoCommand;
 import entity.*;
 import graphics.Background;
-import graphics.Draw;
+import graphics.Redraw;
 import graphics.GameGraphicStyle;
 
 import javax.swing.*;
@@ -17,7 +19,7 @@ import java.util.List;
 import static graphics.GameGraphicStyle.*;
 import static graphics.GameGraphicStyle.styleMatrixCellAvailable;
 
-public class GameUI implements Draw {
+public class GameUI implements Redraw {
     private Status status;
     private final JPanel backgroundPanel;
     private final Game game;
@@ -31,12 +33,10 @@ public class GameUI implements Draw {
 
     public void updateGameUI(int time, int score, Status status){
         this.status = status;
-        backgroundPanel.removeAll();
-        backgroundPanel.repaint();
+        Redraw.clearCanvas(backgroundPanel);
 
-        if (game.gameLogic.isGameOver()) drawGameOverPanel(time,score);
+        if (game.isGameOver()) drawGameOverPanel(time,score);
         else drawGamingPanel(time,score);
-
         backgroundPanel.revalidate();
     }
 
@@ -47,6 +47,7 @@ public class GameUI implements Draw {
         backgroundPanel.add(drawDaemons());
         backgroundPanel.add(drawScorePanel(score));
         backgroundPanel.add(drawMenuBar());
+        backgroundPanel.add(undoCoolDownPanel());
     }
 
     private void drawGameOverPanel(int time, int score) {
@@ -111,14 +112,11 @@ public class GameUI implements Draw {
                 JLabel succeededLable = new JLabel("SUCCEEDED");
                 styleResultLabel(succeededLable);
                 daemonPanel.add(succeededLable);
-            }
-            if (daemon.isFailed()) {
+            } else if (daemon.isFailed()) {
                 JLabel failedLable = new JLabel("FAILED");
                 styleResultLabel(failedLable);
                 daemonPanel.add(failedLable);
-            }
-
-            if (!daemon.isFailed() && !daemon.isSucceeded()) {
+            } else  {
                 for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
                     JLabel label = drawDaemonCell(daemon.getDaemonCells().get(j));
                     daemonPanel.add(label);
@@ -182,15 +180,27 @@ public class GameUI implements Draw {
 
         JButton endButton = new JButton("END");
         styleGameMenuButton(endButton);
-        endButton.addActionListener(e -> game.gameLogic.setTimeLimitZero());
+        endButton.addActionListener(e -> game.executeCommand(new EndGameCommand(game)));
         menuBar.add(endButton);
 
         JButton exitButton = new JButton("MENU");
         styleGameMenuButton(exitButton);
-        exitButton.addActionListener(game.exitGame);
+        game.executeCommand(new BackToMenuCommand(game,exitButton));
         menuBar.add(exitButton);
 
         return menuBar;
+    }
+
+    private JPanel undoCoolDownPanel(){
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(""+SwingConstants.CENTER);
+        if(game.canUndo()) label.setText("OK");
+        else label.setText(String.valueOf(game.getUndoCoolDown()));
+        styleUndoCDPanel(panel);
+        styleUndoCDLabel(label);
+        panel.add(label);
+
+        return panel;
     }
 
     private void addMouseEventToMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {

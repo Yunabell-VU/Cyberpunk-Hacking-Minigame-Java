@@ -2,19 +2,20 @@ package command;
 
 import game.Game;
 
-public class UndoCommand implements Command{
+public class EndGameCommand implements Command{
     private final Game game;
 
-    public UndoCommand(Game game){
+    public EndGameCommand(Game game){
         this.game = game;
     }
+
     @Override
     public boolean executable() {
-        return game.canUndo();
+        return !game.isGameOver();
     }
 
     @Override
     public void execute() {
-        game.undo();
+        game.finishGameTime();
     }
 }

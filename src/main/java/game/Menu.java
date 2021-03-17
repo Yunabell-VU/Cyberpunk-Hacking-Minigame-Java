@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 import static graphics.MenuGraphicStyle.*;
 
-class Menu extends JPanel implements Draw {
+class Menu extends JPanel implements Redraw {
 
     private final transient ActionListener startGame;
     private final Difficulty gameDifficulty;
@@ -73,7 +73,7 @@ class Menu extends JPanel implements Draw {
     }
 
     private void updatePanel() {
-        Draw.redraw(this,drawMenuPanel());
+        Redraw.redraw(this,drawMenuPanel());
     }
 
     private ActionListener selectDifficulty() {

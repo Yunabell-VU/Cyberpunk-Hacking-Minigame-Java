@@ -1,6 +1,6 @@
 package game;
 
-import graphics.Draw;
+import graphics.Redraw;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 
-public class Engine implements Draw {
+public class Engine implements Redraw {
 
     private final Difficulty gameDifficulty = new Difficulty();
     private final JFrame gameFrame = new JFrame("Cyberpunk Hacking - Infinity");
@@ -40,9 +40,9 @@ public class Engine implements Draw {
         displayGamePanel(game);
     }
 
-    private void displayGamePanel(Game game) { Draw.redraw(gameFrame.getContentPane(),game); }
+    private void displayGamePanel(Game game) { Redraw.redraw(gameFrame.getContentPane(),game); }
 
-    private void displayMenu() { Draw.redraw(gameFrame.getContentPane(),new Menu(startGame(), gameDifficulty)); }
+    private void displayMenu() { Redraw.redraw(gameFrame.getContentPane(),new Menu(startGame(), gameDifficulty)); }
 
     private static void runGame() { new Engine(); }
 

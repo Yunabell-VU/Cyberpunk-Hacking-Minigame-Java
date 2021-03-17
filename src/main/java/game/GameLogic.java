@@ -170,6 +170,12 @@ class GameLogic {
         timeLimit = Math.max(timeLimit + offset, 0);
     }
 
+    public void finishGame(){
+        setGameOver();
+        markUnrewardedDaemonsFailed();
+        saveHighestScore();
+    }
+
     public boolean isGameOver() {
         return gameOver;
     }
@@ -183,5 +189,6 @@ class GameLogic {
     }
 
     public int getHighestScore(){return highestScore;}
+
     public void saveHighestScore(){exportHighestScore(highestScore);}
 }

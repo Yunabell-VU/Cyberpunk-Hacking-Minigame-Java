@@ -112,7 +112,6 @@ public class GameGraphicStyle {
     }
 
     public static void styleScoreLabel(JLabel label){
-        //label.setBorder(BorderFactory.createDashedBorder(Color.RED, 12, 5));
         label.setPreferredSize(new Dimension(220,55));
         label.setFont(new Font(fontStyle,Font.BOLD, 25));
     }
@@ -130,6 +129,18 @@ public class GameGraphicStyle {
         panel.setOpaque(false);
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 86, 6));
     }
+
+    public static void styleUndoCDPanel(JPanel panel){
+        panel.setBounds(650,530,40,40);
+        panel.setOpaque(false);
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    }
+    public static void styleUndoCDLabel(JLabel label){
+        label.setPreferredSize(new Dimension(40,40));
+        label.setForeground(themeColor);
+        label.setFont(new Font(fontStyle,Font.BOLD, 25));
+    }
+
     public static void styleTimeLimitPanel(JPanel panel){
         panel.setOpaque(false);
         panel.setBounds(432, 63, 85, 52);

@@ -13,15 +13,20 @@ import java.util.LinkedList;
 
 public class Game extends JPanel {
 
-    public final transient GameLogic gameLogic;
+    private final transient GameLogic gameLogic;
+    private final transient GameUI gameUI;
 
     private static final int TIMER_PERIOD = 1000;
-    private boolean timeStarted = false;
+    private boolean gameTimeStarted = false;
+    private static final int UNDO_COOL_DOWN = 8;
+    private int undoCoolDown;
+    private boolean undoAvailable = true;
 
     public final transient ActionListener exitGame;
+
     private final Deque<Status> statuses = new LinkedList<>();
     private Status currentStatus;
-    private final transient GameUI gameUI;
+
 
     //init GamePanel
     public Game(Status firstStatus, ActionListener exitGame) {
@@ -31,6 +36,7 @@ public class Game extends JPanel {
         this.gameUI = new GameUI(this, currentStatus);
         this.exitGame = exitGame;
 
+        this.undoCoolDown = UNDO_COOL_DOWN;
         this.setBackground(Color.BLACK);
 
         gameUI.updateGameUI(gameLogic.getTimeLimit(), gameLogic.getHighestScore(),currentStatus);
@@ -42,8 +48,8 @@ public class Game extends JPanel {
     }
 
     public void triggerGameTimer(){
-        if (!timeStarted) {
-            timeStarted = true;
+        if (!gameTimeStarted) {
+            gameTimeStarted = true;
             startGameTimer();
         }
     }
@@ -70,25 +76,50 @@ public class Game extends JPanel {
 
             else {
                 ((Timer) e.getSource()).stop();
-                finishGame();
+                endGame();
             }
             updatePanel();
         }).start();
     }
 
-    private void finishGame() {
-        gameLogic.setGameOver();
-        gameLogic.markUnrewardedDaemonsFailed();
-        gameLogic.saveHighestScore();
+    public void finishGameTime(){
+        gameLogic.setTimeLimitZero();
+    }
+
+    public void endGame() {
+        gameLogic.finishGame();
+    }
+
+    public boolean isGameOver(){
+        return gameLogic.isGameOver();
     }
 
     public boolean canUndo(){
-        return !statuses.isEmpty() && !gameLogic.isGameOver();
+        return !statuses.isEmpty() && !gameLogic.isGameOver() && undoAvailable;
     }
     public void undo() {
+        startUndoTimer();
+        undoAvailable = false;
         currentStatus = statuses.pop();
         gameLogic.switchLogicStatusToGameStatus(currentStatus);
         updatePanel();
+    }
+
+    public int getUndoCoolDown(){
+        return undoCoolDown;
+    }
+
+    private void startUndoTimer() {
+        new Timer(TIMER_PERIOD, e -> {
+            if (undoCoolDown > 0) undoCoolDown--;
+
+            else {
+                ((Timer) e.getSource()).stop();
+                undoAvailable = true;
+                undoCoolDown = UNDO_COOL_DOWN;
+            }
+            updatePanel();
+        }).start();
     }
 
     public void executeCommand(Command command){

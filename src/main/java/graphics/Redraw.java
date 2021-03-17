@@ -3,8 +3,8 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public interface Draw {
-    public static void redraw(Container canvas, JPanel panel){
+public interface Redraw {
+    static void redraw(Container canvas, JPanel panel) {
         canvas.removeAll();
         canvas.repaint();
         canvas.add(panel);
@@ -12,10 +12,16 @@ public interface Draw {
     }
 
     //Overloading
-    public static void redraw(JPanel canvas, JPanel panel){
+    static void redraw(JPanel canvas, JPanel panel) {
         canvas.removeAll();
         canvas.repaint();
         canvas.add(panel);
         canvas.revalidate();
     }
+
+    static void clearCanvas(JPanel canvas){
+        canvas.removeAll();
+        canvas.repaint();
+    }
+
 }
