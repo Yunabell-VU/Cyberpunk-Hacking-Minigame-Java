@@ -19,7 +19,7 @@ import java.util.List;
 import static graphics.GameGraphicStyle.*;
 import static graphics.GameGraphicStyle.styleMatrixCellAvailable;
 
-public class GameUI implements Redraw {
+public class GameUI implements Redraw,GameGraphicStyle {
     private Status status;
     private final JPanel backgroundPanel;
     private final Game game;
@@ -108,19 +108,19 @@ public class GameUI implements Redraw {
             GameGraphicStyle.styleDaemonsPanel(daemonPanel);
             panel.add(daemonPanel);
 
-            if (daemon.isSucceeded()) {
-                JLabel succeededLable = new JLabel("SUCCEEDED");
-                styleResultLabel(succeededLable);
-                daemonPanel.add(succeededLable);
-            } else if (daemon.isFailed()) {
-                JLabel failedLable = new JLabel("FAILED");
-                styleResultLabel(failedLable);
-                daemonPanel.add(failedLable);
-            } else  {
+            if(!daemon.isSucceeded()&& !daemon.isFailed())  {
                 for (int j = 0; j < daemon.getDaemonCells().size(); j++) {
                     JLabel label = drawDaemonCell(daemon.getDaemonCells().get(j));
                     daemonPanel.add(label);
                 }
+            } else{
+                JLabel resultLabel = new JLabel();
+
+                if (daemon.isSucceeded()) resultLabel.setText("SUCCEEDED");
+                else resultLabel.setText("FAILED");
+
+                styleResultLabel(resultLabel);
+                daemonPanel.add(resultLabel);
             }
         }
 
@@ -173,29 +173,40 @@ public class GameUI implements Redraw {
         JPanel menuBar = new JPanel();
         styleMenuBarPanel(menuBar);
 
-        JButton undoButton = new JButton("UNDO");
-        styleGameMenuButton(undoButton);
-        undoButton.addActionListener(e -> game.executeCommand(new UndoCommand(game)));
-        menuBar.add(undoButton);
-
-        JButton endButton = new JButton("END");
-        styleGameMenuButton(endButton);
-        endButton.addActionListener(e -> game.executeCommand(new EndGameCommand(game)));
-        menuBar.add(endButton);
-
-        JButton exitButton = new JButton("MENU");
-        styleGameMenuButton(exitButton);
-        game.executeCommand(new BackToMenuCommand(game,exitButton));
-        menuBar.add(exitButton);
+        menuBar.add(createMenuBarButton("UNDO"));
+        menuBar.add(createMenuBarButton("END"));
+        menuBar.add(createMenuBarButton("MENU"));
 
         return menuBar;
+    }
+
+    private JButton createMenuBarButton(String text){
+        JButton button = new JButton(text);
+        styleGameMenuButton(button);
+
+        switch (text){
+            case "UNDO":
+                button.addActionListener(e -> game.executeCommand(new UndoCommand(game)));
+                break;
+            case "END":
+                button.addActionListener(e -> game.executeCommand(new EndGameCommand(game)));
+                break;
+            case "MENU":
+                game.executeCommand(new BackToMenuCommand(game,button));
+                break;
+            default:
+                break;
+        }
+        return button;
     }
 
     private JPanel undoCoolDownPanel(){
         JPanel panel = new JPanel();
         JLabel label = new JLabel(""+SwingConstants.CENTER);
+
         if(game.canUndo()) label.setText("OK");
         else label.setText(String.valueOf(game.getUndoCoolDown()));
+
         styleUndoCDPanel(panel);
         styleUndoCDLabel(label);
         panel.add(label);

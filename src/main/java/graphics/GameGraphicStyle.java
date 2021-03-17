@@ -3,34 +3,22 @@ package graphics;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameGraphicStyle {
-    static Color themeColor = new Color(250, 247, 10);
-    static Color subThemeColor = Color.BLACK;
-    static Color opaqueThemeColor = new Color(250, 247, 10, 90);
-    static Color succeedColor = new Color(27, 213, 117);
-    static Color failColor = new Color(255, 87, 81);
-    static Color resultFontColor = new Color(0, 0, 0, 98);
-    static Color matrixCellSelectedColor = new Color(70, 44, 84);
-    static Color matrixCellAvailableColor = new Color(41, 44, 57);
-    static Color matrixCellMouseEnterColor = Color.CYAN;
-    static String fontStyle = "Consolas";
+public interface GameGraphicStyle {
 
-    private GameGraphicStyle() { throw new IllegalStateException("Utility class"); }
-
-    public static void styleBufferCell(JLabel label){
+    static void styleBufferCell(JLabel label){
         label.setPreferredSize(new Dimension(35,35));
-        label.setFont(new Font(fontStyle, Font.BOLD, 18));
-        label.setForeground(themeColor);
-        label.setBorder(BorderFactory.createDashedBorder(opaqueThemeColor, 12, 5));
+        label.setFont(FontFactory.createFont(18));
+        label.setForeground(ColorFactory.createColor("theme"));
+        label.setBorder(BorderFactory.createDashedBorder(ColorFactory.createColor("opaqueTheme"), 12, 5));
     }
 
-    public static void styleBufferPanel(JPanel panel){
+    static void styleBufferPanel(JPanel panel){
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         panel.setBounds(555,70,550,120);
         panel.setOpaque(false);
     }
 
-    public static void styleCodeMatrixPanel(JPanel panel, int matrixSpan){
+    static void styleCodeMatrixPanel(JPanel panel, int matrixSpan){
 
         panel.setBounds(90,192,449,370);
         panel.setOpaque(false);
@@ -39,120 +27,122 @@ public class GameGraphicStyle {
         panel.setLayout(gridLayout);
     }
 
-    public static void styleMatrixCellButton(JButton button){
-        button.setBackground(subThemeColor);
+    static void styleMatrixCellButton(JButton button){
+        button.setBackground(ColorFactory.createColor("subTheme"));
         button.setPreferredSize(new Dimension(60, 60));
-        button.setFont(new Font(fontStyle, Font.BOLD, 20));
+        button.setFont(FontFactory.createFont(20));
 
         button.setBorderPainted(false);
         button.setOpaque(true);
-        button.setForeground(themeColor);
+        button.setForeground(ColorFactory.createColor("theme"));
     }
 
-    public static void styleMatrixCellSelected(JButton button){
-        button.setForeground(matrixCellSelectedColor);
+    static void styleMatrixCellSelected(JButton button){
+        button.setForeground(ColorFactory.createColor("matrixCellSelected"));
     }
 
-    public static void styleMatrixCellAvailable(JButton button){
-        button.setBackground(matrixCellAvailableColor);
+    static void styleMatrixCellAvailable(JButton button){
+        button.setBackground(ColorFactory.createColor("matrixCellAvailable"));
     }
 
-    public static void styleMatrixCellMouseEnter(JButton button){
-        button.setForeground(matrixCellMouseEnterColor);
+    static void styleMatrixCellMouseEnter(JButton button){
+        button.setForeground(ColorFactory.createColor("matrixCellMouseEnter"));
     }
-    public static void styleMatrixCellMouseExit(JButton button){
-        button.setForeground(themeColor);
+    static void styleMatrixCellMouseExit(JButton button){
+        button.setForeground(ColorFactory.createColor("theme"));
     }
 
-    public static void styleCountDownLabel(JLabel label){
+    static void styleCountDownLabel(JLabel label){
         label.setPreferredSize(new Dimension(82,46));
-        label.setForeground(themeColor);
-        label.setBorder(BorderFactory.createLineBorder(themeColor));
-        label.setFont(new Font(fontStyle, Font.BOLD, 35));
+        label.setForeground(ColorFactory.createColor("theme"));
+        label.setBorder(BorderFactory.createLineBorder(ColorFactory.createColor("theme")));
+        label.setFont(FontFactory.createFont(35));
     }
 
-    public static void styleDaemonCellLabel(JLabel label){
-        label.setForeground(themeColor);
+    static void styleDaemonCellLabel(JLabel label){
+        label.setForeground(ColorFactory.createColor("theme"));
         label.setPreferredSize(new Dimension(40,40));
-        label.setFont(new Font(fontStyle, Font.BOLD, 18));
+        label.setFont(FontFactory.createFont(18));
     }
 
-    public static void styleDaemonCellNotAdded(JLabel label){
+    static void styleDaemonCellNotAdded(JLabel label){
         label.setForeground(Color.WHITE);
     }
 
-    public static void styleDaemonCellSelected(JLabel label){
-        label.setBorder(BorderFactory.createLineBorder(themeColor));
+    static void styleDaemonCellSelected(JLabel label){
+        label.setBorder(BorderFactory.createLineBorder(ColorFactory.createColor("theme")));
     }
 
-    public static void styleDaemonsPanel(JPanel panel){
+    static void styleDaemonsPanel(JPanel panel){
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
         panel.setOpaque(false);
         panel.setPreferredSize(new Dimension(548, 65));
     }
 
-    public static void styleDaemonPanel(JPanel panel){
+    static void styleDaemonPanel(JPanel panel){
         panel.setBounds(560,200,550,350);
         panel.setOpaque(false);
     }
 
-    public static void styleResultLabel(JLabel label){
+    static void styleResultLabel(JLabel label){
         label.setPreferredSize(new Dimension(548,65));
-        label.setForeground(resultFontColor);
+        label.setForeground(ColorFactory.createColor("resultFont"));
         label.setOpaque(true);
-        label.setFont(new Font(fontStyle,Font.BOLD, 20));
-        if(label.getText().equals("SUCCEEDED")) label.setBackground(succeedColor);
-        if(label.getText().equals("FAILED")) label.setBackground(failColor);
+        label.setFont(FontFactory.createFont(20));
+        if(label.getText().equals("SUCCEEDED")) label.setBackground(ColorFactory.createColor("succeed"));
+        if(label.getText().equals("FAILED")) label.setBackground(ColorFactory.createColor("fail"));
     }
 
-    public static void styleScorePanel(JPanel panel){
+    static void styleScorePanel(JPanel panel){
         panel.setBounds(-10,650,1200,200);
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 330, 0));
         panel.setOpaque(false);
     }
 
-    public static void styleScoreLabel(JLabel label){
+    static void styleScoreLabel(JLabel label){
         label.setPreferredSize(new Dimension(220,55));
-        label.setFont(new Font(fontStyle,Font.BOLD, 25));
+        label.setFont(FontFactory.createFont(25));
     }
 
-    public static void styleGameMenuButton(JButton button){
-        button.setForeground(subThemeColor);
+    static void styleGameMenuButton(JButton button){
+        button.setForeground(ColorFactory.createColor("subTheme"));
         button.setPreferredSize(new Dimension(100,30));
         button.setBorderPainted(false);
-        button.setBackground(themeColor);
-        button.setFont(new Font(fontStyle, Font.BOLD, 22));
+        button.setBackground(ColorFactory.createColor("theme"));
+        button.setFont(FontFactory.createFont(22));
     }
 
-    public static void styleMenuBarPanel(JPanel panel){
+    static void styleMenuBarPanel(JPanel panel){
         panel.setBounds(502,490,700,50);
         panel.setOpaque(false);
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 86, 6));
     }
 
-    public static void styleUndoCDPanel(JPanel panel){
+    static void styleUndoCDPanel(JPanel panel){
         panel.setBounds(650,530,40,40);
         panel.setOpaque(false);
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     }
-    public static void styleUndoCDLabel(JLabel label){
+    static void styleUndoCDLabel(JLabel label){
         label.setPreferredSize(new Dimension(40,40));
-        label.setForeground(themeColor);
-        label.setFont(new Font(fontStyle,Font.BOLD, 25));
+        label.setForeground(ColorFactory.createColor("theme"));
+        label.setFont(FontFactory.createFont(25));
     }
 
-    public static void styleTimeLimitPanel(JPanel panel){
+    static void styleTimeLimitPanel(JPanel panel){
         panel.setOpaque(false);
         panel.setBounds(432, 63, 85, 52);
     }
-    public static void styleTimeOutPanel(JPanel panel){
+
+    static void styleTimeOutPanel(JPanel panel){
         panel.setBounds(90,160,450,405);
         panel.setPreferredSize(new Dimension(450,400));
-        panel.setBackground(themeColor);
+        panel.setBackground(ColorFactory.createColor("theme"));
     }
-    public static void styleTimeOutLabel(JLabel label){
+
+    static void styleTimeOutLabel(JLabel label){
         label.setPreferredSize(new Dimension(450,400));
-        label.setFont(new Font(fontStyle, Font.BOLD, 50));
-        label.setForeground(subThemeColor);
+        label.setFont(FontFactory.createFont(50));
+        label.setForeground(ColorFactory.createColor("subTheme"));
     }
 }

@@ -11,7 +11,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Engine implements Redraw {
 
-    private final Difficulty gameDifficulty = new Difficulty();
+    private final Difficulty gameDifficulty = Difficulty.getInstance();
     private final JFrame gameFrame = new JFrame("Cyberpunk Hacking - Infinity");
 
     public Engine() {

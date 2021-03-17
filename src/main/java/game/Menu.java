@@ -3,19 +3,18 @@ package game;
 import graphics.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
 import static graphics.MenuGraphicStyle.*;
 
-class Menu extends JPanel implements Redraw {
+class Menu extends JPanel implements Redraw, MenuGraphicStyle {
 
-    private final transient ActionListener startGame;
+    public final transient ActionListener startGame;
     private final Difficulty gameDifficulty;
 
     public Menu(ActionListener startGame, Difficulty gameDifficulty) {
 
-        this.setBackground(new Color(250, 247, 10));
+        this.setBackground(ColorFactory.createColor("theme"));
         this.setBorder(null);
 
         this.startGame = startGame;
@@ -28,6 +27,7 @@ class Menu extends JPanel implements Redraw {
         JPanel panel = new Background("MENU");
 
         panel.add(drawSelectionButtons());
+
         JLabel difficultyLabel = new JLabel(gameDifficulty.getLevel(),SwingConstants.CENTER);
         styleDifficultyLabel(difficultyLabel);
         panel.add(difficultyLabel);
@@ -48,28 +48,19 @@ class Menu extends JPanel implements Redraw {
         JPanel selectionPanel = new JPanel();
         styleMenuSelectionPanel(selectionPanel);
 
-        JButton buttonVeryEasy = new JButton("VERY EASY");
-        styleDifficultyButton(buttonVeryEasy);
-        buttonVeryEasy.addActionListener(selectDifficulty());
-
-        JButton buttonEasy = new JButton("EASY");
-        styleDifficultyButton(buttonEasy);
-        buttonEasy.addActionListener(selectDifficulty());
-
-        JButton buttonNormal = new JButton("NORMAL");
-        styleDifficultyButton(buttonNormal);
-        buttonNormal.addActionListener(selectDifficulty());
-
-        JButton buttonHard = new JButton("HARD");
-        styleDifficultyButton(buttonHard);
-        buttonHard.addActionListener(selectDifficulty());
-
-        selectionPanel.add(buttonVeryEasy);
-        selectionPanel.add(buttonEasy);
-        selectionPanel.add(buttonNormal);
-        selectionPanel.add(buttonHard);
+        selectionPanel.add(createSelectionButton("VERY EASY"));
+        selectionPanel.add(createSelectionButton("EASY"));
+        selectionPanel.add(createSelectionButton("NORMAL"));
+        selectionPanel.add(createSelectionButton("HARD"));
 
         return selectionPanel;
+    }
+
+    private JButton createSelectionButton(String text){
+        JButton button = new JButton(text);
+        styleDifficultyButton(button);
+        button.addActionListener(selectDifficulty());
+        return button;
     }
 
     private void updatePanel() {

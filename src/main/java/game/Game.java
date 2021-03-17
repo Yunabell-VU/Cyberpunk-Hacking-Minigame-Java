@@ -97,6 +97,7 @@ public class Game extends JPanel {
     public boolean canUndo(){
         return !statuses.isEmpty() && !gameLogic.isGameOver() && undoAvailable;
     }
+
     public void undo() {
         startUndoTimer();
         undoAvailable = false;
@@ -125,4 +126,5 @@ public class Game extends JPanel {
     public void executeCommand(Command command){
         if(command.executable()) command.execute();
     }
+
 }
