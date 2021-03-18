@@ -7,23 +7,28 @@ public abstract class Cell implements Serializable {
 
     private boolean selected = false;
 
-    protected Cell(String code) {
+    protected
+    Cell(String code) {
         this.code = code;
     }
 
-    public String getCode() {
+    public String
+    getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void
+    setCode(String code) {
         this.code = code;
     }
 
-    public boolean isSelected() {
+    public boolean
+    isSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    public void
+    setSelected(boolean selected) {
         this.selected = selected;
     }
 }

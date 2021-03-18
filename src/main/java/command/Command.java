@@ -1,6 +1,9 @@
 package command;
 
 public interface Command {
-    boolean executable();
-    void execute();
+    boolean
+    executable();
+
+    void
+    execute();
 }

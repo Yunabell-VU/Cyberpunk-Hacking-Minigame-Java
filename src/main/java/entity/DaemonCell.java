@@ -6,19 +6,23 @@ public class DaemonCell extends Cell implements Serializable {
 
     private boolean matched = false;
 
-    public DaemonCell(String code) {
+    public
+    DaemonCell(String code) {
         super(code);
     }
 
-    public boolean isMatched() {
+    public boolean
+    isMatched() {
         return matched;
     }
 
-    public void setMatched(boolean matched) {
+    public void
+    setMatched(boolean matched) {
         this.matched = matched;
     }
 
-    public boolean isMatch(String pickedCode) {
+    public boolean
+    isMatch(String pickedCode) {
         return this.getCode().equals(pickedCode);
     }
 }

@@ -3,10 +3,11 @@ package graphics;
 import java.awt.*;
 
 public final class ColorFactory {
-    private ColorFactory() {
-    }
+    private
+    ColorFactory(){}
 
-    public static Color createColor(String text) {
+    public static Color
+    createColor(String text) {
         switch (text) {
             case "theme":
                 return new Color(250, 247, 10);

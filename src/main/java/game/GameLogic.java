@@ -2,8 +2,6 @@ package game;
 
 import entity.*;
 
-import java.util.List;
-
 import static entity.ScoreHandler.exportHighestScore;
 import static entity.ScoreHandler.importHighestScore;
 
@@ -11,184 +9,105 @@ class GameLogic {
 
     private boolean gameOver = false;
     private int timeLimit;
-    Status statusToBeDisplayed;
+    private Status statusToBeDisplayed;
+    private final PuzzleHandler puzzleHandler;
+
+    private final Difficulty difficulty;
     private int highestScore = importHighestScore();
 
-    public GameLogic(Status status) {
+    public
+    GameLogic(Status status) {
         this.statusToBeDisplayed = status;
+        this.difficulty = statusToBeDisplayed.getGameDifficulty();
+        this.puzzleHandler = new PuzzleHandler(statusToBeDisplayed.getPuzzle());
         this.timeLimit = status.getGameDifficulty().getInitTimeLimit();
     }
 
     //API called in Game, returned the updated status
-    public Status updateStatus(Status status, Coordinate clickedCellPosition) {
+    public Status
+    updateStatus(Status status, Coordinate clickedCellPosition) {
         statusToBeDisplayed = status;
-        updateCodeMatrix(clickedCellPosition);
-        updateBuffer();
-        updateDaemons();
-        updateReward();
 
-        if (isDaemonsAllRewarded() && !gameOver) statusToBeDisplayed.switchPuzzle();
+        puzzleHandler.updatePuzzle(statusToBeDisplayed.getPuzzle(), clickedCellPosition);
+        updateReward(puzzleHandler.countUncheckedDaemons("SUCCEEDED"), puzzleHandler.countUncheckedDaemons("FAILED"));
+
+        if (puzzleHandler.isAllDaemonsChecked() && !gameOver) statusToBeDisplayed.switchPuzzle();
         return statusToBeDisplayed;
     }
 
-    //Change the whole code matrix cell' state in the Status ->codeMatrix
-    //e.g. from available = true -> available = false
-    private void updateCodeMatrix(Coordinate clickedCellPosition) {
-        CodeMatrix codeMatrix = statusToBeDisplayed.getCodeMatrix();
-        codeMatrix.updateCellPicked(clickedCellPosition);
-        codeMatrix.disableAllCells();
-
-        if (codeMatrix.isRowAvailable()) codeMatrix.setOneColAvailable();
-        else codeMatrix.setOneRowAvailable();
-
-        if (statusToBeDisplayed.getBuffer().isBufferFull()) codeMatrix.disableAllCells();
-
+    //overloading
+    public void
+    updateStatus(Status currentStatus){
+        statusToBeDisplayed = currentStatus;
+        puzzleHandler.updatePuzzle(statusToBeDisplayed.getPuzzle());
     }
 
-    //ADD corresponding matrixCell in the buffer
-    private void updateBuffer() {
-        if (!statusToBeDisplayed.getBuffer().isBufferFull())
-            statusToBeDisplayed.getBuffer().addCellToBuffer(statusToBeDisplayed.getCodeMatrix().getPickedCharacter());
+    public boolean
+    isGameOver() {
+        return gameOver;
     }
 
-    //Two states need to changed:
-    //Inside a Daemon: matrixCell successively in the buffer-> state: matched = true, selected = true
-    //Daemon: check if can be marked as SUCCEEDED or FAILED
-    private void updateDaemons() {
-        int bufferCounter = statusToBeDisplayed.getBuffer().getBufferCounter();
-        List<Daemon> daemons = statusToBeDisplayed.getDaemons();
+    public void
+    finishGame(){
+        setGameOver();
+        puzzleHandler.markUncheckedDaemonsFailed();
+        saveHighestScore();
+    }
 
-        for (Daemon daemon : daemons) {
-            if (daemon.isNotRewarded()) { //if this is an unmarked Daemon
-                updateDaemonCells(daemon, bufferCounter);
+    public int
+    getTimeLimit() {
+        return timeLimit;
+    }
 
-                if (daemon.isLastCellMatched()) daemon.setDaemonSucceeded();
-                if (isDaemonExceedsBuffer(daemon)) daemon.setDaemonFailed();
-            }
+    public void
+    setTimeLimitZero() {
+        timeLimit = 0;
+    }
+
+    public void
+    updateTimeLimit(int offset) {
+        timeLimit = Math.max(timeLimit + offset, 0);
+    }
+
+
+    public int
+    getHighestScore(){ return highestScore; }
+
+    private void
+    updateReward(int succeeded, int failed) {
+        for (int i = 0; i < succeeded; i++) {
+            rewardTime();
+            rewardScore();
+        }
+        for (int i = 0; i < failed; i++) {
+            punishTime();
         }
     }
 
-    private void updateDaemonCells(Daemon daemon, int bufferCounter) {
-        daemon.setAllDaemonCellsUnSelected();
-        DaemonCell cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);
-
-        updateStatesOfMatchedDaemonCell(cellWaitingToBeCheck);
-
-        if (!cellWaitingToBeCheck.isMatched()) {
-            daemon.setAllDaemonCellsUnMatched();
-            alignDaemonCellWithBuffer(daemon, bufferCounter);
-
-            cellWaitingToBeCheck = daemon.getDaemonCell(bufferCounter - 1);//switch waiting cell to first unEmpty cell
-            updateStatesOfMatchedDaemonCell(cellWaitingToBeCheck);
-
-            if(!cellWaitingToBeCheck.isMatched()) daemon.addEmptyCell();
-        }
-    }
-
-    private void updateStatesOfMatchedDaemonCell(DaemonCell waitingCell){
-        String pickedCharacter = statusToBeDisplayed.getCodeMatrix().getPickedCharacter();
-        String lastBufferCharacter = statusToBeDisplayed.getBuffer().getLastCodeInBuffer();
-        if (waitingCell.isMatch(pickedCharacter)) waitingCell.setSelected(true);
-        if (waitingCell.isMatch(lastBufferCharacter)) waitingCell.setMatched(true);
-    }
-
-    private void alignDaemonCellWithBuffer(Daemon daemon, int bufferCounter) {
-        int positionOfWaitingCell = getWaitingDaemonCellPosition(daemon, bufferCounter);
-        for (int i = 0; i < positionOfWaitingCell-1; i++) {
-            daemon.addEmptyCell();
-        }
-    }
-
-    private int getWaitingDaemonCellPosition(Daemon daemon,int bufferCounter){
-        int emptyCellCounter = 0;
-        for (int i = 0; i < bufferCounter - 1; i++) {
-            if (daemon.getDaemonCell(i).getCode().equals("")) emptyCellCounter += 1;
-        }
-        return bufferCounter - emptyCellCounter;
-    }
-
-    private boolean isDaemonExceedsBuffer(Daemon daemon) {
-        return daemon.getDaemonCells().size() > statusToBeDisplayed.getBuffer().getBufferSize();
-    }
-
-    private void updateReward() {
-        for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
-            if (daemon.isNotRewarded()) {
-                if (daemon.isSucceeded()) {
-                    rewardTime();
-                    rewardScore();
-                    daemon.setRewarded();
-                }
-                if (daemon.isFailed()) {
-                    punishTime();
-                    daemon.setRewarded();
-                }
-            }
-        }
-    }
-
-    private void rewardScore(){
-        int scoreReward = statusToBeDisplayed.getGameDifficulty().getScoreReward();
+    private void
+    rewardScore(){
+        int scoreReward = difficulty.getScoreReward();
         statusToBeDisplayed.setScore(scoreReward);
         if(highestScore < statusToBeDisplayed.getScore()){
             highestScore = statusToBeDisplayed.getScore();
         }
     }
 
-    public void markUnrewardedDaemonsFailed() {
-        List<Daemon> tmpSeq = statusToBeDisplayed.getDaemons();
-        for (Daemon sequence : tmpSeq) {
-            if (sequence.isNotRewarded()) sequence.setDaemonFailed();
-        }
+    private void
+    rewardTime() {
+        updateTimeLimit(difficulty.getTimeReward());
     }
 
-    public void switchLogicStatusToGameStatus(Status currentStatus){
-        statusToBeDisplayed = currentStatus;
+    private void
+    punishTime() {
+        updateTimeLimit(difficulty.getTimePunishment());
     }
 
-    //Do Not modify this function!
-    public void setGameOver() {
+    private void
+    setGameOver() {
         gameOver = true;
     }
 
-    private boolean isDaemonsAllRewarded() {
-        for (Daemon daemon : statusToBeDisplayed.getDaemons()) {
-            if (daemon.isNotRewarded()) return false;
-        }
-        return true;
-    }
-
-    private void rewardTime() {
-        updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimeReward());
-    }
-
-    private void punishTime() {
-        updateTimeLimit(statusToBeDisplayed.getGameDifficulty().getTimePunishment());
-    }
-
-    public void updateTimeLimit(int offset) {
-        timeLimit = Math.max(timeLimit + offset, 0);
-    }
-
-    public void finishGame(){
-        setGameOver();
-        markUnrewardedDaemonsFailed();
-        saveHighestScore();
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public int getTimeLimit() {
-        return timeLimit;
-    }
-
-    public void setTimeLimitZero() {
-        timeLimit = 0;
-    }
-
-    public int getHighestScore(){return highestScore;}
-
-    public void saveHighestScore(){exportHighestScore(highestScore);}
+    private void
+    saveHighestScore(){ exportHighestScore(highestScore); }
 }

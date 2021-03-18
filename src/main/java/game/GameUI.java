@@ -19,20 +19,25 @@ import java.util.List;
 import static graphics.GameGraphicStyle.*;
 import static graphics.GameGraphicStyle.styleMatrixCellAvailable;
 
-public class GameUI implements Redraw,GameGraphicStyle {
+public class GameUI {
     private Status status;
+    private Puzzle puzzle;
     private final JPanel backgroundPanel;
     private final Game game;
 
-    public GameUI (Game game, Status status){
+    public
+    GameUI (Game game, Status status){
         this.status = status;
         this.game = game;
+        this.puzzle = status.getPuzzle();
         backgroundPanel = new Background("GAME");
         game.add(backgroundPanel, new FlowLayout(FlowLayout.CENTER, 0, 0));
     }
 
-    public void updateGameUI(int time, int score, Status status){
+    public void
+    updateGameUI(int time, int score, Status status){
         this.status = status;
+        this.puzzle = status.getPuzzle();
         Redraw.clearCanvas(backgroundPanel);
 
         if (game.isGameOver()) drawGameOverPanel(time,score);
@@ -40,7 +45,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         backgroundPanel.revalidate();
     }
 
-    public void drawGamingPanel(int time, int score) {
+    private void
+    drawGamingPanel(int time, int score) {
         backgroundPanel.add(drawTimerPanel(time));
         backgroundPanel.add(drawBuffer());
         backgroundPanel.add(drawCodeMatrix());
@@ -50,7 +56,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         backgroundPanel.add(undoCoolDownPanel());
     }
 
-    private void drawGameOverPanel(int time, int score) {
+    private void
+    drawGameOverPanel(int time, int score) {
         backgroundPanel.add(drawTimerPanel(time));
         backgroundPanel.add(drawBuffer());
         backgroundPanel.add(drawDaemons());
@@ -59,8 +66,9 @@ public class GameUI implements Redraw,GameGraphicStyle {
         backgroundPanel.add(drawTimeOutPanel());
     }
 
-    private JPanel drawCodeMatrix() {
-        CodeMatrix codeSource = status.getCodeMatrix();
+    private JPanel
+    drawCodeMatrix() {
+        CodeMatrix codeSource = puzzle.getCodeMatrix();
         int matrixSpan = codeSource.getMatrixSpan();
 
         JPanel panel = new JPanel();
@@ -75,7 +83,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private JButton drawMatrixCell(MatrixCell cell) {
+    private JButton
+    drawMatrixCell(MatrixCell cell) {
         JButton matrixCell = new JButton(cell.getCode());
         styleMatrixCellButton(matrixCell);
         if (cell.isSelected()) styleMatrixCellSelected(matrixCell);
@@ -87,21 +96,23 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return matrixCell;
     }
 
-    private JPanel drawBuffer() {
+    private JPanel
+    drawBuffer() {
         JPanel panel = new JPanel();
         styleBufferPanel(panel);
-        for (int i = 0; i < status.getBuffer().getBufferSize(); i++) {
-            JLabel bufferCellLabel = new JLabel(status.getBuffer().getBufferCode(i),SwingConstants.CENTER);
+        for (int i = 0; i < puzzle.getBuffer().getBufferSize(); i++) {
+            JLabel bufferCellLabel = new JLabel(puzzle.getBuffer().getBufferCode(i),SwingConstants.CENTER);
             styleBufferCell(bufferCellLabel);
             panel.add(bufferCellLabel);
         }
         return panel;
     }
 
-    private JPanel drawDaemons() {
+    private JPanel
+    drawDaemons() {
         JPanel panel = new JPanel();
         styleDaemonPanel(panel);
-        List<Daemon> daemons = status.getDaemons();
+        List<Daemon> daemons = puzzle.getDaemons();
 
         for (Daemon daemon : daemons) {
             JPanel daemonPanel = new JPanel();
@@ -127,7 +138,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private JLabel drawDaemonCell(DaemonCell daemonCell) {
+    private JLabel
+    drawDaemonCell(DaemonCell daemonCell) {
         JLabel label = new JLabel(daemonCell.getCode(),SwingConstants.CENTER);
         styleDaemonCellLabel(label);
         if (!daemonCell.isMatched()) styleDaemonCellNotAdded(label);
@@ -136,7 +148,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return label;
     }
 
-    private JPanel drawScorePanel(int score) {
+    private JPanel
+    drawScorePanel(int score) {
         JPanel panel = new JPanel();
         styleScorePanel(panel);
         JLabel currentScore = new JLabel(String.valueOf(status.getScore()),SwingConstants.CENTER);
@@ -148,7 +161,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private JPanel drawTimeOutPanel() {
+    private JPanel
+    drawTimeOutPanel() {
         JPanel panel = new JPanel();
         styleTimeOutPanel(panel);
 
@@ -159,7 +173,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private JPanel drawTimerPanel(int time) {
+    private JPanel
+    drawTimerPanel(int time) {
         JPanel panel = new JPanel();
         styleTimeLimitPanel(panel);
         JLabel countDownLabel = new JLabel(time + "",SwingConstants.CENTER);
@@ -169,7 +184,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private JPanel drawMenuBar() {
+    private JPanel
+    drawMenuBar() {
         JPanel menuBar = new JPanel();
         styleMenuBarPanel(menuBar);
 
@@ -180,7 +196,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return menuBar;
     }
 
-    private JButton createMenuBarButton(String text){
+    private JButton
+    createMenuBarButton(String text){
         JButton button = new JButton(text);
         styleGameMenuButton(button);
 
@@ -200,7 +217,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return button;
     }
 
-    private JPanel undoCoolDownPanel(){
+    private JPanel
+    undoCoolDownPanel(){
         JPanel panel = new JPanel();
         JLabel label = new JLabel(""+SwingConstants.CENTER);
 
@@ -214,7 +232,8 @@ public class GameUI implements Redraw,GameGraphicStyle {
         return panel;
     }
 
-    private void addMouseEventToMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {
+    private void
+    addMouseEventToMatrixCell(JButton matrixCell, Coordinate clickedCellPosition) {
         matrixCell.addMouseListener(new MouseListener() {
 
             @Override

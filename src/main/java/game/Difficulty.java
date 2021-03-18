@@ -12,7 +12,8 @@ final class Difficulty implements Serializable {
     private int timeReward;
     private final int timePunishment;
 
-    private Difficulty() {
+    private
+    Difficulty() {
         level = "NORMAL";
         initTimeLimit = 15;
         bufferOffset = 0;
@@ -21,35 +22,43 @@ final class Difficulty implements Serializable {
         timePunishment = -5;
     }
 
-    public static Difficulty getInstance(){
+    public static Difficulty
+    getInstance(){
         return instance;
     }
 
-    public int getBufferOffset() {
+    public int
+    getBufferOffset() {
         return bufferOffset;
     }
 
-    public int getInitTimeLimit() {
+    public int
+    getInitTimeLimit() {
         return initTimeLimit;
     }
 
-    public int getScoreReward() {
+    public int
+    getScoreReward() {
         return scoreReward;
     }
 
-    public int getTimeReward() {
+    public int
+    getTimeReward() {
         return timeReward;
     }
 
-    public int getTimePunishment() {
+    public int
+    getTimePunishment() {
         return timePunishment;
     }
 
-    public String getLevel() {
+    public String
+    getLevel() {
         return level;
     }
 
-    public void setDifficulty(String level) {
+    public void
+    setDifficulty(String level) {
         switch (level) {
             case "VERY EASY":
                 this.level = "VERY EASY";
@@ -82,7 +91,8 @@ final class Difficulty implements Serializable {
         }
     }
 
-    public String getDifficultyInfo() {
+    public String
+    getDifficultyInfo() {
         String info;
         info = "<html> Initial Time Limit : " + initTimeLimit + " seconds <br> Buffer Size : + " + bufferOffset +
                 "<br> Time Reward : " + timeReward + " seconds <br> Score Reward : " + scoreReward + "</html>";

@@ -7,12 +7,13 @@ import java.awt.event.ActionListener;
 
 import static graphics.MenuGraphicStyle.*;
 
-class Menu extends JPanel implements Redraw, MenuGraphicStyle {
+class Menu extends JPanel {
 
     public final transient ActionListener startGame;
     private final Difficulty gameDifficulty;
 
-    public Menu(ActionListener startGame, Difficulty gameDifficulty) {
+    public
+    Menu(ActionListener startGame, Difficulty gameDifficulty) {
 
         this.setBackground(ColorFactory.createColor("theme"));
         this.setBorder(null);
@@ -23,7 +24,8 @@ class Menu extends JPanel implements Redraw, MenuGraphicStyle {
         this.add(drawMenuPanel());
     }
 
-    private JPanel drawMenuPanel() {
+    private JPanel
+    drawMenuPanel() {
         JPanel panel = new Background("MENU");
 
         panel.add(drawSelectionButtons());
@@ -44,7 +46,8 @@ class Menu extends JPanel implements Redraw, MenuGraphicStyle {
         return panel;
     }
 
-    private JPanel drawSelectionButtons() {
+    private JPanel
+    drawSelectionButtons() {
         JPanel selectionPanel = new JPanel();
         styleMenuSelectionPanel(selectionPanel);
 
@@ -56,18 +59,21 @@ class Menu extends JPanel implements Redraw, MenuGraphicStyle {
         return selectionPanel;
     }
 
-    private JButton createSelectionButton(String text){
+    private JButton
+    createSelectionButton(String text){
         JButton button = new JButton(text);
         styleDifficultyButton(button);
         button.addActionListener(selectDifficulty());
         return button;
     }
 
-    private void updatePanel() {
+    private void
+    updatePanel() {
         Redraw.redraw(this,drawMenuPanel());
     }
 
-    private ActionListener selectDifficulty() {
+    private ActionListener
+    selectDifficulty() {
         return e -> {
             String buttonName = e.getActionCommand();
             gameDifficulty.setDifficulty(buttonName);

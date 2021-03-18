@@ -23,7 +23,8 @@ public class Puzzle implements Serializable {
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
 
-    public Puzzle(int bufferOffset) {
+    public
+    Puzzle(int bufferOffset) {
         Parse.emptySeq();
         Parse.readFile();
 
@@ -35,7 +36,8 @@ public class Puzzle implements Serializable {
         initDaemons();
     }
 
-    private void initCodeMatrix() {
+    private void
+    initCodeMatrix() {
         MatrixCell temp;
         for (int row = 0; row < Parse.getMatrixSpan(); row++) {
             for (int col = 0; col < Parse.getMatrixSpan(); col++) {
@@ -51,7 +53,8 @@ public class Puzzle implements Serializable {
         }
     }
 
-    private void initDaemons() {
+    private void
+    initDaemons() {
         DaemonCell temp2;
         for (String[] strings : Parse.getSeq()) {
             ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
@@ -64,16 +67,18 @@ public class Puzzle implements Serializable {
         }
     }
 
-    //Do not modify the gets
-    public Buffer getBuffer() {
+    public Buffer
+    getBuffer() {
         return buffer;
     }
 
-    public CodeMatrix getCodeMatrix() {
+    public CodeMatrix
+    getCodeMatrix() {
         return codeMatrix;
     }
 
-    public List<Daemon> getDaemons() {
+    public List<Daemon>
+    getDaemons() {
         return daemons;
     }
 }
@@ -86,11 +91,13 @@ class Parse {
     private static int matrixSpan = 0;
     private static final Random rand = new Random();
 
-    private Parse() {
+    private
+    Parse() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void readFile() {
+    public static void
+    readFile() {
         try {
             File dir = new File("./resources/puzzles");
             File[] files = dir.listFiles();
@@ -128,23 +135,28 @@ class Parse {
         }
     }
 
-    public static int getBufferSize() {
+    public static int
+    getBufferSize() {
         return bufferSize;
     }
 
-    public static String[][] getMatrix() {
+    public static String[][]
+    getMatrix() {
         return matrix;
     }
 
-    public static List<String[]> getSeq() {
+    public static List<String[]>
+    getSeq() {
         return seq;
     }
 
-    public static int getMatrixSpan() {
+    public static int
+    getMatrixSpan() {
         return matrixSpan;
     }
 
-    public static void emptySeq() {
+    public static void
+    emptySeq() {
         seq.clear();
     }
 }

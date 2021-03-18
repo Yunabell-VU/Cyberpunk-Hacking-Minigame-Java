@@ -203,11 +203,21 @@ V
 &src/main/java/entity/ScoreHandler.java,6\0\60609238a95c608dd62cbcb09e5bfb2aaa79b087
 H
 resources/save/score.txt,a\1\a179b1d66fa708104496f1be5c334d0d7c69f3b4
-P
- src/main/java/graphics/Draw.java,c\4\c4a157b4124ff1ea577ac82653fb7c17657b8311
 N
 src/main/java/game/GameUI.java,d\7\d72e3b689c26dd98f2a9f3985557c34d1d46bcb1
-S
-#src/main/java/command/ICommand.java,6\0\6011ac85d7be56aaf92af172ac2dc1ef75955573
 [
 +src/main/java/command/ClickCellCommand.java,f\6\f65fb4c581a2a5e78b1d9f82d65444bf4fca491b
+\
+,src/main/java/command/BackToMenuCommand.java,2\f\2fbbdcfe8e0e0fe908eb1e860519e02fb8fbe0e9
+R
+"src/main/java/command/Command.java,0\5\0598fc46caab0ea8e5ed30956b47574d612c694f
+Y
+)src/main/java/command/EndGameCommand.java,6\e\6e722da62b0b5dda7fde0a1651dfc68387ade501
+V
+&src/main/java/command/UndoCommand.java,1\5\15f82fa8d0ceb5423158aa63f3af5db126a534c2
+R
+"src/main/java/graphics/Redraw.java,0\5\054bbee2990e8177b501a2942db9454b5116e799
+X
+(src/main/java/graphics/ColorFactory.java,4\6\46f92478e6400a9ef6b4c43bd8bb155522780f7f
+W
+'src/main/java/graphics/FontFactory.java,8\8\884f381ddeccd7e4ee880354afa53c76492299a7

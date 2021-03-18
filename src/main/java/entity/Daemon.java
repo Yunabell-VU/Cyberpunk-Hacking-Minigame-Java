@@ -9,61 +9,74 @@ import java.util.List;
 public class Daemon implements Serializable {
     private boolean succeeded = false;
     private boolean failed = false;
-    private boolean rewarded = false;
+    private boolean checked = false;
 
     private final List<DaemonCell> daemonCells;
 
-    public Daemon(List<DaemonCell> daemonCells) {
+    public
+    Daemon(List<DaemonCell> daemonCells) {
         this.daemonCells = daemonCells;
     }
 
-    public List<DaemonCell> getDaemonCells() {
+    public List<DaemonCell>
+    getDaemonCells() {
         return daemonCells;
     }
 
-    public DaemonCell getDaemonCell(int index) {
+    public DaemonCell
+    getDaemonCell(int index) {
         return daemonCells.get(index);
     }
 
-    public boolean isSucceeded() {
+    public boolean
+    isSucceeded() {
         return succeeded;
     }
 
-    public boolean isFailed() {
+    public boolean
+    isFailed() {
         return failed;
     }
 
-    public boolean isNotRewarded() {
-        return !rewarded;
+    public boolean
+    isNotChecked() {
+        return !checked;
     }
 
-    public void setDaemonSucceeded() {
+    public void
+    setDaemonSucceeded() {
         this.succeeded = true;
     }
 
-    public boolean isLastCellMatched() {
+    public boolean
+    isLastCellMatched() {
         return daemonCells.get(daemonCells.size() - 1).isMatched();
     }
 
-    public void setDaemonFailed() {
+    public void
+    setDaemonFailed() {
         this.failed = true;
     }
 
-    public void setRewarded() {
-        this.rewarded = true;
+    public void
+    setChecked() {
+        this.checked = true;
     }
 
-    public void addEmptyCell() {
+    public void
+    addEmptyCell() {
         this.daemonCells.add(0, new DaemonCell(""));
     }
 
-    public void setAllDaemonCellsUnSelected() {
+    public void
+    setAllDaemonCellsUnSelected() {
         for (DaemonCell daemonCell : daemonCells) {
             daemonCell.setSelected(false);
         }
     }
 
-    public void setAllDaemonCellsUnMatched() {
+    public void
+    setAllDaemonCellsUnMatched() {
         for (DaemonCell daemonCell : daemonCells) {
             daemonCell.setMatched(false);
         }

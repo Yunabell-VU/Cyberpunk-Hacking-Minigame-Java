@@ -8,7 +8,8 @@ public class ScoreHandler {
 
     private ScoreHandler() { throw new IllegalStateException("Utility class"); }
 
-    public static int importHighestScore(){
+    public static int
+    importHighestScore(){
         int highestScore = 0;
         try {
             File saveFile = new File("./resources/save/score.txt");
@@ -24,7 +25,8 @@ public class ScoreHandler {
         return highestScore;
     }
 
-    public static void exportHighestScore(int score){
+    public static void
+    exportHighestScore(int score){
         try {
             FileWriter scoreWriter = new FileWriter("./resources/save/score.txt");
             String cookedScore = encryptScore(score);
@@ -36,11 +38,13 @@ public class ScoreHandler {
         }
     }
 
-    private static String encryptScore(int score) {
+    private static String
+    encryptScore(int score) {
         return Base64.getEncoder().encodeToString(String.valueOf(score).getBytes(StandardCharsets.UTF_8));
     }
 
-    private static int parseScore(String score) {
+    private static int
+    parseScore(String score) {
         byte[] scoreBytes = Base64.getDecoder().decode(score);
         String scoreString = new String(scoreBytes, StandardCharsets.UTF_8);
         return Integer.parseInt(scoreString);

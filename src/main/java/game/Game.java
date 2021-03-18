@@ -22,17 +22,17 @@ public class Game extends JPanel {
     private int undoCoolDown;
     private boolean undoAvailable = true;
 
-    public final transient ActionListener exitGame;
-
     private final Deque<Status> statuses = new LinkedList<>();
     private Status currentStatus;
 
+    public final transient ActionListener exitGame;
 
     //init GamePanel
-    public Game(Status firstStatus, ActionListener exitGame) {
+    public
+    Game(Status firstStatus, ActionListener exitGame) {
 
         this.gameLogic = new GameLogic(firstStatus);
-        currentStatus = firstStatus;
+        this.currentStatus = firstStatus;
         this.gameUI = new GameUI(this, currentStatus);
         this.exitGame = exitGame;
 
@@ -43,24 +43,66 @@ public class Game extends JPanel {
     }
 
     //refresh the Panel
-    public void updatePanel() {
+    public void
+    updatePanel() {
         gameUI.updateGameUI(gameLogic.getTimeLimit(),gameLogic.getHighestScore(),currentStatus);
     }
 
-    public void triggerGameTimer(){
+    public void
+    executeCommand(Command command){
+        if(command.executable()) command.execute();
+    }
+
+    public void
+    triggerGameTimer(){
         if (!gameTimeStarted) {
             gameTimeStarted = true;
             startGameTimer();
         }
     }
 
-    public void saveAndUpdateStatus(Coordinate clickedCellPosition){
+    public void
+    saveAndUpdateStatus(Coordinate clickedCellPosition){
         statuses.push(currentStatus);
         updateCurrentStatus(clickedCellPosition);
     }
 
+    public void
+    setGameTimeToZero(){
+        gameLogic.setTimeLimitZero();
+    }
 
-    private void updateCurrentStatus(Coordinate clickedCellPosition) {
+    public void
+    endGame() {
+        gameLogic.finishGame();
+    }
+
+    public boolean
+    isGameOver(){
+        return gameLogic.isGameOver();
+    }
+
+    public boolean
+    canUndo(){
+        return !statuses.isEmpty() && !gameLogic.isGameOver() && undoAvailable;
+    }
+
+    public void
+    undo() {
+        startUndoTimer();
+        undoAvailable = false;
+        currentStatus = statuses.pop();
+        gameLogic.updateStatus(currentStatus);
+        updatePanel();
+    }
+
+    public int
+    getUndoCoolDown(){
+        return undoCoolDown;
+    }
+
+    private void
+    updateCurrentStatus(Coordinate clickedCellPosition) {
         Status newStatus = null;
         try {
             newStatus = (Status) currentStatus.deepClone();
@@ -70,10 +112,10 @@ public class Game extends JPanel {
         if (newStatus != null) currentStatus = gameLogic.updateStatus(newStatus, clickedCellPosition);
     }
 
-    private void startGameTimer() {
+    private void
+    startGameTimer() {
         new Timer(TIMER_PERIOD, e -> {
             if (gameLogic.getTimeLimit() > 0) gameLogic.updateTimeLimit(-1);
-
             else {
                 ((Timer) e.getSource()).stop();
                 endGame();
@@ -82,38 +124,10 @@ public class Game extends JPanel {
         }).start();
     }
 
-    public void finishGameTime(){
-        gameLogic.setTimeLimitZero();
-    }
-
-    public void endGame() {
-        gameLogic.finishGame();
-    }
-
-    public boolean isGameOver(){
-        return gameLogic.isGameOver();
-    }
-
-    public boolean canUndo(){
-        return !statuses.isEmpty() && !gameLogic.isGameOver() && undoAvailable;
-    }
-
-    public void undo() {
-        startUndoTimer();
-        undoAvailable = false;
-        currentStatus = statuses.pop();
-        gameLogic.switchLogicStatusToGameStatus(currentStatus);
-        updatePanel();
-    }
-
-    public int getUndoCoolDown(){
-        return undoCoolDown;
-    }
-
-    private void startUndoTimer() {
+    private void
+    startUndoTimer() {
         new Timer(TIMER_PERIOD, e -> {
             if (undoCoolDown > 0) undoCoolDown--;
-
             else {
                 ((Timer) e.getSource()).stop();
                 undoAvailable = true;
@@ -122,9 +136,4 @@ public class Game extends JPanel {
             updatePanel();
         }).start();
     }
-
-    public void executeCommand(Command command){
-        if(command.executable()) command.execute();
-    }
-
 }
