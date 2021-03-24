@@ -49,11 +49,6 @@ public class Game extends JPanel {
     }
 
     public void
-    executeCommand(Command command){
-        if(command.executable()) command.execute();
-    }
-
-    public void
     triggerGameTimer(){
         if (!gameTimeStarted) {
             gameTimeStarted = true;
@@ -70,11 +65,6 @@ public class Game extends JPanel {
     public void
     setGameTimeToZero(){
         gameLogic.setTimeLimitZero();
-    }
-
-    public void
-    endGame() {
-        gameLogic.finishGame();
     }
 
     public boolean
@@ -118,7 +108,7 @@ public class Game extends JPanel {
             if (gameLogic.getTimeLimit() > 0) gameLogic.updateTimeLimit(-1);
             else {
                 ((Timer) e.getSource()).stop();
-                endGame();
+                gameLogic.finishGame();
             }
             updatePanel();
         }).start();

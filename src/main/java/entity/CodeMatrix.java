@@ -33,6 +33,7 @@ public class CodeMatrix implements Serializable {
         return pickedCharacter;
     }
 
+    //fill in code matrix cell at specific position
     public void
     setCell(int row, int col, MatrixCell matrixCell) {
         this.matrix[row][col] = matrixCell;
@@ -55,21 +56,21 @@ public class CodeMatrix implements Serializable {
     setOneColAvailable() {
         rowAvailable = false;
         for (MatrixCell[] matrixCells : matrix)
-            if (!matrixCells[cellPicked.getCoordinate().getCol()].isAvailable())
-                matrixCells[cellPicked.getCoordinate().getCol()].setAvailable(true);
+            if (!matrixCells[cellPicked.coordinate.getCol()].isAvailable())
+                matrixCells[cellPicked.coordinate.getCol()].setAvailable(true);
     }
 
     public void
     setOneRowAvailable() {
         rowAvailable = true;
-        for (int col = 0; col < matrix[cellPicked.getCoordinate().getRow()].length; col++)
-            if (!matrix[cellPicked.getCoordinate().getRow()][col].isAvailable())
-                matrix[cellPicked.getCoordinate().getRow()][col].setAvailable(true);
+        for (int col = 0; col < matrix[cellPicked.coordinate.getRow()].length; col++)
+            if (!matrix[cellPicked.coordinate.getRow()][col].isAvailable())
+                matrix[cellPicked.coordinate.getRow()][col].setAvailable(true);
     }
 
     public void
     disableAllCells() {
         for (MatrixCell[] matrixCells : matrix)
-            for (MatrixCell matrixCell : matrixCells) if (matrixCell.isAvailable()) matrixCell.setAvailable(false);
+            for (MatrixCell matrixCell : matrixCells)  matrixCell.setAvailable(false);
     }
 }

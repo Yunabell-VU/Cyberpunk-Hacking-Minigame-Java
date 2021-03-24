@@ -1,9 +1,6 @@
 package game;
 
-import command.BackToMenuCommand;
-import command.ClickCellCommand;
-import command.EndGameCommand;
-import command.UndoCommand;
+import command.*;
 import entity.*;
 import graphics.Background;
 import graphics.Redraw;
@@ -91,7 +88,7 @@ public class GameUI {
 
         if (cell.isAvailable()) {
             styleMatrixCellAvailable(matrixCell);
-            if (!cell.isSelected()) addMouseEventToMatrixCell(matrixCell, cell.getCoordinate());
+            if (!cell.isSelected()) addMouseEventToMatrixCell(matrixCell, cell.coordinate);
         }
         return matrixCell;
     }
@@ -203,13 +200,13 @@ public class GameUI {
 
         switch (text){
             case "UNDO":
-                button.addActionListener(e -> game.executeCommand(new UndoCommand(game)));
+                button.addActionListener(e -> executeCommand(new UndoCommand(game)));
                 break;
             case "END":
-                button.addActionListener(e -> game.executeCommand(new EndGameCommand(game)));
+                button.addActionListener(e -> executeCommand(new EndGameCommand(game)));
                 break;
             case "MENU":
-                game.executeCommand(new BackToMenuCommand(game,button));
+                executeCommand(new BackToMenuCommand(game,button));
                 break;
             default:
                 break;
@@ -238,7 +235,7 @@ public class GameUI {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                game.executeCommand(new ClickCellCommand(game,clickedCellPosition));
+                executeCommand(new ClickCellCommand(game,clickedCellPosition));
             }
 
             @Override
@@ -259,6 +256,11 @@ public class GameUI {
                 styleMatrixCellMouseExit(matrixCell);
             }
         });
+    }
+
+    private void
+    executeCommand(Command command){
+        if(command.executable()) command.execute();
     }
 
 }

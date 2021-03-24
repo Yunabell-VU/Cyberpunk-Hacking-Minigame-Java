@@ -7,12 +7,12 @@ import java.io.Serializable;
 
 public class MatrixCell extends Cell implements Serializable {
     private boolean available = false;
-    private final Coordinate coordinate;
+    public final Coordinate coordinate;
 
     public
-    MatrixCell(String code) {
+    MatrixCell(String code, Coordinate coordinate) {
         super(code);
-        this.coordinate = new Coordinate(-1, -1);
+        this.coordinate = coordinate;
     }
 
     public boolean
@@ -23,16 +23,5 @@ public class MatrixCell extends Cell implements Serializable {
     public void
     setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public void
-    setCoordinate(int x, int y) {
-        coordinate.setRow(x);
-        coordinate.setCol(y);
-    }
-
-    public Coordinate
-    getCoordinate() {
-        return coordinate;
     }
 }

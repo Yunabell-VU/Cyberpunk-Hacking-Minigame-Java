@@ -23,8 +23,7 @@ public class Puzzle implements Serializable {
     private final CodeMatrix codeMatrix;
     private final List<Daemon> daemons = new ArrayList<>();
 
-    public
-    Puzzle(int bufferOffset) {
+    public Puzzle(int bufferOffset) {
         Parse.emptySeq();
         Parse.readFile();
 
@@ -38,29 +37,26 @@ public class Puzzle implements Serializable {
 
     private void
     initCodeMatrix() {
-        MatrixCell temp;
+        MatrixCell matrixCell;
         for (int row = 0; row < Parse.getMatrixSpan(); row++) {
             for (int col = 0; col < Parse.getMatrixSpan(); col++) {
-                if (row == 0) {
-                    temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
-                    temp.setAvailable(true);
-                } else {
-                    temp = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase());
-                }
-                codeMatrix.setCell(row, col, temp);
-                codeMatrix.getMatrixCell(row, col).setCoordinate(row, col);
+                matrixCell = new MatrixCell(Parse.getMatrix()[row][col].toUpperCase(), new Coordinate(row, col));
+
+                if (row == 0) matrixCell.setAvailable(true);
+
+                codeMatrix.setCell(row, col, matrixCell);
             }
         }
     }
 
     private void
     initDaemons() {
-        DaemonCell temp2;
+        DaemonCell daemonCell;
         for (String[] strings : Parse.getSeq()) {
             ArrayList<DaemonCell> currentSeq = new ArrayList<>(strings.length);
             for (String s : strings) {
-                temp2 = new DaemonCell(s.toUpperCase());
-                currentSeq.add(temp2);
+                daemonCell = new DaemonCell(s.toUpperCase());
+                currentSeq.add(daemonCell);
             }
             Daemon cookedSeq = new Daemon(currentSeq);
             daemons.add(cookedSeq);
@@ -91,8 +87,7 @@ class Parse {
     private static int matrixSpan = 0;
     private static final Random rand = new Random();
 
-    private
-    Parse() {
+    private Parse() {
         throw new IllegalStateException("Utility class");
     }
 

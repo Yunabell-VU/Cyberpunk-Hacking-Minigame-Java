@@ -199,8 +199,6 @@ r
 Bout/artifacts/software_design_vu_2020_jar/resources/puzzles/40.txt,9\c\9c56f056a1c288608a03df8d5c0481e49995936c
 _
 /.idea/artifacts/software_design_vu_2020_jar.xml,b\4\b414b3d9add283f44ab456fe5bb870a853ebfadc
-V
-&src/main/java/entity/ScoreHandler.java,6\0\60609238a95c608dd62cbcb09e5bfb2aaa79b087
 H
 resources/save/score.txt,a\1\a179b1d66fa708104496f1be5c334d0d7c69f3b4
 N
@@ -221,3 +219,7 @@ X
 (src/main/java/graphics/ColorFactory.java,4\6\46f92478e6400a9ef6b4c43bd8bb155522780f7f
 W
 'src/main/java/graphics/FontFactory.java,8\8\884f381ddeccd7e4ee880354afa53c76492299a7
+U
+%src/main/java/game/PuzzleHandler.java,0\1\01b1e0eca7e3c716cd1589a4064dfd64e00e3530
+T
+$src/main/java/game/ScoreHandler.java,1\e\1e024bbdcaef44bc4695cc7bde6c97075bc2f6d5

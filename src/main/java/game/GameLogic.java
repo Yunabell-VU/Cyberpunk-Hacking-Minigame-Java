@@ -2,17 +2,18 @@ package game;
 
 import entity.*;
 
-import static entity.ScoreHandler.exportHighestScore;
-import static entity.ScoreHandler.importHighestScore;
+import static game.ScoreHandler.exportHighestScore;
+import static game.ScoreHandler.importHighestScore;
 
 class GameLogic {
 
     private boolean gameOver = false;
     private int timeLimit;
+
     private Status statusToBeDisplayed;
     private final PuzzleHandler puzzleHandler;
-
     private final Difficulty difficulty;
+
     private int highestScore = importHighestScore();
 
     public

@@ -28,6 +28,13 @@ public class Engine {
         gameFrame.setResizable(false);
     }
 
+    public void
+    initGame() {
+        Status firstStatus = new Status(gameDifficulty);
+        Game game = new Game(firstStatus, exitGame());
+        displayGamePanel(game);
+    }
+
     private ActionListener
     startGame() {
         return e -> initGame();
@@ -36,13 +43,6 @@ public class Engine {
     private ActionListener
     exitGame() {
         return e -> displayMenu();
-    }
-
-    public void
-    initGame() {
-        Status firstStatus = new Status(gameDifficulty);
-        Game game = new Game(firstStatus, exitGame());
-        displayGamePanel(game);
     }
 
     private void
