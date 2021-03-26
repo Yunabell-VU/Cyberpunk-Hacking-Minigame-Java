@@ -5,6 +5,9 @@ import entity.*;
 import static game.ScoreHandler.exportHighestScore;
 import static game.ScoreHandler.importHighestScore;
 
+//update puzzle based on clicked matrix cell
+//update time and score based on the updated puzzle results
+
 class GameLogic {
 
     private boolean gameOver = false;
@@ -37,6 +40,8 @@ class GameLogic {
     }
 
     //overloading
+    //invoked by Game when undo is called
+    //this is used to make it safe under a combo action of UNDO and END because END only changes the status saved in GameLogic
     public void
     updateStatus(Status currentStatus){
         statusToBeDisplayed = currentStatus;

@@ -16,6 +16,8 @@ import java.util.List;
 import static graphics.GameGraphicStyle.*;
 import static graphics.GameGraphicStyle.styleMatrixCellAvailable;
 
+//Draw Game UI
+
 public class GameUI {
     private Status status;
     private Puzzle puzzle;
@@ -53,6 +55,7 @@ public class GameUI {
         backgroundPanel.add(undoCoolDownPanel());
     }
 
+    //Difficulty to use template because these components need to be added to the panel one by one
     private void
     drawGameOverPanel(int time, int score) {
         backgroundPanel.add(drawTimerPanel(time));
@@ -262,5 +265,4 @@ public class GameUI {
     executeCommand(Command command){
         if(command.executable()) command.execute();
     }
-
 }

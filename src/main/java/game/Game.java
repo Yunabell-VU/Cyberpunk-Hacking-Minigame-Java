@@ -1,6 +1,5 @@
 package game;
 
-import command.Command;
 import entity.*;
 
 import javax.swing.*;
@@ -11,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.util.Deque;
 import java.util.LinkedList;
 
+//save and track status history
+//pass status, time and score to GameUI to display
+//pass status to GameLogic to update
+
 public class Game extends JPanel {
 
     private final transient GameLogic gameLogic;
@@ -18,11 +21,12 @@ public class Game extends JPanel {
 
     private static final int TIMER_PERIOD = 1000;
     private boolean gameTimeStarted = false;
-    private static final int UNDO_COOL_DOWN = 8;
+
+    private static final int UNDO_COOL_DOWN = 8; //Default cool down time for undo
     private int undoCoolDown;
     private boolean undoAvailable = true;
 
-    private final Deque<Status> statuses = new LinkedList<>();
+    private final Deque<Status> statuses = new LinkedList<>(); //Status History
     private Status currentStatus;
 
     public final transient ActionListener exitGame;
@@ -39,10 +43,9 @@ public class Game extends JPanel {
         this.undoCoolDown = UNDO_COOL_DOWN;
         this.setBackground(Color.BLACK);
 
-        gameUI.updateGameUI(gameLogic.getTimeLimit(), gameLogic.getHighestScore(),currentStatus);
+        updatePanel();
     }
 
-    //refresh the Panel
     public void
     updatePanel() {
         gameUI.updateGameUI(gameLogic.getTimeLimit(),gameLogic.getHighestScore(),currentStatus);
@@ -70,6 +73,11 @@ public class Game extends JPanel {
     public boolean
     isGameOver(){
         return gameLogic.isGameOver();
+    }
+
+    public boolean
+    isGameStarted(){
+        return gameTimeStarted;
     }
 
     public boolean

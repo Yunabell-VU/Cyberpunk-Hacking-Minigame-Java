@@ -27,9 +27,9 @@ public abstract class Cell implements Serializable {
         return selected;
     }
 
-    /*MatrixCell: setSelected(true) when a cell is picked
-    **DaemonCell: setSelected(true) when waiting cell is matched
-    **            setSelected(false) for all DaemonCells for next picking
+    /* MatrixCell: setSelected(true) when a cell is picked
+    ** DaemonCell: setSelected(true) when waiting cell is matched
+    **             setSelected(false) for all DaemonCells for next picking
     */
     public void
     setSelected(boolean selected) {

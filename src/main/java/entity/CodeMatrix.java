@@ -33,7 +33,7 @@ public class CodeMatrix implements Serializable {
         return pickedCharacter;
     }
 
-    //fill in code matrix cell at specific position
+    //fills in code matrix cell at specific position
     public void
     setCell(int row, int col, MatrixCell matrixCell) {
         this.matrix[row][col] = matrixCell;

@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import static graphics.MenuGraphicStyle.*;
 
+//start the Game with selected difficulty level
+
 class Menu extends JPanel {
 
     public final transient ActionListener startGame;

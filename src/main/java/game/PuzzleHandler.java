@@ -21,6 +21,8 @@ public class PuzzleHandler {
     }
 
     //overloading
+    //used to replace the puzzle attribute to the newest one.
+
     public void
     updatePuzzle(Puzzle puzzle){
         this.puzzle = puzzle;

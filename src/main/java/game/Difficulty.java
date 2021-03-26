@@ -91,6 +91,7 @@ final class Difficulty implements Serializable {
         }
     }
 
+    //Infomation to be displayed on the Menu Panel
     public String
     getDifficultyInfo() {
         String info;

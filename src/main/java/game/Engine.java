@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+//Control the panel to display : Menu / Game
 
 public class Engine {
 

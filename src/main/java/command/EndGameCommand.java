@@ -10,10 +10,11 @@ public class EndGameCommand implements Command{
         this.game = game;
     }
 
+    //This command shall only works when the game is started and not finished.
     @Override
     public boolean
     executable() {
-        return !game.isGameOver();
+        return !game.isGameOver()&&game.isGameStarted();
     }
 
     @Override

@@ -13,6 +13,7 @@ public class ClickCellCommand implements Command {
         this.coordinate = coordinate;
     }
 
+    //only available matrix cells will be added with this command
     @Override
     public boolean
     executable() {

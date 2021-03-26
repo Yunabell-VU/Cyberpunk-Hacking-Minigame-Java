@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Daemon implements Serializable {
     private boolean succeeded = false;
-    private boolean failed = false;
+    private boolean failed = false; //this attribute is needed because the default state of a Daemon is neither succeeded nor failed
     private boolean checked = false;
 
     private final List<DaemonCell> daemonCells;
@@ -63,6 +63,7 @@ public class Daemon implements Serializable {
         this.checked = true;
     }
 
+    //insert empty cells to the front to align the index of waiting cell to the buffer counter
     public void
     addEmptyCell() {
         this.daemonCells.add(0, new DaemonCell(""));
