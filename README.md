@@ -68,16 +68,16 @@ The game shall work as follows:
 
 **Menu**:
 
-![demo1](https://img.imgdb.cn/item/6066e57a8322e6675cec3a7b.png)
+![demo1](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/Assignment3/docs/demo1.png)
 
 
 
-**Game:
+**Game**:
 
-![demo2](https://img.imgdb.cn/item/6066e5a78322e6675cec69df.png)
+![demo2](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/Assignment3/docs/demo2.png)
 
 
 
 **Game Over:**
 
-![demo3](https://img.imgdb.cn/item/6066e5eb8322e6675cecabc0.png)
+![demo3](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/Assignment3/docs/demo3.png)
