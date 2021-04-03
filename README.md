@@ -1,8 +1,26 @@
 # Software Design 
 
-# Team Project - Cyberpunk Hacking Minigame
+# Cyberpunk Hacking Minigame
 
 This is the team project of the Software Design course at the Vrije Universiteit Amsterdam. 
+
+### Demo:
+
+**Menu**:
+
+![demo1](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo1.png)
+
+
+
+**Game**:
+
+![demo2](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo2.png)
+
+
+
+**Game Over:**
+
+![demo3](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo3.png)
 
 ## Introduction
 
@@ -62,22 +80,3 @@ The game shall work as follows:
 |   F6   |      Timer       | There shall be a timer that starts to count down after the user picks the first code from the Code Matrix. The game shall be over if the remaining time becomes zero. |    Y.Chen    |
 |   F7   |      Scores      | The current score and highest history score are displayed on the game panel. The most recent highest score shall be encrypted and written into a save file and displayed on the game panel. <br/>This feature is used to assess the performance of the player and provide motivations for the player to continue to play the game. |     Fan      |
 
-
-
-### Demo:
-
-**Menu**:
-
-![demo1](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo1.png)
-
-
-
-**Game**:
-
-![demo2](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo2.png)
-
-
-
-**Game Over:**
-
-![demo3](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo3.png)
