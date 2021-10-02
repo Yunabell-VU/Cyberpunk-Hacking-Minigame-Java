@@ -6,6 +6,10 @@ This is the team project of the Software Design course at the Vrije Universiteit
 
 ### Demo:
 
+**Video Demo:**
+English: https://youtu.be/b-5DFa3TB6U
+Chinese: https://www.bilibili.com/video/BV14K411w7nG/
+
 **Menu**:
 
 ![demo1](https://github.com/Yunabell-VU/Cyberpunk-Hacking-Minigame-Java/blob/main/docs/demo1.png)
