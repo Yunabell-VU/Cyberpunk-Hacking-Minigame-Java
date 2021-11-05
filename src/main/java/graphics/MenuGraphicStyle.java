@@ -20,7 +20,7 @@ public interface MenuGraphicStyle {
         button.setBackground(ColorFactory.createColor("subTheme"));
         button.setOpaque(true);
         button.setForeground(ColorFactory.createColor("theme"));
-        button.setFont(FontFactory.createFont(20));
+        button.setFont(FontFactory.createFont(19));
     }
 
     static void
@@ -42,6 +42,7 @@ public interface MenuGraphicStyle {
     static void
     styleStartButton(JButton button){
         button.setBackground(ColorFactory.createColor("subTheme"));
+        button.setBorderPainted(false);
         button.setOpaque(true);
         button.setForeground(ColorFactory.createColor("theme"));
         button.setFont(FontFactory.createFont(20));

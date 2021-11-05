@@ -127,7 +127,7 @@ public interface GameGraphicStyle {
         button.setPreferredSize(new Dimension(100,30));
         button.setBorderPainted(false);
         button.setBackground(ColorFactory.createColor("theme"));
-        button.setFont(FontFactory.createFont(22));
+        button.setFont(FontFactory.createFont(18));
     }
 
     static void
